@@ -12,6 +12,12 @@
   
   <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
   <link rel="manifest" href="./manifest.json" />
+  
+  <meta property="og:title" content="Our Solar View" />
+  <meta property="og:description" content="An advanced browser-based 3D astrophysics visualization platform." />
+  <meta property="og:image" content="https://raw.githubusercontent.com/manishkumawat14128/solar/main/planets/img_earth/earth_day_4096.jpg" />
+  <meta property="og:url" content="https://solarview.vercel.app/" />
+  <meta property="og:type" content="website" />
 
   
   <link rel="stylesheet" href="./css/design-tokens.css" />
@@ -99,13 +105,16 @@
 
   <!-- Celestial Catalog -->
   <section class="catalog">
-    <div class="section-header">
-      <div class="section-eyebrow">Celestial Catalog</div>
-      <h2 class="section-title">Explore the Solar System</h2>
-      <div class="section-title-bar"></div>
-    </div>
-    <hr class="catalog-divider" />
-    <div class="planet-grid" id="planetGrid" role="list"></div>
+      <div class="section-header">
+        <div class="section-eyebrow">Celestial Catalog</div>
+        <h2 class="section-title">Explore the Solar System</h2>
+        <div class="section-title-bar"></div>
+      </div>
+      <div class="catalog-controls" style="text-align:center; margin-bottom: 20px;">
+        <input type="text" id="planetSearch" placeholder="Search planets..." aria-label="Search planets" style="padding: 12px 20px; width: 80%; max-width: 400px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.15); background: rgba(0,10,25,0.8); color: var(--text); font-family: 'Space Grotesk', sans-serif; font-size: 1rem; outline: none; transition: border-color 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.3);" />
+      </div>
+      <hr class="catalog-divider" />
+      <div class="planet-grid" id="planetGrid" role="list"></div>
   </section>
 
   <!-- Modules -->

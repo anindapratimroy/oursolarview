@@ -37,6 +37,26 @@ PLANETS.forEach(p => {
   grid.appendChild(card);
 });
 
+// Search Filter Logic
+const searchInput = document.getElementById('planetSearch');
+if (searchInput) {
+  searchInput.addEventListener('input', (e) => {
+    const term = e.target.value.toLowerCase();
+    const cards = grid.querySelectorAll('.planet-card');
+    cards.forEach(card => {
+      const name = card.querySelector('.planet-name').innerText.toLowerCase();
+      const desc = card.querySelector('.planet-desc').innerText.toLowerCase();
+      if (name.includes(term) || desc.includes(term)) {
+        card.style.display = '';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  });
+  searchInput.addEventListener('focus', () => searchInput.style.borderColor = 'var(--gold)');
+  searchInput.addEventListener('blur', () => searchInput.style.borderColor = 'rgba(255,255,255,0.15)');
+}
+
 // History State URL Parameter logic
 const urlParams = new URLSearchParams(window.location.search);
 const activePlanet = urlParams.get('planet');
