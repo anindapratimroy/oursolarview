@@ -159,7 +159,7 @@
     controls.maxDistance = 60;
     scene.remove(directionalLight);
 
-    const fireTexture = textureLoader.load('./img_others/8k_sun.jpg', hideLoading);
+    const fireTexture = textureLoader.load('./img_others/2k_sun.jpg', hideLoading);
     fireTexture.wrapS = fireTexture.wrapT = THREE.RepeatWrapping;
 
     const sunMaterial = new THREE.MeshStandardMaterial({
@@ -191,7 +191,7 @@
     controls.minDistance = 5.9;
     controls.maxDistance = 35;
 
-    const planetTexture = textureLoader.load("./img_others/8k_saturn.jpg", hideLoading);
+    const planetTexture = textureLoader.load("./img_others/2k_saturn.jpg", hideLoading);
     const rockTexture = textureLoader.load("./img_others/cream.jpeg");
     const rock2Texture = textureLoader.load("./img_others/stone_brown.jpg");
 
@@ -242,13 +242,13 @@
     controls.maxDistance = 15;
 
     let texturePath = '';
-    if (name === 'mercury') texturePath = './img_others/8k_mercury.jpg';
-    else if (name === 'venus') texturePath = './img_others/8k_venus_surface.jpg';
-    else if (name === 'mars') texturePath = './img_others/8k_mars.jpg';
-    else if (name === 'jupiter') texturePath = './img_others/8k_jupiter.jpg';
+    if (name === 'mercury') texturePath = './img_others/2k_mercury.jpg';
+    else if (name === 'venus') texturePath = './img_others/2k_venus_surface.jpg';
+    else if (name === 'mars') texturePath = './img_others/2k_mars.jpg';
+    else if (name === 'jupiter') texturePath = './img_others/2k_jupiter.jpg';
     else if (name === 'uranus') texturePath = './img_others/2k_uranus.jpg';
     else if (name === 'neptune') texturePath = './img_others/2k_neptune.jpg';
-    else texturePath = './img_others/8k_mercury.jpg'; // fallback
+    else texturePath = './img_others/2k_mercury.jpg'; // fallback
 
     const planetTexture = textureLoader.load(texturePath, hideLoading);
 

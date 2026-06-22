@@ -22,11 +22,7 @@ PLANETS.forEach(p => {
   card.setAttribute('tabindex', '0');
   card.innerHTML = `
     <div class="planet-img-wrap">
-      <picture>
-        <source srcset="${p.image.replace('.jpg', '.avif').replace('.webp', '.avif')}" type="image/avif" />
-        <source srcset="${p.image.replace('.jpg', '.webp').replace('.avif', '.webp')}" type="image/webp" />
-        <img src="${p.image}" alt="${p.name}" loading="lazy" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'400\\' height=\\'400\\'><rect width=\\'400\\' height=\\'400\\' fill=\\'%23000f23\\'/><circle cx=\\'200\\' cy=\\'200\\' r=\\'150\\' fill=\\'%23c5a048\\' opacity=\\'0.2\\'/></svg>'; this.classList.add('fallback-img');" />
-      </picture>
+      <img src="${p.image}" alt="${p.name}" loading="lazy" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'400\\' height=\\'400\\'><rect width=\\'400\\' height=\\'400\\' fill=\\'%23000f23\\'/><circle cx=\\'200\\' cy=\\'200\\' r=\\'150\\' fill=\\'%23c5a048\\' opacity=\\'0.2\\'/></svg>'; this.classList.add('fallback-img');" />
     </div>
     <h3 class="planet-name">${p.name}</h3>
     <p class="planet-desc">${p.desc}</p>

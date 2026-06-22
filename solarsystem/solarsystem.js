@@ -144,7 +144,7 @@ function loadPlanetTexture(texture, radius) {
 // --- Orbital periods normalized to Earth = 1 ---
 
 const textureLoader1 = new THREE.TextureLoader(manager);
-const fireTexture = textureLoader1.load('./sun.jpg'); // Assuming sun.jpg is in the same directory
+const fireTexture = textureLoader1.load('../planets/img_others/2k_sun.jpg'); // Assuming sun.jpg is in the same directory
 fireTexture.wrapS = fireTexture.wrapT = THREE.RepeatWrapping;
 // Sun Material
 const sunMaterial = new THREE.MeshStandardMaterial({
@@ -167,7 +167,7 @@ composer.addPass(new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window
 
 // --- Planets array with additional info ---
 const planets = [
-  { mesh: loadPlanetTexture("./2k_sun.jpg", 4.9), key: "sun",
+  { mesh: loadPlanetTexture("../planets/img_others/2k_sun.jpg", 4.9), key: "sun",
     details: "The Sun is the star at the center of the Solar System.",
     funFact: "The Sun accounts for 99.86% of the total mass of the Solar System!",
     info: {
@@ -219,7 +219,7 @@ const planets = [
       notableFeatures: "Solar flares, sunspots, coronal mass ejections, source of light and heat for the Solar System."
     }
   },
-  { mesh: loadPlanetTexture("./2k_mercury.jpg", 1), key: "mercury",
+  { mesh: loadPlanetTexture("../planets/img_others/2k_mercury.jpg", 1), key: "mercury",
     details: "Mercury is the smallest planet in our solar system and closest to the Sun.",
     funFact: "A day on Mercury is longer than its year!",
     info: {
@@ -271,7 +271,7 @@ const planets = [
       notableFeatures: "Highly eccentric orbit, extreme temperature variations, caloris basin."
     }
   },
-  { mesh: loadPlanetTexture("./2k_venus_surface.jpg", 2.3), key: "venus",
+  { mesh: loadPlanetTexture("../planets/img_others/2k_venus_surface.jpg", 2.3), key: "venus",
     details: "Venus is the second planet from the Sun, often called Earth's 'sister planet' due to its similar size and mass. However, it has an extremely dense, toxic atmosphere and a scorching hot surface due to a runaway greenhouse effect.",
     funFact: "Venus rotates in the opposite direction (retrograde) to most other planets, meaning the Sun rises in the west and sets in the east. Its day is also longer than its year!",
     info: {
@@ -323,7 +323,7 @@ const planets = [
       notableFeatures: "Runaway greenhouse effect, sulfuric acid clouds, retrograde rotation, volcanic plains."
     }
   },
-  { mesh: loadPlanetTexture("./earth_day_4096.jpg", 2.3), key: "earth",
+  { mesh: loadPlanetTexture("../planets/img_earth/earth_day_4096.jpg", 2.3), key: "earth",
     details: "Earth is the third planet from the Sun and the only astronomical object known to harbor life.",
     funFact: "Earth is not a perfect sphere; it bulges at the equator.",
     info: {
@@ -375,7 +375,7 @@ const planets = [
       notableFeatures: "Only known planet to support life, diverse ecosystems, liquid water on surface, active plate tectonics."
     }
   },
-  { mesh: loadPlanetTexture("./2k_mars.jpg", 2), key: "mars",
+  { mesh: loadPlanetTexture("../planets/img_others/2k_mars.jpg", 2), key: "mars",
     details: "Mars is the fourth planet from the Sun and the second-smallest planet in the Solar System.",
     funFact: "Mars has two moons, Phobos and Deimos, which are thought to be captured asteroids.",
     info: {
@@ -427,7 +427,7 @@ const planets = [
       notableFeatures: "Polar ice caps, Valles Marineris (canyon system), Olympus Mons (largest volcano), evidence of past liquid water."
     }
   },
-  { mesh: loadPlanetTexture("./2k_jupiter.jpg", 4), key: "jupiter",
+  { mesh: loadPlanetTexture("../planets/img_others/2k_jupiter.jpg", 4), key: "jupiter",
     details: "Jupiter is the fifth planet from the Sun and the largest in the Solar System.",
     funFact: "Jupiter's Great Red Spot is a giant storm bigger than Earth!",
     info: {
@@ -479,7 +479,7 @@ const planets = [
       notableFeatures: "Great Red Spot, strong magnetic field, four large Galilean moons, fastest rotation of any planet."
     }
   },
-  { mesh: loadPlanetTexture("./2k_saturn.jpg", 4), key: "saturn",
+  { mesh: loadPlanetTexture("../planets/img_others/2k_saturn.jpg", 4), key: "saturn",
     details: "Saturn is the sixth planet from the Sun and the second-largest in the Solar System, known for its rings.",
     funFact: "Saturn's rings are mostly made of ice particles and rock debris.",
     info: {
@@ -531,7 +531,7 @@ const planets = [
       notableFeatures: "Extensive and complex ring system, least dense planet in the Solar System, Titan (large moon with a dense atmosphere and liquid methane lakes)."
     }
   },
-  { mesh: loadPlanetTexture("./2k_uranus.jpg", 3), key: "uranus",
+  { mesh: loadPlanetTexture("../planets/img_others/2k_uranus.jpg", 3), key: "uranus",
     details: "Uranus is the seventh planet from the Sun, with the third-largest planetary radius.",
     funFact: "Uranus rotates on its side, almost perpendicular to its orbit.",
     info: {
@@ -583,7 +583,7 @@ const planets = [
       notableFeatures: "Extreme axial tilt, coldest planetary atmosphere in the Solar System, thin ring system."
     }
   },
-  { mesh: loadPlanetTexture("./2k_neptune.jpg", 3), key: "neptune",
+  { mesh: loadPlanetTexture("../planets/img_others/2k_neptune.jpg", 3), key: "neptune",
     details: "Neptune is the eighth and farthest known planet from the Sun in the Solar System, an ice giant with incredibly strong winds, often exceeding the speed of sound. Its vivid blue color is also due to methane in its atmosphere.",
     funFact: "Neptune experiences the strongest winds in the Solar System, with speeds reaching up to 2,100 km/h (1,300 mph), creating massive storms like the Great Dark Spot, which was comparable in size to Earth.",
     info: {
@@ -728,8 +728,8 @@ function createStoneRing(innerRadius, outerRadius, stoneCount, texture, opacity 
 }
 
 // --- Load Saturn ring textures ---
-const rockTexture = textureLoader.load("./stone_brown.jpg"); // Assuming stone_brown.jpg is in the same directory
-const rock2Texture = textureLoader.load("./cream.jpeg"); // Assuming cream.jpeg is in the same directory
+const rockTexture = textureLoader.load("../planets/img_others/stone_brown.jpg"); // Assuming stone_brown.jpg is in the same directory
+const rock2Texture = textureLoader.load("../planets/img_others/cream.jpeg"); // Assuming cream.jpeg is in the same directory
 
 // --- Create Saturn’s stone rings ---
 const saturnMesh = planets.find(p => p.key === "saturn").mesh;
