@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <title>Planet Viewer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" />
   <style>
     body { margin: 0; overflow: hidden; background: black; }
     canvas { display: block; }
@@ -12,11 +15,59 @@
       left: 50%;
       transform: translate(-50%, -50%);
       color: white;
-      font-family: 'Inter', sans-serif;
+      font-family: 'Space Grotesk', sans-serif;
       font-size: 1.5rem;
       pointer-events: none;
       z-index: 10;
       transition: opacity 0.5s;
+    }
+    /* ── Back Button ─────────────────────────────────── */
+    #back-btn {
+      position: fixed;
+      top: 18px;
+      left: 18px;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 10px 22px;
+      background: rgba(0, 7, 20, 0.75);
+      backdrop-filter: blur(18px);
+      border: 1.5px solid rgba(255, 255, 255, 0.18);
+      border-radius: 30px;
+      color: #ffffff;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13.5px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      transition: border-color 0.25s, transform 0.25s, background 0.25s;
+    }
+    #back-btn:hover {
+      border-color: rgba(197, 160, 72, 0.7);
+      background: rgba(197, 160, 72, 0.12);
+      transform: translateX(-4px);
+    }
+    /* ── Planet Name HUD ─────────────────────────────── */
+    #planet-label {
+      position: fixed;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      padding: 10px 26px;
+      background: rgba(0, 7, 20, 0.75);
+      backdrop-filter: blur(18px);
+      border: 1.5px solid rgba(197, 160, 72, 0.35);
+      border-radius: 30px;
+      color: #c5a048;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      pointer-events: none;
     }
   </style>
   <script type="importmap">
@@ -29,6 +80,27 @@
   </script>
 </head>
 <body>
+
+<!-- Back Button (works in modal iframe AND standalone) -->
+<button id="back-btn" aria-label="Go back">
+  <i class="fa-solid fa-arrow-left"></i>
+  Back
+</button>
+<script>
+  document.getElementById('back-btn').addEventListener('click', function() {
+    // If inside an iframe (modal), tell parent to close the modal
+    if (window.parent && window.parent !== window) {
+      const closeBtn = window.parent.document.getElementById('modalClose');
+      if (closeBtn) { closeBtn.click(); return; }
+    }
+    // Otherwise, go back in history (standalone mode)
+    window.history.back();
+  });
+</script>
+
+<!-- Planet Name Label -->
+<div id="planet-label">🪐 Loading...</div>
+
 <div id="loading">Loading...</div>
 <script type="module">
   import * as THREE from 'three';
@@ -39,6 +111,10 @@
 
   const urlParams = new URLSearchParams(window.location.search);
   const planetName = urlParams.get('planet') || 'earth';
+
+  // Update the HUD label
+  const label = document.getElementById('planet-label');
+  label.textContent = '🪐 ' + planetName.charAt(0).toUpperCase() + planetName.slice(1);
 
   // Scene setup
   const scene = new THREE.Scene();
