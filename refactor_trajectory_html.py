@@ -1,14 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SolarVerse — Trajectory Physics Simulator</title>
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Merriweather:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" />
-<link rel="stylesheet" href="../css/design-tokens.css" />
+import re
+
+with open('trajectory/index.html', 'r', encoding='utf-8') as f:
+    content = f.read()
+
+# Extract script type="module"
+script_match = re.search(r'<script type="module">([\s\S]*?)</script>', content)
+if script_match:
+    js_content = script_match.group(1).strip()
+    with open('trajectory/trajectory.js', 'w', encoding='utf-8') as f:
+        f.write(js_content)
+    content = content.replace(script_match.group(0), '<script type="module" src="./trajectory.js"></script>')
+
+# Replace the style block
+style_replace = '''<link rel="stylesheet" href="../css/design-tokens.css" />
   <link rel="stylesheet" href="../css/base.css" />
   <style>
     body { overflow: hidden; background: var(--navy); }
@@ -80,9 +84,12 @@
       #dashboard { bottom: auto; top: 70px; flex-wrap: wrap; justify-content: center; width: 100%; }
       #orbitTypeBadge { top: 70px; display: none; /* Hide to save space */ }
     }
-  </style>
-</head>
-<body>
+  </style>'''
+
+content = re.sub(r'<style>[\s\S]*?</style>', style_replace, content)
+
+# Keep the body structure but apply the CSS class names. Let's rewrite the body entirely.
+body_html = '''<body>
   <a href="../index.html" class="back-btn" aria-label="Back to Our Solar View">
     <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Our Solar View
   </a>
@@ -146,4 +153,10 @@
   </script>
   <script type="module" src="./trajectory.js"></script>
 </body>
-</html>
+</html>'''
+
+content = re.sub(r'<body>[\s\S]*?</html>', body_html, content)
+
+with open('trajectory/index.html', 'w', encoding='utf-8') as f:
+    f.write(content)
+print("Updated trajectory HTML")

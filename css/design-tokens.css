@@ -1,0 +1,18 @@
+/* ─── DAASE + Liquid Glass Design System ─────────────────── */
+    :root {
+      --navy:        #00070f;
+      --navy-mid:    #000f23;
+      --gold:        #c5a048;
+      --gold-light:  #ffd97a;
+      --text:        #ffffffee;
+      --text-muted:  #ffffffcc;
+      --text-dim:    #8ba3c0;
+
+      /* Liquid Glass — Apple Vision Pro style */
+      --lg-bg:     linear-gradient(135deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.05) 100%);
+      --lg-border: rgba(255,255,255,0.22);
+      --lg-top:    rgba(255,255,255,0.38);
+      --lg-shadow: 0 8px 32px rgba(0,0,0,0.5), inset 0 1.5px 0 rgba(255,255,255,0.28), inset 0 -1px 0 rgba(0,0,0,0.15);
+      --lg-hover:  linear-gradient(135deg, rgba(255,255,255,0.26) 0%, rgba(255,255,255,0.1) 100%);
+    }
+

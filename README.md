@@ -1,6 +1,6 @@
 <img width="1604" height="895" alt="Screenshot 2026-04-26 144212" src="https://github.com/user-attachments/assets/63c58da3-25b0-4991-ab81-3ea230853473" />
 
-# 🌌 HSPTP — Heliocentric Space & Trajectory Physics Platform
+# 🌌 Our Solar View
 
 <div align="center">
 
@@ -8,7 +8,7 @@
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
 ![WebGL](https://img.shields.io/badge/WebGL-990000?style=for-the-badge&logo=webgl&logoColor=white)
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
-![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmanishkumawat14128%2Fsolar)
 
 **An interactive 3D space simulation — built from scratch using raw Three.js and WebGL**
 
@@ -20,7 +20,7 @@
 
 ## ✨ What Is This?
 
-HSPTP is a browser-based **3D astrophysics visualization platform** with two core modules:
+Our Solar View is a browser-based **3D astrophysics visualization platform** with two core modules:
 
 1. **3D Solar System** — An immersive, explorable model of our solar system with realistic textures, orbital mechanics, and smooth interaction.
 2. **Trajectory Simulation (Kepler's Laws)** — A physics-based orbital simulation where you can manipulate eccentricity and semi-major axis in real time and visualize gravitational effects.
@@ -71,10 +71,10 @@ Built entirely with **vanilla JavaScript + Three.js** — no game engines, no ph
 
 ```bash
 # Clone the repository
-git clone https://github.com/manishkumawat14128/HSPTP.git
+git clone https://github.com/manishkumawat14128/solar.git
 
 # Navigate into the project
-cd HSPTP
+cd solar
 
 # Open with Live Server or any local HTTP server
 # (Required because of ES module imports and texture loading)
@@ -90,7 +90,7 @@ Then open `http://localhost:3000` in your browser.
 ## 📁 Project Structure
 
 ```
-HSPTP/
+solar/
 ├── index.html            # Landing / home page
 ├── solarsystem/          # 3D Solar System module
 │   └── ...

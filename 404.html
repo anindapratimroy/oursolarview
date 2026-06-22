@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 - Lost in Space | Our Solar View</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Merriweather:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy: #00070f;
+      --gold: #c5a048;
+      --text: #ffffff;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--navy);
+      color: var(--text);
+      font-family: 'Space Grotesk', sans-serif;
+      overflow: hidden;
+      text-align: center;
+    }
+    h1 {
+      font-family: 'Merriweather', serif;
+      font-size: 8rem;
+      margin: 0;
+      color: var(--gold);
+      text-shadow: 0 0 20px rgba(197, 160, 72, 0.5);
+    }
+    p {
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+      color: rgba(255, 255, 255, 0.8);
+    }
+    a {
+      display: inline-block;
+      padding: 12px 24px;
+      background: rgba(197, 160, 72, 0.1);
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      text-decoration: none;
+      border-radius: 30px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      font-family: 'Space Mono', monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    a:hover {
+      background: var(--gold);
+      color: var(--navy);
+      box-shadow: 0 0 15px rgba(197, 160, 72, 0.4);
+    }
+    .astronaut {
+      font-size: 5rem;
+      animation: float 6s ease-in-out infinite;
+      margin-bottom: 1rem;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(10deg); }
+    }
+    .stars {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      z-index: -1;
+      background: radial-gradient(circle at center, #00122e 0%, #00070f 100%);
+    }
+  </style>
+</head>
+<body>
+  <div class="stars"></div>
+  <div class="astronaut">👨‍🚀</div>
+  <h1>404</h1>
+  <p>You've drifted too far into the void.</p>
+  <a href="/">Return to Base</a>
+</body>
+</html>

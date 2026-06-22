@@ -1,0 +1,291 @@
+    /* ─── Earth Viewer (right side hero) ─────────────────────── */
+    .hero-earth-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .earth-glow-ring {
+      position: absolute;
+      width: 420px; height: 420px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,80,200,0.15) 0%, transparent 70%);
+      animation: glow-pulse 4s ease-in-out infinite;
+      pointer-events: none;
+    }
+    @keyframes glow-pulse {
+      0%, 100% { transform: scale(1); opacity: 0.7; }
+      50% { transform: scale(1.08); opacity: 1; }
+    }
+
+    #earth-canvas-wrap {
+      width: 380px;
+      height: 380px;
+      border-radius: 50%;
+      overflow: hidden;
+      position: relative;
+      border: 1px solid rgba(100,160,255,0.2);
+      box-shadow: 0 0 60px rgba(50,120,255,0.2), 0 0 120px rgba(0,60,180,0.12);
+    }
+
+    #earth-renderer {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* ─── Planet Grid (Liquid Glass Cards) ───────────────────── */
+    .planet-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 22px;
+    }
+
+    .planet-card {
+      position: relative;
+      overflow: hidden;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-top: 1px solid rgba(255,255,255,0.24);
+      border-radius: 22px;
+      padding: 32px 28px 28px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+      transition: transform 0.35s cubic-bezier(0.16,1,0.3,1), box-shadow 0.35s, border-color 0.3s, background 0.3s;
+      text-decoration: none;
+      color: inherit;
+      will-change: transform;
+    }
+
+    /* Liquid glass specular highlight */
+    .planet-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(160deg, rgba(255,255,255,0.18) 0%, transparent 50%);
+      border-radius: inherit;
+      pointer-events: none;
+      opacity: 0.8;
+      transition: opacity 0.3s;
+    }
+
+    /* Shimmer on hover */
+    .planet-card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -110%;
+      width: 70%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+      transform: skewX(-20deg);
+      transition: left 0.6s ease;
+      pointer-events: none;
+    }
+    .planet-card:hover::after { left: 150%; }
+
+    .planet-card:hover {
+      transform: translateY(-6px) scale(1.01);
+      border-color: rgba(197,160,72,0.38);
+      border-top-color: rgba(197,160,72,0.65);
+      background: rgba(197,160,72,0.08);
+      box-shadow: 0 14px 42px rgba(0,0,0,0.55), 0 0 22px rgba(197,160,72,0.1);
+    }
+
+    .planet-img-wrap {
+      width: 120px; height: 120px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 1.5px solid rgba(255,255,255,0.18);
+      margin-bottom: 20px;
+      flex-shrink: 0;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.5), 0 0 0 6px rgba(255,255,255,0.04);
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .planet-card:hover .planet-img-wrap {
+      border-color: rgba(197,160,72,0.5);
+      box-shadow: 0 6px 24px rgba(197,160,72,0.25), 0 0 0 8px rgba(197,160,72,0.06);
+    }
+    .planet-img-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .planet-name {
+      font-family: 'Merriweather', serif;
+      font-size: 1.18rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 10px;
+    }
+
+    .planet-desc {
+      font-size: 0.96rem;
+      line-height: 1.75;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    .planet-cta {
+      margin-top: auto;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: color 0.2s, gap 0.25s;
+    }
+    .planet-card:hover .planet-cta {
+      color: var(--gold-light);
+      gap: 14px;
+    }
+
+    /* ─── Modal ───────────────────────────────────────────────── */
+    #modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 500;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    #modal.open { display: flex; }
+
+    .modal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,5,15,0.92);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .modal-box {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 1080px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.04) 100%);
+      backdrop-filter: blur(28px) saturate(200%);
+      -webkit-backdrop-filter: blur(28px) saturate(200%);
+      border: 1px solid rgba(255,255,255,0.16);
+      border-top: 1px solid rgba(255,255,255,0.32);
+      border-radius: 24px;
+      box-shadow: 0 12px 64px rgba(0,0,0,0.7), inset 0 1.5px 0 rgba(255,255,255,0.28);
+      overflow: hidden;
+      transform: scale(0.94) translateY(12px);
+      opacity: 0;
+      transition: transform 0.35s cubic-bezier(0.16,1,0.3,1), opacity 0.3s ease;
+    }
+    #modal.open .modal-box {
+      transform: scale(1) translateY(0);
+      opacity: 1;
+    }
+    /* Specular sheen */
+    .modal-box::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(160deg, rgba(255,255,255,0.12) 0%, transparent 50%);
+      border-radius: inherit;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 22px 32px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      position: relative;
+      z-index: 2;
+    }
+
+    .modal-title {
+      font-family: 'Merriweather', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text);
+    }
+    .modal-title span { color: var(--gold); }
+
+    .modal-close {
+      position: relative;
+      overflow: hidden;
+      background: rgba(255,255,255,0.08);
+      border: 1.5px solid rgba(255,255,255,0.15);
+      border-radius: 50%;
+      width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-dim);
+      cursor: pointer;
+      font-size: 1.1rem;
+      transition: background 0.25s, color 0.25s, border-color 0.25s, transform 0.2s;
+    }
+    .modal-close:hover {
+      background: rgba(197,160,72,0.2);
+      color: var(--gold-light);
+      border-color: rgba(197,160,72,0.5);
+      transform: rotate(90deg);
+    }
+
+    .modal-iframe {
+      width: 100%;
+      height: 72vh;
+      border: none;
+      display: block;
+      background: var(--navy);
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Fullscreen modal */
+    #modal.fullscreen {
+      padding: 0;
+    }
+    #modal.fullscreen .modal-box {
+      max-width: 100%;
+      width: 100%;
+      height: 100%;
+      border-radius: 0;
+      border: none;
+    }
+    #modal.fullscreen .modal-iframe {
+      height: calc(100vh - 70px);
+    }
+    .modal-fullscreen-btn {
+      position: relative;
+      overflow: hidden;
+      background: rgba(255,255,255,0.08);
+      border: 1.5px solid rgba(255,255,255,0.15);
+      border-radius: 50%;
+      width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-dim);
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: background 0.25s, color 0.25s, border-color 0.25s, transform 0.2s;
+      flex-shrink: 0;
+    }
+    .modal-fullscreen-btn:hover {
+      background: rgba(197,160,72,0.2);
+      color: var(--gold-light);
+      border-color: rgba(197,160,72,0.5);
+      transform: scale(1.1);
+    }
+
+    /* Earth drag cursor */
+    #earth-canvas-wrap { cursor: grab; }
+    #earth-canvas-wrap:active { cursor: grabbing; }
+

@@ -1,14 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SolarVerse — 3D Solar System Viewer</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Merriweather:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous">
-  <link rel="stylesheet" href="../css/design-tokens.css" />
+import re
+
+with open('solarsystem/index.html', 'r', encoding='utf-8') as f:
+    content = f.read()
+
+# Replace <style> to </style> with <link rel="stylesheet" href="../css/design-tokens.css">
+# and a new solarsystem specific CSS file, or just base styles.
+style_replace = '''<link rel="stylesheet" href="../css/design-tokens.css" />
   <link rel="stylesheet" href="../css/base.css" />
   <style>
     /* Solar System Viewer specific overrides */
@@ -87,17 +84,12 @@
       .control-panel { top: auto; bottom: 0; left: 0; right: 0; width: 100%; border-radius: 20px 20px 0 0; padding: 16px; }
       #infoPanel { bottom: 100px; left: 10px; right: 10px; max-width: auto; }
     }
-  </style>
-<script type="importmap">
-  {
-    "imports": {
-      "three": "https://cdn.jsdelivr.net/npm/three@0.129.0/build/three.module.js",
-      "three/examples/jsm/": "https://cdn.jsdelivr.net/npm/three@0.129.0/examples/jsm/"
-    }
-  }
-</script>
-</head>
-<body>
+  </style>'''
+
+content = re.sub(r'<style>[\s\S]*?</style>', style_replace, content)
+
+# Replace the scattered body controls with the new .control-panel structure
+body_html = '''<body>
   <!-- Back Button -->
   <a href="../index.html" class="back-btn" aria-label="Back to Our Solar View">
     <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
@@ -166,6 +158,10 @@
   </script>
   <script type="module" src="./solarsystem.js"></script>
 </body>
-</html>
+</html>'''
 
+content = re.sub(r'<body>[\s\S]*?</html>', body_html, content)
 
+with open('solarsystem/index.html', 'w', encoding='utf-8') as f:
+    f.write(content)
+print("Updated solarsystem HTML")
