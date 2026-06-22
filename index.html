@@ -95,7 +95,8 @@
     .nav {
       position: fixed;
       top: 0; left: 0; right: 0;
-      z-index: 9000;
+       z-index: 99999 !important; /* Increase this to the max */
+       pointer-events: auto;   
       height: 72px;
       background: rgba(0,7,15,0.65);
       backdrop-filter: blur(12px);
@@ -145,6 +146,8 @@
       align-items: center;
       gap: 6px;
       list-style: none;
+        position: relative; /* Added */
+  z-index: 9999; z-index: 100000 !important; /* Even higher than the nav bar */   /* Added: Ensures links are above everything else */
     }
 
     .nav-links a {
@@ -162,6 +165,8 @@
       overflow: hidden;
       cursor: pointer;
       pointer-events: auto;
+        display: inline-block; /* Added: Ensures the hit-box is calculated correctly */
+  pointer-events: auto !important; 
       transition: color 0.25s, background 0.25s, border-color 0.25s, transform 0.2s;
     }
     /* Liquid glass shimmer on nav links */
