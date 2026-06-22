@@ -1,0 +1,16 @@
+{
+  "name": "Our Solar View",
+  "short_name": "SolarView",
+  "description": "An advanced browser-based 3D astrophysics visualization platform.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#00070f",
+  "theme_color": "#c5a048",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

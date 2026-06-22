@@ -101,9 +101,33 @@ const orbitsData = [
   { a: 706.621, b: 706.594926, cx: -5.462 },  
 ];
 orbitsData.forEach(o => scene.add(createEllipseRing(o.a,o.b,o.cx)));
+  
+  // --- Loading Manager ---
+  const manager = new THREE.LoadingManager();
+  const loadingOverlay = document.createElement('div');
+  loadingOverlay.id = 'solarsystem-loader';
+  loadingOverlay.style.cssText = 'position:fixed; top:0; left:0; width:100%; height:100%; background:var(--navy); z-index:9999; display:flex; justify-content:center; align-items:center; color:var(--gold); font-family:"Space Mono", monospace; font-size:1.2rem; flex-direction:column; gap:20px; transition:opacity 0.5s;';
+  
+  const loadingText = document.createElement('div');
+  loadingText.innerText = 'Loading Textures (0%)';
+  
+  const spinner = document.createElement('i');
+  spinner.className = 'fa-solid fa-circle-notch fa-spin fa-2x';
+  
+  loadingOverlay.appendChild(spinner);
+  loadingOverlay.appendChild(loadingText);
+  document.body.appendChild(loadingOverlay);
 
-// --- Textures & Planets ---
-const textureLoader = new THREE.TextureLoader();
+  manager.onProgress = function (url, itemsLoaded, itemsTotal) {
+    loadingText.innerText = `Loading Textures (${Math.round((itemsLoaded / itemsTotal) * 100)}%)`;
+  };
+  manager.onLoad = function () {
+    loadingOverlay.style.opacity = '0';
+    setTimeout(() => loadingOverlay.remove(), 500);
+  };
+
+  // --- Textures & Planets ---
+  const textureLoader = new THREE.TextureLoader(manager);
 function loadPlanetTexture(texture, radius) {
   const geo = new THREE.SphereGeometry(radius, 32, 32);
   const mat = new THREE.MeshStandardMaterial({ 
@@ -119,7 +143,7 @@ function loadPlanetTexture(texture, radius) {
 
 // --- Orbital periods normalized to Earth = 1 ---
 
-const textureLoader1 = new THREE.TextureLoader();
+const textureLoader1 = new THREE.TextureLoader(manager);
 const fireTexture = textureLoader1.load('./sun.jpg'); // Assuming sun.jpg is in the same directory
 fireTexture.wrapS = fireTexture.wrapT = THREE.RepeatWrapping;
 // Sun Material
@@ -143,7 +167,7 @@ composer.addPass(new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window
 
 // --- Planets array with additional info ---
 const planets = [
-  { mesh: loadPlanetTexture("./8k_sun.jpg", 4.9), key: "sun",
+  { mesh: loadPlanetTexture("./2k_sun.jpg", 4.9), key: "sun",
     details: "The Sun is the star at the center of the Solar System.",
     funFact: "The Sun accounts for 99.86% of the total mass of the Solar System!",
     info: {
@@ -195,7 +219,7 @@ const planets = [
       notableFeatures: "Solar flares, sunspots, coronal mass ejections, source of light and heat for the Solar System."
     }
   },
-  { mesh: loadPlanetTexture("./8k_mercury.jpg", 1), key: "mercury",
+  { mesh: loadPlanetTexture("./2k_mercury.jpg", 1), key: "mercury",
     details: "Mercury is the smallest planet in our solar system and closest to the Sun.",
     funFact: "A day on Mercury is longer than its year!",
     info: {
@@ -247,7 +271,7 @@ const planets = [
       notableFeatures: "Highly eccentric orbit, extreme temperature variations, caloris basin."
     }
   },
-  { mesh: loadPlanetTexture("./8k_venus_surface.jpg", 2.3), key: "venus",
+  { mesh: loadPlanetTexture("./2k_venus_surface.jpg", 2.3), key: "venus",
     details: "Venus is the second planet from the Sun, often called Earth's 'sister planet' due to its similar size and mass. However, it has an extremely dense, toxic atmosphere and a scorching hot surface due to a runaway greenhouse effect.",
     funFact: "Venus rotates in the opposite direction (retrograde) to most other planets, meaning the Sun rises in the west and sets in the east. Its day is also longer than its year!",
     info: {
@@ -351,7 +375,7 @@ const planets = [
       notableFeatures: "Only known planet to support life, diverse ecosystems, liquid water on surface, active plate tectonics."
     }
   },
-  { mesh: loadPlanetTexture("./8k_mars.jpg", 2), key: "mars",
+  { mesh: loadPlanetTexture("./2k_mars.jpg", 2), key: "mars",
     details: "Mars is the fourth planet from the Sun and the second-smallest planet in the Solar System.",
     funFact: "Mars has two moons, Phobos and Deimos, which are thought to be captured asteroids.",
     info: {
@@ -403,7 +427,7 @@ const planets = [
       notableFeatures: "Polar ice caps, Valles Marineris (canyon system), Olympus Mons (largest volcano), evidence of past liquid water."
     }
   },
-  { mesh: loadPlanetTexture("./8k_jupiter.jpg", 4), key: "jupiter",
+  { mesh: loadPlanetTexture("./2k_jupiter.jpg", 4), key: "jupiter",
     details: "Jupiter is the fifth planet from the Sun and the largest in the Solar System.",
     funFact: "Jupiter's Great Red Spot is a giant storm bigger than Earth!",
     info: {
@@ -455,7 +479,7 @@ const planets = [
       notableFeatures: "Great Red Spot, strong magnetic field, four large Galilean moons, fastest rotation of any planet."
     }
   },
-  { mesh: loadPlanetTexture("./8k_saturn.jpg", 4), key: "saturn",
+  { mesh: loadPlanetTexture("./2k_saturn.jpg", 4), key: "saturn",
     details: "Saturn is the sixth planet from the Sun and the second-largest in the Solar System, known for its rings.",
     funFact: "Saturn's rings are mostly made of ice particles and rock debris.",
     info: {

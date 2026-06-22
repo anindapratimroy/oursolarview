@@ -45,8 +45,31 @@ gridHelper.material.opacity = 0.45; gridHelper.material.transparent = true;
 scene.add(gridHelper);
 
 // ── Textures ──────────────────────────────────────────────────
-const loader = new THREE.TextureLoader();
-const sunTex   = loader.load('../planets/img_others/8k_sun.jpg');
+const manager = new THREE.LoadingManager();
+const loadingOverlay = document.createElement('div');
+loadingOverlay.id = 'trajectory-loader';
+loadingOverlay.style.cssText = 'position:fixed; top:0; left:0; width:100%; height:100%; background:var(--navy); z-index:9999; display:flex; justify-content:center; align-items:center; color:var(--gold); font-family:"Space Mono", monospace; font-size:1.2rem; flex-direction:column; gap:20px; transition:opacity 0.5s;';
+
+const loadingText = document.createElement('div');
+loadingText.innerText = 'Loading Physics Engine (0%)';
+
+const spinner = document.createElement('i');
+spinner.className = 'fa-solid fa-circle-notch fa-spin fa-2x';
+
+loadingOverlay.appendChild(spinner);
+loadingOverlay.appendChild(loadingText);
+document.body.appendChild(loadingOverlay);
+
+manager.onProgress = function (url, itemsLoaded, itemsTotal) {
+  loadingText.innerText = `Loading Assets (${Math.round((itemsLoaded / itemsTotal) * 100)}%)`;
+};
+manager.onLoad = function () {
+  loadingOverlay.style.opacity = '0';
+  setTimeout(() => loadingOverlay.remove(), 500);
+};
+
+const loader = new THREE.TextureLoader(manager);
+const sunTex   = loader.load('../planets/img_others/2k_sun.jpg');
 const earthTex = loader.load('../planets/img_earth/earth_day_4096.jpg');
 const cloudTex = loader.load('../planets/img_earth/earth_clouds_1024.png');
 const normalTex = loader.load('../planets/img_earth/earth_normal_2048.jpg');

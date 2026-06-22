@@ -34,7 +34,23 @@ export function initEarth() {
 
   // Earth sphere
   const geo = new THREE.SphereGeometry(1, 64, 64);
-  const loader = new THREE.TextureLoader();
+  // Loading Manager
+  const manager = new THREE.LoadingManager();
+  const preloader = document.getElementById('preloader');
+  const spinner = document.querySelector('.pre-spinner');
+  const preLabel = document.querySelector('.pre-label');
+  
+  if (preloader) {
+    manager.onProgress = function (url, itemsLoaded, itemsTotal) {
+      if (preLabel) preLabel.innerText = `Loading Assets (${Math.round((itemsLoaded / itemsTotal) * 100)}%)`;
+    };
+    manager.onLoad = function () {
+      preloader.classList.add('out');
+      setTimeout(() => preloader.remove(), 700);
+    };
+  }
+
+  const loader = new THREE.TextureLoader(manager);
   const earthTex  = loader.load('./planets/img_earth/earth_day_4096.jpg');
   const normalTex = loader.load('./planets/img_earth/earth_normal_2048.jpg');
   const cloudTex  = loader.load('./planets/img_earth/earth_clouds_1024.png');
