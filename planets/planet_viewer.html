@@ -87,15 +87,14 @@
   Back
 </button>
 <script>
-  document.getElementById('back-btn').addEventListener('click', function() {
-    // If inside an iframe (modal), tell parent to close the modal
-    if (window.parent && window.parent !== window) {
-      const closeBtn = window.parent.document.getElementById('modalClose');
-      if (closeBtn) { closeBtn.click(); return; }
-    }
-    // Otherwise, go back in history (standalone mode)
-    window.history.back();
-  });
+  if (window.parent && window.parent !== window) {
+    document.getElementById('back-btn').style.display = 'none';
+    document.getElementById('planet-label').style.display = 'none';
+  } else {
+    document.getElementById('back-btn').addEventListener('click', function() {
+      window.history.back();
+    });
+  }
 </script>
 
 <!-- Planet Name Label -->

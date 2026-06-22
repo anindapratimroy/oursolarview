@@ -86,9 +86,24 @@
     .info-item span { color: var(--text-muted); font-size: 0.9rem; }
     .panel-section { font-size: 0.9rem; line-height: 1.6; margin-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px; }
     
+    .toggle-controls-btn { display: none; }
+
     @media (max-width: 768px) {
-      .control-panel { top: auto; bottom: 0; left: 0; right: 0; width: 100%; border-radius: 20px 20px 0 0; padding: 16px; }
-      #infoPanel { bottom: 100px; left: 10px; right: 10px; max-width: auto; }
+      .toggle-controls-btn {
+        display: flex; position: absolute; top: 18px; right: 18px; z-index: 2000;
+        background: rgba(0, 15, 35, 0.85); border: 1.5px solid rgba(197, 160, 72, 0.4);
+        border-radius: 30px; padding: 8px 16px; color: var(--gold-light);
+        font-family: 'Space Mono', monospace; font-size: 0.8rem; font-weight: 700;
+        text-transform: uppercase; cursor: pointer; align-items: center; gap: 8px;
+        backdrop-filter: blur(8px);
+      }
+      .control-panel { 
+        top: auto; bottom: 0; left: 0; right: 0; width: 100%; border-radius: 20px 20px 0 0; 
+        padding: 16px 16px 30px; transform: translateY(100%); transition: transform 0.35s cubic-bezier(0.16,1,0.3,1); 
+      }
+      .control-panel.open { transform: translateY(0); }
+      #infoPanel { bottom: 20px; left: 10px; right: 10px; max-width: auto; transition: transform 0.35s cubic-bezier(0.16,1,0.3,1); }
+      .control-panel.open ~ #infoPanel { transform: translateY(-240px); }
     }
   </style>
 <script type="importmap">
@@ -106,6 +121,11 @@
     <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
     Our Solar View
   </a>
+
+  <!-- Mobile Toggle -->
+  <button class="toggle-controls-btn" id="toggleControlsBtn">
+    <i class="fa-solid fa-sliders"></i> Controls
+  </button>
 
   <!-- Unified Control Panel -->
   <aside class="control-panel">
@@ -127,11 +147,6 @@
         <option value="uranus">Uranus</option>
         <option value="neptune">Neptune</option>
       </select>
-    </div>
-
-    <div class="control-group">
-      <label>Background Color:</label>
-      <input type="color" id="bgColorPicker" value="#000011">
     </div>
 
     <div class="checkbox-group">
@@ -165,6 +180,15 @@
         "three": "https://cdn.jsdelivr.net/npm/three@0.129.0/build/three.module.js",
         "three/examples/jsm/": "https://cdn.jsdelivr.net/npm/three@0.129.0/examples/jsm/"
       }
+    }
+  </script>
+  <script>
+    const toggleBtn = document.getElementById('toggleControlsBtn');
+    const controlPanel = document.querySelector('.control-panel');
+    if (toggleBtn && controlPanel) {
+      toggleBtn.addEventListener('click', () => {
+        controlPanel.classList.toggle('open');
+      });
     }
   </script>
   <script type="module" src="./solarsystem.js"></script>

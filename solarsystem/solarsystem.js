@@ -761,12 +761,7 @@ const bgMaterial = new THREE.MeshBasicMaterial({
   color: 0x050505,     // base dark blue
   side: THREE.BackSide, // render inside of sphere
 });
-document.getElementById("bgColorPicker").addEventListener("input", e=>{
-  const color = new THREE.Color(e.target.value);
-  bgMaterial.color = color;
-  scene.fog.color = color;
-  renderer.setClearColor(color);
-});
+// Bg color removed
 const background = new THREE.Mesh(bgGeometry, bgMaterial);
 scene.add(background);
 scene.fog = new THREE.FogExp2(0x000011, 0.00015);
@@ -975,8 +970,8 @@ function hideInfoPanel() {
   infoPanel.classList.remove("visible"); // Use class for visibility
 }
 
-// --- Mouse click event ---
-window.addEventListener("mousedown", (event) => {
+// --- Mouse/Touch click event ---
+window.addEventListener("pointerdown", (event) => {
   mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
   mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
   

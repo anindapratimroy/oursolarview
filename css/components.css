@@ -5,6 +5,11 @@
       justify-content: center;
       position: relative;
     }
+    @media (max-width: 1100px) {
+      .hero-earth-wrap {
+        display: none !important;
+      }
+    }
 
     .earth-glow-ring {
       position: absolute;
