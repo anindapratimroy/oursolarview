@@ -103,7 +103,9 @@
     .hero {
       position: relative;
       z-index: 1;
-      min-height: 100vh;
+      min-height: 700px;
+      height: 100vh;
+      max-height: 1000px;
       display: flex;
       align-items: center;
       padding-top: 72px;
@@ -574,6 +576,7 @@
     right: 0;
     width: 60%;
     height: calc(100vh - 72px);
+    max-height: 900px;
     background: rgba(0, 10, 25, 0.95);
     backdrop-filter: blur(15px);
     flex-direction: column;

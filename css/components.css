@@ -268,6 +268,7 @@
     }
     #modal.fullscreen .modal-iframe {
       height: calc(100vh - 70px);
+      max-height: 1000px;
     }
     .modal-fullscreen-btn {
       position: relative;

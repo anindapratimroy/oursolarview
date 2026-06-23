@@ -7,7 +7,7 @@
       background-color: var(--navy);
       color: var(--text);
       overflow-x: hidden;
-      min-height: 100vh;
+      min-height: 100%;
     }
 
     /* ─── Space Canvas ───────────────────────────────────────── */
