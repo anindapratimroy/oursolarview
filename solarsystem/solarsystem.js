@@ -119,20 +119,33 @@ orbitsData.forEach(o => scene.add(createEllipseRing(o.a,o.b,o.cx)));
   document.body.appendChild(loadingOverlay);
 
   const startTime = Date.now();
+  const phrases = [
+    "God is sketching the blueprint of the cosmos...",
+    "God is forging the heavy elements...",
+    "God is carefully designing the planetary orbits...",
+    "God is calibrating the laws of physics...",
+    "God is fine-tuning the speed of light...",
+    "God is painting the atmospheric clouds...",
+    "God is scattering cosmic dust...",
+    "God is admiring the final masterpiece..."
+  ];
+  let currentPct = 0;
+  
+  const phraseInterval = setInterval(() => {
+    const randPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+    loadingText.innerText = `${randPhrase} (${currentPct}%)`;
+  }, 800);
+
   manager.onProgress = function (url, itemsLoaded, itemsTotal) {
-    const pct = Math.round((itemsLoaded / itemsTotal) * 100);
-    let msg = "God is sketching the blueprint of the cosmos...";
-    if (pct > 15) msg = "God is forging the heavy elements...";
-    if (pct > 35) msg = "God is carefully designing the planetary orbits...";
-    if (pct > 60) msg = "God is painting the atmospheric clouds...";
-    if (pct > 85) msg = "God is admiring the final masterpiece...";
-    if (pct > 95) msg = "God is testing your patience... A flawless Universe cannot be rushed.";
-    loadingText.innerText = `${msg} (${pct}%)`;
+    currentPct = Math.round((itemsLoaded / itemsTotal) * 100);
+    const currentText = loadingText.innerText.split(' (')[0] || phrases[0];
+    loadingText.innerText = `${currentText} (${currentPct}%)`;
   };
   manager.onLoad = function () {
     const elapsed = Date.now() - startTime;
     const delay = Math.max(0, 3000 - elapsed);
     setTimeout(() => {
+      clearInterval(phraseInterval);
       loadingOverlay.style.opacity = '0';
       setTimeout(() => loadingOverlay.remove(), 500);
     }, delay);

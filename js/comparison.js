@@ -141,6 +141,18 @@ function buildViewer(canvasId, wrapperId, loaderId) {
     if (animId) { cancelAnimationFrame(animId); animId = null; }
     loader.style.display = 'flex';
     const startTime = Date.now();
+    
+    const phrases = [
+      "God is retrieving this celestial body...",
+      "God is forging the heavy elements...",
+      "God is calculating the planetary mass...",
+      "God is painting the surface textures...",
+      "God is admiring the final masterpiece..."
+    ];
+    const span = loader.querySelector('span');
+    const phraseInterval = setInterval(() => {
+      if (span) span.innerText = phrases[Math.floor(Math.random() * phrases.length)];
+    }, 800);
 
     const pd = PLANET_DATA[key];
     const radius = visualRadius(key);
@@ -184,6 +196,7 @@ function buildViewer(canvasId, wrapperId, loaderId) {
       const delay = Math.max(0, 2500 - elapsed);
       
       setTimeout(() => {
+        clearInterval(phraseInterval);
         loader.style.display = 'none';
 
         function animate() {

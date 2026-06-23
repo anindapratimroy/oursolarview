@@ -36,13 +36,37 @@ export function initEarth() {
   
   if (preloader) {
     const startTime = Date.now();
+    const phrases = [
+      "God is sketching the blueprint of the cosmos...",
+      "God is forging the heavy elements...",
+      "God is carefully designing the planetary orbits...",
+      "God is calibrating the laws of physics...",
+      "God is fine-tuning the speed of light...",
+      "God is painting the atmospheric clouds...",
+      "God is scattering cosmic dust..."
+    ];
+    let currentPct = 0;
+    
+    const phraseInterval = setInterval(() => {
+      if (preLabel) {
+        const randPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+        preLabel.innerText = `${randPhrase} (${currentPct}%)`;
+      }
+    }, 800);
+
     manager.onProgress = function (url, itemsLoaded, itemsTotal) {
-      if (preLabel) preLabel.innerText = `God is Sketching the Blueprint... (${Math.round((itemsLoaded / itemsTotal) * 100)}%)`;
+      currentPct = Math.round((itemsLoaded / itemsTotal) * 100);
+      if (preLabel) {
+        const currentText = preLabel.innerText.split(' (')[0] || phrases[0];
+        preLabel.innerText = `${currentText} (${currentPct}%)`;
+      }
     };
+
     manager.onLoad = function () {
       const elapsed = Date.now() - startTime;
       const delay = Math.max(0, 3000 - elapsed);
       setTimeout(() => {
+        clearInterval(phraseInterval);
         preloader.classList.add('out');
         setTimeout(() => preloader.remove(), 700);
       }, delay);
