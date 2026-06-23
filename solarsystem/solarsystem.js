@@ -109,7 +109,7 @@ orbitsData.forEach(o => scene.add(createEllipseRing(o.a,o.b,o.cx)));
   loadingOverlay.style.cssText = 'position:fixed; top:0; left:0; width:100%; height:100%; background:var(--navy); z-index:9999; display:flex; justify-content:center; align-items:center; color:var(--gold); font-family:"Space Mono", monospace; font-size:1.2rem; flex-direction:column; gap:20px; transition:opacity 0.5s;';
   
   const loadingText = document.createElement('div');
-  loadingText.innerText = 'Loading Textures (0%)';
+  loadingText.innerText = 'God is sketching the blueprint of the cosmos... (0%)';
   
   const spinner = document.createElement('i');
   spinner.className = 'fa-solid fa-circle-notch fa-spin fa-2x';
@@ -119,7 +119,14 @@ orbitsData.forEach(o => scene.add(createEllipseRing(o.a,o.b,o.cx)));
   document.body.appendChild(loadingOverlay);
 
   manager.onProgress = function (url, itemsLoaded, itemsTotal) {
-    loadingText.innerText = `Loading Textures (${Math.round((itemsLoaded / itemsTotal) * 100)}%)`;
+    const pct = Math.round((itemsLoaded / itemsTotal) * 100);
+    let msg = "God is sketching the blueprint of the cosmos...";
+    if (pct > 15) msg = "God is forging the heavy elements...";
+    if (pct > 35) msg = "God is carefully designing the planetary orbits...";
+    if (pct > 60) msg = "God is painting the atmospheric clouds...";
+    if (pct > 85) msg = "God is admiring the final masterpiece...";
+    if (pct > 95) msg = "God is testing your patience... A flawless Universe cannot be rushed.";
+    loadingText.innerText = `${msg} (${pct}%)`;
   };
   manager.onLoad = function () {
     loadingOverlay.style.opacity = '0';

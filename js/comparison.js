@@ -232,6 +232,13 @@ function updateTable(leftKey, rightKey) {
       '<td class="compare-td-val' + hlRight + '">' + rv + '</td>';
     tbody.appendChild(tr);
   });
+  
+  // God Easter Egg
+  if ((leftKey === 'earth' && rightKey === 'jupiter') || (leftKey === 'jupiter' && rightKey === 'earth')) {
+    const tr = document.createElement('tr');
+    tr.innerHTML = '<td colspan="3" style="text-align:center; color:var(--gold); padding:20px; font-family:\'Space Mono\', monospace; letter-spacing:0.05em; font-size:0.8rem;">"You built one for life, and the other to protect it."</td>';
+    tbody.appendChild(tr);
+  }
 }
 
 export function initComparison() {

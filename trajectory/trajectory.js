@@ -305,9 +305,15 @@ function buildAndSetOrbit() {
 
   // Badge
   const em = e.toFixed(3);
-  if (type === 'ellipse')  badge.textContent = `⬤ Elliptical Orbit  ·  e = ${em}`;
-  else if (type === 'parabola') badge.textContent = `◆ Parabolic Escape  ·  e = ${em}`;
-  else badge.textContent = `▲ Hyperbolic Flyby  ·  e = ${em}`;
+  if (type === 'ellipse' && e === 0.0) {
+    badge.textContent = `⬤ A mathematically perfect circle. God is pleased.`;
+  } else if (type === 'ellipse') {
+    badge.textContent = `⬤ Elliptical Orbit  ·  e = ${em}`;
+  } else if (type === 'parabola') {
+    badge.textContent = `◆ Parabolic Escape  ·  e = ${em}`;
+  } else {
+    badge.textContent = `▲ God has banished this celestial body to the void.`;
+  }
   badge.style.borderColor = type === 'ellipse' ? 'rgba(197,160,72,0.5)' : type === 'parabola' ? 'rgba(255,220,50,0.6)' : 'rgba(255,100,60,0.6)';
 
   // Period (Kepler 3rd law) — only meaningful for ellipse
