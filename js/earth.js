@@ -35,12 +35,17 @@ export function initEarth() {
   const preLabel = document.querySelector('.pre-label');
   
   if (preloader) {
+    const startTime = Date.now();
     manager.onProgress = function (url, itemsLoaded, itemsTotal) {
-      if (preLabel) preLabel.innerText = `Loading Assets (${Math.round((itemsLoaded / itemsTotal) * 100)}%)`;
+      if (preLabel) preLabel.innerText = `God is Sketching the Blueprint... (${Math.round((itemsLoaded / itemsTotal) * 100)}%)`;
     };
     manager.onLoad = function () {
-      preloader.classList.add('out');
-      setTimeout(() => preloader.remove(), 700);
+      const elapsed = Date.now() - startTime;
+      const delay = Math.max(0, 3000 - elapsed);
+      setTimeout(() => {
+        preloader.classList.add('out');
+        setTimeout(() => preloader.remove(), 700);
+      }, delay);
     };
   }
 

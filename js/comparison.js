@@ -140,6 +140,7 @@ function buildViewer(canvasId, wrapperId, loaderId) {
     if (mesh) { scene.remove(mesh); mesh.geometry.dispose(); mesh.material.dispose(); mesh = null; }
     if (animId) { cancelAnimationFrame(animId); animId = null; }
     loader.style.display = 'flex';
+    const startTime = Date.now();
 
     const pd = PLANET_DATA[key];
     const radius = visualRadius(key);
@@ -179,20 +180,25 @@ function buildViewer(canvasId, wrapperId, loaderId) {
         mesh.add(atmoMesh);
       }
 
-      loader.style.display = 'none';
+      const elapsed = Date.now() - startTime;
+      const delay = Math.max(0, 2500 - elapsed);
+      
+      setTimeout(() => {
+        loader.style.display = 'none';
 
-      function animate() {
-        animId = requestAnimationFrame(animate);
-        if (mesh && !controls.state) {
-          mesh.rotation.y += 0.002; // Slower auto-rotate
-          if (mesh.children.length > 0) {
-             mesh.children[0].rotation.y += 0.001; // Clouds move slightly faster
+        function animate() {
+          animId = requestAnimationFrame(animate);
+          if (mesh && !controls.state) {
+            mesh.rotation.y += 0.002; // Slower auto-rotate
+            if (mesh.children.length > 0) {
+               mesh.children[0].rotation.y += 0.001; // Clouds move slightly faster
+            }
           }
+          controls.update();
+          renderer.render(scene, camera);
         }
-        controls.update();
-        renderer.render(scene, camera);
-      }
-      animate();
+        animate();
+      }, delay);
     }
 
     texLoader.load(pd.texture, onLoaded, undefined, () => onLoaded(null));

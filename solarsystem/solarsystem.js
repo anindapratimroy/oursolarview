@@ -118,6 +118,7 @@ orbitsData.forEach(o => scene.add(createEllipseRing(o.a,o.b,o.cx)));
   loadingOverlay.appendChild(loadingText);
   document.body.appendChild(loadingOverlay);
 
+  const startTime = Date.now();
   manager.onProgress = function (url, itemsLoaded, itemsTotal) {
     const pct = Math.round((itemsLoaded / itemsTotal) * 100);
     let msg = "God is sketching the blueprint of the cosmos...";
@@ -129,8 +130,12 @@ orbitsData.forEach(o => scene.add(createEllipseRing(o.a,o.b,o.cx)));
     loadingText.innerText = `${msg} (${pct}%)`;
   };
   manager.onLoad = function () {
-    loadingOverlay.style.opacity = '0';
-    setTimeout(() => loadingOverlay.remove(), 500);
+    const elapsed = Date.now() - startTime;
+    const delay = Math.max(0, 3000 - elapsed);
+    setTimeout(() => {
+      loadingOverlay.style.opacity = '0';
+      setTimeout(() => loadingOverlay.remove(), 500);
+    }, delay);
   };
 
   // --- Textures & Planets ---
