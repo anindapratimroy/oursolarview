@@ -15,7 +15,6 @@ export function initModal() {
     modalIframe.src = `./planets/planet_viewer.html?planet=${p.name.toLowerCase()}`;
     modal.classList.add('open');
     document.body.style.overflow = 'hidden';
-    modalClose.focus();
 
     if (pushState) {
       const url = new URL(window.location);
@@ -58,7 +57,11 @@ export function initModal() {
     modalFullscreen.title = isFullscreen ? 'Exit fullscreen' : 'Fullscreen';
   }
   modalFullscreen.addEventListener('click', toggleFullscreen);
-  modalClose.addEventListener('click', closeModal);
   modalBackdrop.addEventListener('click', closeModal);
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+  // Listen for postMessage from planet_viewer iframe back button
+  window.addEventListener('message', (e) => {
+    if (e.data === 'closeModal') closeModal();
+  });
 }

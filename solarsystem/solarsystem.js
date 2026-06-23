@@ -144,7 +144,7 @@ function loadPlanetTexture(texture, radius) {
 // --- Orbital periods normalized to Earth = 1 ---
 
 const textureLoader1 = new THREE.TextureLoader(manager);
-const fireTexture = textureLoader1.load('../planets/img_others/2k_sun.jpg'); // Assuming sun.jpg is in the same directory
+const fireTexture = textureLoader1.load('../planets/img_others/8k_sun.jpg');
 fireTexture.wrapS = fireTexture.wrapT = THREE.RepeatWrapping;
 // Sun Material
 const sunMaterial = new THREE.MeshStandardMaterial({
@@ -155,10 +155,10 @@ const sunMaterial = new THREE.MeshStandardMaterial({
 });
 
 // Sun Mesh
-const sunGeometry = new THREE.SphereGeometry(5, 18, 18);
+const sunGeometry = new THREE.SphereGeometry(5, 32, 32);
 const sunMesh = new THREE.Mesh(sunGeometry, sunMaterial);
 scene.add(sunMesh);
-const sunLight = new THREE.PointLight(0xffddaa, 3, 1000);
+const sunLight = new THREE.PointLight(0xfff4e0, 3, 1000);
 sunLight.position.copy(sunMesh.position);
 scene.add(sunLight);
 const composer = new EffectComposer(renderer);
@@ -1006,6 +1006,9 @@ function animate(){
 // --- Rotate the Sun relative to Earth's orbital position ---
  const delta=clock.getDelta(); // seconds since last frame
 sunMesh.rotation.y += (2 * Math.PI / sunRotationPeriod) * delta * simScale;
+  // Animated UV-scroll — gives boiling fire/plasma effect (Reference sun.html technique)
+  fireTexture.offset.x += 0.0006 * delta * 60;
+  fireTexture.offset.y += 0.0004 * delta * 60;
   // Sun spin
 //   planets[0].mesh.rotation.y += (2*Math.PI/realSeconds.sun_eq) * delta * simScale;
 

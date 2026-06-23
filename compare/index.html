@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Planet Comparison — Our Solar View</title>
+  <meta name="description" content="Compare the physical properties and visual scaling of Solar System planets." />
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Merriweather:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" />
+  
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+  
+  <!-- Global CSS -->
+  <link rel="stylesheet" href="../css/design-tokens.css" />
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/layout.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <!-- Feature Specific CSS -->
+  <link rel="stylesheet" href="../css/compare.css" />
+</head>
+<body>
+
+<!-- Animated Space Canvas -->
+<canvas id="space-canvas"></canvas>
+
+<!-- Navigation -->
+<nav class="nav" role="navigation" aria-label="Main Navigation">
+  <div class="nav-inner">
+    <a href="../index.html" class="nav-brand" aria-label="Home">
+      <span class="brand-dot"></span>
+      Our Solar <em>View</em>
+    </a>
+    
+    <button class="mobile-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="nav-links">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </button>
+
+    <ul class="nav-links" id="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="../solarsystem/index.html">3D Solar System</a></li>
+      <li><a href="../trajectory/index.html">Trajectory</a></li>
+      <li><a href="index.html" aria-current="page">Compare Planets</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="compare-container">
+  
+  <div class="compare-header">
+    <h1 class="compare-title">Planet Comparison</h1>
+    <p class="compare-subtitle">Select two celestial bodies to instantly compare their physical scales and orbital parameters in full 3D.</p>
+  </div>
+
+  <div class="compare-split">
+    <!-- Left Planet -->
+    <div class="compare-side compare-side-left">
+      <div class="compare-selector">
+        <select id="select-left" aria-label="Select left planet">
+          <option value="mercury">Mercury</option>
+          <option value="venus">Venus</option>
+          <option value="earth" selected>Earth</option>
+          <option value="mars">Mars</option>
+          <option value="jupiter">Jupiter</option>
+          <option value="saturn">Saturn</option>
+          <option value="uranus">Uranus</option>
+          <option value="neptune">Neptune</option>
+        </select>
+        <i class="fa-solid fa-chevron-down select-icon"></i>
+      </div>
+      
+      <div class="compare-canvas-container" id="compare-canvas-wrap-left">
+        <div class="compare-loader" id="compare-loader-left">
+          <div class="spinner"></div>
+          <span>Acquiring target...</span>
+        </div>
+        <canvas id="compare-canvas-left"></canvas>
+      </div>
+    </div>
+
+    <!-- Right Planet -->
+    <div class="compare-side compare-side-right">
+      <div class="compare-selector">
+        <select id="select-right" aria-label="Select right planet">
+          <option value="mercury">Mercury</option>
+          <option value="venus" selected>Venus</option>
+          <option value="earth">Earth</option>
+          <option value="mars">Mars</option>
+          <option value="jupiter">Jupiter</option>
+          <option value="saturn">Saturn</option>
+          <option value="uranus">Uranus</option>
+          <option value="neptune">Neptune</option>
+        </select>
+        <i class="fa-solid fa-chevron-down select-icon"></i>
+      </div>
+      
+      <div class="compare-canvas-container" id="compare-canvas-wrap-right">
+        <div class="compare-loader" id="compare-loader-right">
+          <div class="spinner"></div>
+          <span>Acquiring target...</span>
+        </div>
+        <canvas id="compare-canvas-right"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Data Table -->
+  <div class="compare-table-wrapper">
+    <table class="compare-data-table">
+      <thead>
+        <tr>
+          <th class="td-prop">Parameter</th>
+          <th id="compare-th-left" class="td-val left-val">Earth</th>
+          <th id="compare-th-right" class="td-val right-val">Venus</th>
+        </tr>
+      </thead>
+      <tbody id="compare-tbody">
+        <!-- Javascript populates this -->
+      </tbody>
+    </table>
+  </div>
+</main>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+<script type="module" src="../js/compare_init.js"></script>
+</body>
+</html>

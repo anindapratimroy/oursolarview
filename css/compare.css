@@ -1,0 +1,277 @@
+@import "design-tokens.css";
+
+.compare-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 120px 40px 80px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+}
+
+.compare-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.compare-title {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 15px;
+  background: linear-gradient(to right, #fff, #8ab4f8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.compare-subtitle {
+  color: var(--text-dim);
+  font-size: 1.1rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ── Split Layout ── */
+.compare-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  position: relative;
+}
+
+/* Decorative divider */
+.compare-split::after {
+  content: '';
+  position: absolute;
+  top: 10%;
+  bottom: 10%;
+  left: 50%;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, rgba(138, 180, 248, 0.2), transparent);
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.compare-side {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
+
+/* ── Selector Dropdown ── */
+.compare-selector {
+  position: relative;
+  width: 280px;
+}
+
+.compare-selector select {
+  width: 100%;
+  appearance: none;
+  background: rgba(10, 15, 30, 0.6);
+  border: 1px solid rgba(138, 180, 248, 0.3);
+  color: #fff;
+  padding: 16px 24px;
+  font-size: 1.1rem;
+  font-family: var(--font-body);
+  font-weight: 600;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  outline: none;
+}
+
+.compare-selector select:hover, .compare-selector select:focus {
+  border-color: rgba(138, 180, 248, 0.8);
+  background: rgba(15, 22, 40, 0.8);
+  box-shadow: 0 0 20px rgba(138, 180, 248, 0.15);
+}
+
+.compare-selector .select-icon {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--accent-blue);
+  pointer-events: none;
+  font-size: 0.9rem;
+  transition: transform 0.3s ease;
+}
+
+.compare-selector select:focus + .select-icon {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+.compare-selector select option {
+  background: #0a0f1e;
+  color: #fff;
+}
+
+/* ── WebGL Canvas Wrap ── */
+.compare-canvas-container {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  max-width: 500px;
+  background: transparent;
+  border-radius: 50%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.compare-canvas-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+  outline: none;
+  cursor: grab;
+}
+
+.compare-canvas-container canvas:active {
+  cursor: grabbing;
+}
+
+/* ── Loader ── */
+.compare-loader {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  z-index: 10;
+  backdrop-filter: blur(4px);
+}
+
+.compare-loader span {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--accent-blue);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(138, 180, 248, 0.2);
+  border-top-color: var(--accent-blue);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* ── Data Table HUD Style ── */
+.compare-table-wrapper {
+  background: rgba(4, 8, 20, 0.6);
+  border: 1px solid rgba(0, 255, 255, 0.2);
+  border-radius: 8px;
+  backdrop-filter: blur(16px);
+  overflow: hidden;
+  box-shadow: 0 0 30px rgba(0, 255, 255, 0.05), inset 0 0 20px rgba(0, 255, 255, 0.05);
+  position: relative;
+}
+
+/* Scanner line effect */
+.compare-table-wrapper::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 2px;
+  background: rgba(0, 255, 255, 0.5);
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+  animation: scan 4s linear infinite;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+@keyframes scan {
+  0% { top: 0; }
+  100% { top: 100%; }
+}
+
+.compare-data-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.compare-data-table th, .compare-data-table td {
+  padding: 16px 24px;
+  border-bottom: 1px solid rgba(0, 255, 255, 0.1);
+}
+
+.compare-data-table thead th {
+  background: rgba(0, 255, 255, 0.05);
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #0ff;
+  text-shadow: 0 0 8px rgba(0, 255, 255, 0.4);
+  border-bottom: 2px solid rgba(0, 255, 255, 0.3);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.compare-data-table th.td-prop {
+  width: 30%;
+  color: #8ab4f8;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.compare-data-table td.compare-td-label {
+  color: #8ab4f8;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 0.9rem;
+  border-right: 1px solid rgba(0, 255, 255, 0.1);
+  letter-spacing: 0.05em;
+}
+
+.compare-data-table td.compare-td-val {
+  color: #e0f2fe;
+  font-family: var(--font-body);
+  font-weight: 400;
+  width: 35%;
+  font-size: 1.05rem;
+}
+
+.compare-data-table tbody tr:hover td {
+  background: rgba(0, 255, 255, 0.04);
+}
+
+/* Highlight style for dynamic JS updates */
+.compare-td-val.highlight-diff {
+  color: #0ff;
+  text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+  font-weight: 600;
+}
+
+.compare-data-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .compare-split {
+    grid-template-columns: 1fr;
+    gap: 60px;
+  }
+  .compare-split::after {
+    display: none;
+  }
+  .compare-canvas-container {
+    max-width: 350px;
+  }
+  .compare-data-table th, .compare-data-table td {
+    padding: 15px;
+  }
+}

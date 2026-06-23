@@ -19,21 +19,15 @@ export function initEarth() {
 
   const scene = new THREE.Scene();
   sceneManager.registerScene(scene);
-  const camera = new THREE.PerspectiveCamera(35, W / H, 0.1, 100);
-  camera.position.set(0, 0, 3.5);
+  const camera = new THREE.PerspectiveCamera(45, W / H, 0.1, 1000);
+  camera.position.set(0, 0, 5.28);
 
   // Lighting
-  const ambientLight = new THREE.AmbientLight(0x224466, 1.2);
-  scene.add(ambientLight);
-  const sunLight = new THREE.DirectionalLight(0xfff4e0, 3.5);
-  sunLight.position.set(3, 2, 4);
-  scene.add(sunLight);
-  const rimLight = new THREE.DirectionalLight(0x4488ff, 0.8);
-  rimLight.position.set(-4, 0, -2);
-  scene.add(rimLight);
+  const lightDir = new THREE.Vector3(5, 3, 5).normalize();
+  const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+  directionalLight.position.copy(lightDir.clone().multiplyScalar(10));
+  scene.add(directionalLight);
 
-  // Earth sphere
-  const geo = new THREE.SphereGeometry(1, 64, 64);
   // Loading Manager
   const manager = new THREE.LoadingManager();
   const preloader = document.getElementById('preloader');
@@ -51,50 +45,59 @@ export function initEarth() {
   }
 
   const loader = new THREE.TextureLoader(manager);
-  const earthTex  = loader.load('./planets/img_earth/earth_day_4096.jpg');
-  const normalTex = loader.load('./planets/img_earth/earth_normal_2048.jpg');
-  const cloudTex  = loader.load('./planets/img_earth/earth_clouds_1024.png');
+  const texDay    = loader.load('./planets/img_earth/earth_day_4096.jpg');
+  const texNight  = loader.load('./planets/img_earth/earth_night_4096.jpg');
+  const texClouds = loader.load('./planets/img_earth/earth_clouds_1024.png');
 
-  const mat = new THREE.MeshPhongMaterial({
-    map: earthTex,
-    normalMap: normalTex,
-    normalScale: new THREE.Vector2(0.8, 0.8),
-    shininess: 22,
-    specular: new THREE.Color(0x3366aa),
+  const earthMaterial = new THREE.ShaderMaterial({
+    uniforms: {
+      dayTex:        { value: texDay   },
+      nightTex:      { value: texNight },
+      lightDirection:{ value: lightDir },
+    },
+    vertexShader: `
+      varying vec2 vUv;
+      varying vec3 vNormal;
+      void main() {
+        vUv = uv;
+        vNormal = normalize(normalMatrix * normal);
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      }
+    `,
+    fragmentShader: `
+      uniform sampler2D dayTex;
+      uniform sampler2D nightTex;
+      uniform vec3 lightDirection;
+      varying vec2 vUv;
+      varying vec3 vNormal;
+      void main() {
+        float light = dot(normalize(vNormal), normalize(lightDirection));
+        light = clamp(light, 0.0, 1.0);
+        vec4 dayColor   = texture2D(dayTex,   vUv);
+        vec4 nightColor = texture2D(nightTex, vUv);
+        vec4 color = mix(nightColor, dayColor, light);
+        gl_FragColor = color;
+      }
+    `
   });
 
-  const earth = new THREE.Mesh(geo, mat);
-  earth.rotation.z = THREE.MathUtils.degToRad(23.4);
+  const earth = new THREE.Mesh(new THREE.SphereGeometry(2, 64, 64), earthMaterial);
   scene.add(earth);
 
   // Cloud layer
-  const cloudGeo = new THREE.SphereGeometry(1.012, 64, 64);
-  const cloudMat = new THREE.MeshPhongMaterial({
-    map: cloudTex,
-    transparent: true,
-    opacity: 0.55,
-    depthWrite: false,
-  });
-  const clouds = new THREE.Mesh(cloudGeo, cloudMat);
+  const clouds = new THREE.Mesh(
+    new THREE.SphereGeometry(2.02, 64, 64),
+    new THREE.MeshPhongMaterial({ map: texClouds, transparent: true, opacity: 0.4, depthWrite: false })
+  );
   scene.add(clouds);
 
-  // Atmosphere glow
-  const atmoGeo = new THREE.SphereGeometry(1.06, 64, 64);
-  const atmoMat = new THREE.MeshPhongMaterial({
-    color: 0x4488cc,
-    transparent: true,
-    opacity: 0.15,
-    side: THREE.BackSide,
-    depthWrite: false,
-  });
-  scene.add(new THREE.Mesh(atmoGeo, atmoMat));
-
   // ── Mouse DRAG rotation ─────────────────────────────────────
-  let isDragging = false;
-  let prevMouseX = 0, prevMouseY = 0;
-  let rotX = 0, rotY = 0; // cumulative drag rotation
-  let velX = 0, velY = 0; // inertia velocity
-  let autoRotSpeed = 0.0025;
+  let isDragging   = false;
+  let prevMouseX   = 0, prevMouseY = 0;
+  let rotX = 0, rotY = 0;   // cumulative drag rotation
+  let velX = 0, velY = 0;   // inertia velocity
+  const autoRotSpeed  = 0.0025;
+  const RETURN_SPEED  = 0.028; // spring-return speed for rotX after drag
 
   earthCanvas.addEventListener('mousedown', e => {
     isDragging = true;
@@ -145,17 +148,33 @@ export function initEarth() {
     if (window.APP_PAUSED) return;
 
     if (!isDragging) {
-      velX *= 0.95; // friction
-      velY *= 0.95;
+      // Friction — inertia decays
+      velX *= 0.92;
+      velY *= 0.92;
       rotX += velX;
       rotY += velY;
-      // Auto-rotate when not dragging
-      rotY += autoRotSpeed;
+
+      // Auto-rotate Y (continues from wherever user left it)
+      rotY += 0.001;
+
+      // ── Spring-return to upright ─────────────────────────────
+      // After the user lets go, rotX (vertical tilt) gently
+      // lerps back toward 0 (upright), giving a natural "snap back".
+      // rotY is intentionally NOT reset — keeping the current face.
+      rotX += (0 - rotX) * RETURN_SPEED;
     }
-    earth.rotation.x = rotX;
-    earth.rotation.y = rotY;
+
+    earth.rotation.x  = rotX;
+    earth.rotation.y  = rotY;
     clouds.rotation.x = rotX;
-    clouds.rotation.y = rotY + 0.002;
+    clouds.rotation.y = rotY + 0.0005; // cloud net rotation 0.0015
+
+    // Dynamic light
+    const rotationMatrix  = new THREE.Matrix4().makeRotationY(earth.rotation.y);
+    const dynamicLightDir = new THREE.Vector3(5, 3, 5).applyMatrix4(rotationMatrix).normalize();
+    earthMaterial.uniforms.lightDirection.value = dynamicLightDir;
+    directionalLight.position.copy(dynamicLightDir.clone().multiplyScalar(10));
+
     renderer.render(scene, camera);
   }
   animate();

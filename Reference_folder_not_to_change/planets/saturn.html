@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Jupiter with Merged Stone Rings - Three.js</title>
+  <style>
+    body { margin: 0; overflow: hidden; background: black; }
+    canvas { display: block; }
+  </style>
+</head>
+<body>
+<script type="module">
+import * as THREE from "https://cdn.skypack.dev/three@0.129.0";
+import { OrbitControls } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/controls/OrbitControls.js";
+
+// Scene, Camera, Renderer
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 2000);
+camera.position.set(0, 10, 25);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+
+
+controls.minDistance = 5.9;   // how close camera can zoom in
+controls.maxDistance = 35;
+// Lights
+const pointLight = new THREE.PointLight(0xffffff, 2, 500);
+pointLight.position.set(20, 20, 20);
+scene.add(pointLight);
+scene.add(new THREE.AmbientLight(0x333333));
+
+// Texture Loader
+const loader = new THREE.TextureLoader();
+const planetTexture = loader.load("./img_others/8k_saturn.jpg");
+const rockTexture = loader.load("./img_others/cream.jpeg");
+const rock2Texture = loader.load("./img_others/stone_brown.jpg");
+
+// Planet Mesh
+const planetMaterial = new THREE.MeshStandardMaterial({
+  map: planetTexture,
+  bumpMap: planetTexture,
+  bumpScale: 0.05,
+  roughness: 1,
+  metalness: 0
+});
+const planetGeometry = new THREE.SphereGeometry(5, 64, 64);
+const planetMesh = new THREE.Mesh(planetGeometry, planetMaterial);
+scene.add(planetMesh);
+
+// --------- FUNCTION TO CREATE STONE RING ---------
+function createStoneRing(innerRadius, outerRadius, stoneCount, texture, opacity = 0.06) {
+  const ringGroup = new THREE.Group();
+  const stoneGeometry = new THREE.SphereGeometry(0.1, 6, 6);
+  const stoneMaterial = new THREE.MeshStandardMaterial({
+    map: texture,
+    roughness: 0.8,
+    opacity: opacity,
+    transparent: true
+  });
+
+  for (let i = 0; i < stoneCount; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const radius = innerRadius + Math.random() * (outerRadius - innerRadius);
+    const x = Math.cos(angle) * radius;
+    const z = Math.sin(angle) * radius;
+    const y = (Math.random() - 0.5) * 0.5;
+    const stone = new THREE.Mesh(stoneGeometry, stoneMaterial);
+    stone.position.set(x, y, z);
+    stone.rotation.set(Math.random()*Math.PI, Math.random()*Math.PI, Math.random()*Math.PI);
+    const scale = 0.5 + Math.random() * 0.7;
+    stone.scale.set(scale, scale, scale);
+    ringGroup.add(stone);
+  }
+  return ringGroup;
+}
+
+// Merge all rings into one group
+const mergedRing = new THREE.Group();
+
+// Create individual stone rings and add to merged group
+mergedRing.add(createStoneRing(7, 7.5, 10500, rock2Texture, 0.06));
+mergedRing.add(createStoneRing(7.5, 8.1, 1500, rockTexture, 0.06));
+mergedRing.add(createStoneRing(8.1, 9.3, 10500, rock2Texture, 0.06));
+mergedRing.add(createStoneRing(9.3, 11.3, 10500, rockTexture, 0.06));
+
+// Tilt like Jupiter’s ring (almost flat)
+mergedRing.rotation.x = 0.05;
+scene.add(mergedRing);
+
+// Stars background
+const starGeometry = new THREE.BufferGeometry();
+const starPositions = [];
+for (let i = 0; i < 4000; i++) {
+  const x = (Math.random() - 0.5) * 5000;
+  const y = (Math.random() - 0.5) * 5000;
+  const z = (Math.random() - 0.5) * 5000;
+  starPositions.push(x, y, z);
+}
+starGeometry.setAttribute("position", new THREE.Float32BufferAttribute(starPositions, 3));
+const starMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 2 });
+const stars = new THREE.Points(starGeometry, starMaterial);
+scene.add(stars);
+
+// Animation loop
+function animate() {
+  requestAnimationFrame(animate);
+
+  // Jupiter spins fast
+  planetMesh.rotation.y += 0.1;
+
+  // Ring rotates slowly
+  mergedRing.rotation.y += 0.05;
+
+  controls.update();
+  renderer.render(scene, camera);
+}
+
+animate();
+
+// Responsive resize
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+</script>
+</body>
+</html>
+

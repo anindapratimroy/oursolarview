@@ -1,0 +1,177 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Earth with Day/Night Map - Three.js (Skypack)</title>
+  <style>
+    body { margin: 0; overflow: hidden; background: black; }
+    canvas { display: block; }
+  </style>
+</head>
+<body>
+<script type="module">
+  import * as THREE from "https://cdn.skypack.dev/three@0.129.0";
+  import { OrbitControls } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/controls/OrbitControls.js";
+
+  // Scene, Camera, Renderer
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 1000);
+  camera.position.set(0, 0, 6);
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
+
+  // Controls
+  const controls = new OrbitControls(camera, renderer.domElement);
+  // Lights
+  const lightDir = new THREE.Vector3(5, 3, 5).normalize();
+
+  const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+  directionalLight.position.copy(lightDir.clone().multiplyScalar(10));
+  scene.add(directionalLight);
+
+  // Texture Loader
+  const loader = new THREE.TextureLoader();
+  const texDay = loader.load("./img_earth/earth_day_4096.jpg");
+  const texNight = loader.load("./img_earth/earth_night_4096.jpg");
+  const texBump = loader.load("./img_earth/earth_bump_roughness_clouds_4096.jpg");
+  const texNormal = loader.load("./img_earth/earth_normal_2048.jpg");
+  const texClouds = loader.load("./img_earth/earth_clouds_1024.png");
+
+
+const starCount = 3000;
+const starGeometry = new THREE.BufferGeometry();
+const starPositions = [];
+const starColors = [];
+const starTwinkleData = []; // Store base brightness, speed, offset
+
+const tempGeometry = new THREE.SphereGeometry(.5, 6, 6); // A small base sphere geometry
+
+for (let i = 0; i < starCount; i++) {
+  const theta = Math.random() * Math.PI * 2;
+  const phi = Math.acos(2 * Math.random() - 1);
+  const r = 700; // Increased radius for a larger sphere of background stars
+
+  const x = r * Math.sin(phi) * Math.cos(theta);
+  const y = r * Math.sin(phi) * Math.sin(theta);
+  const z = r * Math.cos(phi);
+
+  const size = Math.random() * 1.2 + 0.3;
+  const brightness = Math.random() * 0.8 + 0.2;
+
+  // Position
+  starPositions.push(x, y, z);
+
+  // Color (initial brightness)
+  starColors.push(brightness, brightness, brightness);
+
+  // Twinkle data
+  starTwinkleData.push({
+    baseBrightness: brightness,
+    speed: Math.random() * 2 + 0.5,
+    offset: Math.random() * Math.PI * 2,
+    index: i * 3 // Store the starting index for this star's color in the color array
+  });
+}
+controls.minDistance = 2.8;   // how close camera can zoom in
+controls.maxDistance = 15; 
+// Create BufferAttributes for positions and colors
+starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starPositions, 3));
+starGeometry.setAttribute('color', new THREE.Float32BufferAttribute(starColors, 3));
+
+// Create a Points material for performance
+const starMaterial = new THREE.PointsMaterial({
+  size: 2, // Adjust size as needed
+  vertexColors: true, // Enable vertex colors for twinkling
+  transparent: true,
+  opacity: 0.9,
+});
+
+const starsMesh = new THREE.Points(starGeometry, starMaterial);
+scene.add(starsMesh);
+
+  // Shader Material for Earth (day/night blend)
+  const earthMaterial = new THREE.ShaderMaterial({
+    uniforms: {
+      dayTex: { value: texDay },
+      nightTex: { value: texNight },
+      lightDirection: { value: lightDir },
+    },
+    vertexShader: `
+      varying vec2 vUv;
+      varying vec3 vNormal;
+      void main() {
+        vUv = uv;
+        vNormal = normalize(normalMatrix * normal);
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      }
+    `,
+    fragmentShader: `
+      uniform sampler2D dayTex;
+      uniform sampler2D nightTex;
+      uniform vec3 lightDirection;
+      varying vec2 vUv;
+      varying vec3 vNormal;
+      void main() {
+        float light = dot(normalize(vNormal), normalize(lightDirection));
+        light = clamp(light, 0.0, 1.0);
+        vec4 dayColor = texture2D(dayTex, vUv);
+        vec4 nightColor = texture2D(nightTex, vUv);
+        vec4 color = mix(nightColor, dayColor, light);
+        gl_FragColor = color;
+      }
+    `
+  });
+
+  // Earth Mesh
+  const earthGeometry = new THREE.SphereGeometry(2, 64, 64);
+  const earthMesh = new THREE.Mesh(earthGeometry, earthMaterial);
+  scene.add(earthMesh);
+
+  // Clouds layer
+  const cloudGeometry = new THREE.SphereGeometry(2.02, 64, 64);
+  const cloudMaterial = new THREE.MeshPhongMaterial({
+    map: texClouds,
+    transparent: true,
+    opacity: 0.4,
+    depthWrite: false,
+  });
+  const cloudMesh = new THREE.Mesh(cloudGeometry, cloudMaterial);
+  scene.add(cloudMesh);
+
+
+  // Animation loop
+  function animate() {
+    requestAnimationFrame(animate);
+    earthMesh.rotation.y += 0.001;
+    cloudMesh.rotation.y += 0.0015;
+
+// --- Make light move with Earth ---
+  // Compute new light direction relative to Earth's rotation
+  const rotationMatrix = new THREE.Matrix4().makeRotationY(earthMesh.rotation.y);
+  const dynamicLightDir = new THREE.Vector3(5, 3, 5).applyMatrix4(rotationMatrix).normalize();
+
+  // Update shader uniform for day/night texture blending
+  earthMaterial.uniforms.lightDirection.value = dynamicLightDir;
+
+  // Also move the actual scene light (optional, for speculars etc.)
+  directionalLight.position.copy(dynamicLightDir.clone().multiplyScalar(10));
+    
+    controls.update();
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  // Responsive resize
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+</script>
+</body>
+</html>
+
+

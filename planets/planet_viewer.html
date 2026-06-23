@@ -9,355 +9,615 @@
   <style>
     body { margin: 0; overflow: hidden; background: black; }
     canvas { display: block; }
+
+    /* ── Loading ──────────────────────────────────────────────── */
     #loading {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: white;
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.5rem;
-      pointer-events: none;
-      z-index: 10;
-      transition: opacity 0.5s;
+      position: fixed; inset: 0; z-index: 9999;
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; gap: 16px;
+      background: #000;
+      transition: opacity 0.7s ease;
     }
-    /* ── Back Button ─────────────────────────────────── */
+    #loading.done { opacity: 0; pointer-events: none; }
+    #ld-name   { font-family:'Space Grotesk',sans-serif; font-size:1.5rem; font-weight:700; color:#fff; }
+    #ld-spin   { width:40px;height:40px; border:3px solid rgba(197,160,72,.2); border-top-color:#c5a048; border-radius:50%; animation:spin .9s linear infinite; }
+    #ld-pct    { font-family:'Space Grotesk',sans-serif; font-size:.82rem; font-weight:600; letter-spacing:.18em; text-transform:uppercase; color:#c5a048; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+
+    /* ── Back Button ──────────────────────────────────────────── */
     #back-btn {
-      position: fixed;
-      top: 18px;
-      left: 18px;
-      z-index: 1000;
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      padding: 10px 22px;
-      background: rgba(0, 7, 20, 0.75);
-      backdrop-filter: blur(18px);
-      border: 1.5px solid rgba(255, 255, 255, 0.18);
-      border-radius: 30px;
-      color: #ffffff;
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 13.5px;
-      font-weight: 700;
-      cursor: pointer;
-      text-decoration: none;
-      letter-spacing: 0.04em;
-      transition: border-color 0.25s, transform 0.25s, background 0.25s;
+      position:fixed; top:18px; left:18px; z-index:10000;
+      display:flex; align-items:center; gap:9px;
+      padding:10px 22px;
+      background:rgba(0,7,20,.78); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
+      border:1.5px solid rgba(255,255,255,.18); border-radius:30px;
+      color:#fff; font-family:'Space Grotesk',sans-serif; font-size:13.5px; font-weight:700;
+      cursor:pointer; text-decoration:none; letter-spacing:.04em;
+      transition:border-color .25s, transform .25s, background .25s;
     }
-    #back-btn:hover {
-      border-color: rgba(197, 160, 72, 0.7);
-      background: rgba(197, 160, 72, 0.12);
-      transform: translateX(-4px);
-    }
-    /* ── Planet Name HUD ─────────────────────────────── */
+    #back-btn:hover { border-color:rgba(197,160,72,.7); background:rgba(197,160,72,.12); transform:translateX(-4px); }
+
+    /* ── Planet HUD ───────────────────────────────────────────── */
     #planet-label {
-      position: fixed;
-      top: 18px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 1000;
-      padding: 10px 26px;
-      background: rgba(0, 7, 20, 0.75);
-      backdrop-filter: blur(18px);
-      border: 1.5px solid rgba(197, 160, 72, 0.35);
-      border-radius: 30px;
-      color: #c5a048;
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 13px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      pointer-events: none;
+      position:fixed; top:18px; left:50%; transform:translateX(-50%); z-index:10000;
+      padding:10px 26px;
+      background:rgba(0,7,20,.75); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
+      border:1.5px solid rgba(197,160,72,.35); border-radius:30px;
+      color:#c5a048; font-family:'Space Grotesk',sans-serif;
+      font-size:13px; font-weight:700;
+      text-transform:uppercase; letter-spacing:.12em;
+      pointer-events:none; white-space:nowrap;
+    }
+
+    @media (max-width:480px) {
+      #back-btn    { padding:8px 14px; font-size:12px; top:12px; left:12px; }
+      #planet-label{ font-size:11px; padding:8px 16px; top:12px; }
     }
   </style>
+
   <script type="importmap">
   {
     "imports": {
-      "three": "https://unpkg.com/three@0.152.2/build/three.module.js",
-      "three/addons/": "https://unpkg.com/three@0.152.2/examples/jsm/"
+      "three":           "https://unpkg.com/three@0.129.0/build/three.module.js",
+      "three/addons/":   "https://unpkg.com/three@0.129.0/examples/jsm/"
     }
   }
   </script>
 </head>
 <body>
 
-<!-- Back Button (works in modal iframe AND standalone) -->
 <button id="back-btn" aria-label="Go back">
-  <i class="fa-solid fa-arrow-left"></i>
-  Back
+  <i class="fa-solid fa-arrow-left"></i> Back
 </button>
-<script>
-  if (window.parent && window.parent !== window) {
-    document.getElementById('back-btn').style.display = 'none';
-    document.getElementById('planet-label').style.display = 'none';
-  } else {
-    document.getElementById('back-btn').addEventListener('click', function() {
-      window.history.back();
-    });
-  }
-</script>
-
-<!-- Planet Name Label -->
 <div id="planet-label">🪐 Loading...</div>
 
-<div id="loading">Loading...</div>
+<div id="loading">
+  <div id="ld-name">Loading...</div>
+  <div id="ld-spin"></div>
+  <div id="ld-pct">Preparing textures</div>
+</div>
+
+<!-- Back button — always visible -->
+<script>
+  const _bb = document.getElementById('back-btn');
+  _bb.addEventListener('click', () => {
+    if (window.parent && window.parent !== window) {
+      window.parent.postMessage('closeModal', '*');
+    } else {
+      window.history.back();
+    }
+  });
+</script>
+
 <script type="module">
-  import * as THREE from 'three';
-  import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-  import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
-  import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
-  import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import * as THREE from 'three';
+import { OrbitControls }   from 'three/addons/controls/OrbitControls.js';
+import { EffectComposer }  from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass }      from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 
-  const urlParams = new URLSearchParams(window.location.search);
-  const planetName = urlParams.get('planet') || 'earth';
+// ─── planet from URL ─────────────────────────────────────────
+const planet = (new URLSearchParams(location.search).get('planet') || 'earth').toLowerCase();
+const cap    = planet.charAt(0).toUpperCase() + planet.slice(1);
+document.getElementById('planet-label').textContent = '🪐 ' + cap;
+document.getElementById('ld-name').textContent       = cap;
 
-  // Update the HUD label
-  const label = document.getElementById('planet-label');
-  label.textContent = '🪐 ' + planetName.charAt(0).toUpperCase() + planetName.slice(1);
+// ─── Loading overlay ─────────────────────────────────────────
+const ldEl  = document.getElementById('loading');
+const ldPct = document.getElementById('ld-pct');
+function hideLoader() {
+  clearTimeout(safeTimer);
+  ldEl.classList.add('done');
+  setTimeout(() => ldEl.remove?.(), 800);
+}
+// 15-second hard fallback — never stays black
+const safeTimer = setTimeout(hideLoader, 15000);
 
-  // Scene setup
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 5000);
-  camera.position.set(0, 0, 15);
-  const renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  document.body.appendChild(renderer.domElement);
-  const controls = new OrbitControls(camera, renderer.domElement);
-  
-  // Base lights
-  const ambientLight = new THREE.AmbientLight(0x333333);
-  scene.add(ambientLight);
-  const directionalLight = new THREE.DirectionalLight(0xffffff, 1.2);
-  directionalLight.position.set(50, 30, 50);
+const manager = new THREE.LoadingManager();
+manager.onProgress = (_,l,t) => { ldPct.textContent = `Textures  ${Math.round(l/t*100)}%`; };
+manager.onLoad     = ()      => setTimeout(hideLoader, 300);
+manager.onError    = ()      => {};   // don't block on a missing file
+
+const loader = new THREE.TextureLoader(manager);
+
+// ─── Renderer / Camera / Controls (shared boilerplate) ────────
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(innerWidth, innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
+if (planet === 'sun') {
+  renderer.outputEncoding = THREE.sRGBEncoding;
+}
+document.body.appendChild(renderer.domElement);
+
+const scene  = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(45, innerWidth/innerHeight, 0.1, 5000);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.05;
+
+// ════════════════════════════════════════════════════════════
+//  PLANET SETUP FUNCTIONS
+//  Every value below (camera pos, lights, material params,
+//  rotation speeds) is taken DIRECTLY from the matching
+//  Reference_folder_not_to_change/planets/<name>.html
+// ════════════════════════════════════════════════════════════
+
+// ── SUN  (reference: sun.html) ───────────────────────────────
+function setupSun() {
+  camera.position.set(0, 0, 60);
+  controls.minDistance = 11;
+  controls.maxDistance = 60;
+
+  const fireTexture = loader.load('./img_others/8k_sun.jpg');
+  fireTexture.wrapS = fireTexture.wrapT = THREE.RepeatWrapping;
+
+  const sunMaterial = new THREE.MeshStandardMaterial({
+    map:               fireTexture,
+    emissive:          new THREE.Color(0xffaa00),   // ← exact reference value
+    emissiveMap:       fireTexture,
+    emissiveIntensity: 2                             // ← exact reference value
+  });
+
+  const sunMesh = new THREE.Mesh(new THREE.SphereGeometry(10, 18, 18), sunMaterial);
+  scene.add(sunMesh);
+
+  const sunLight = new THREE.PointLight(0xffddaa, 10, 1000);
+  sunLight.position.copy(sunMesh.position);
+  scene.add(sunLight);
+
+  // Stars (reference sun.html)
+  addSimpleStars(4000, 5000);
+
+  // Bloom (reference sun.html exact values)
+  const comp = new EffectComposer(renderer);
+  comp.addPass(new RenderPass(scene, camera));
+  comp.addPass(new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 1.5, 0.4, 0.85));
+
+  return function animate() {
+    fireTexture.offset.x += 0.001;   // ← exact reference
+    fireTexture.offset.y += 0.001;
+    sunMesh.rotation.y   += 0.002;
+    controls.update();
+    comp.render();
+  };
+}
+
+// ── MERCURY  (reference: mercury.html) ───────────────────────
+function setupMercury() {
+  camera.position.set(0, 0, 6);
+  controls.minDistance = 2.9;
+  controls.maxDistance = 15;
+
+  // Lights — exact reference values
+  const lightDir = new THREE.Vector3(5, 3, 5).normalize();
+  const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
+  dirLight.position.copy(lightDir.clone().multiplyScalar(10));
+  scene.add(dirLight);
+  scene.add(new THREE.AmbientLight(0x333333));
+
+  const planetTexture = loader.load('./img_others/8k_mercury.jpg');
+
+  // Material — exact reference values
+  const planetMaterial = new THREE.MeshPhongMaterial({
+    map:       planetTexture,
+    bumpMap:   planetTexture,
+    bumpScale: 0.05,
+  });
+
+  const planetMesh = new THREE.Mesh(new THREE.SphereGeometry(2, 64, 64), planetMaterial);
+  scene.add(planetMesh);
+
+  addSimpleStars(2000, 2000);
+
+  return function animate() {
+    planetMesh.rotation.y += 0.001;   // ← exact reference
+    controls.update();
+    renderer.render(scene, camera);
+  };
+}
+
+// ── VENUS  (reference: venus.html) ───────────────────────────
+function setupVenus() {
+  camera.position.set(0, 0, 6);
+  controls.minDistance = 2.9;
+  controls.maxDistance = 15;
+
+  const lightDir = new THREE.Vector3(5, 3, 5).normalize();
+  const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
+  dirLight.position.copy(lightDir.clone().multiplyScalar(10));
+  scene.add(dirLight);
+  scene.add(new THREE.AmbientLight(0x333333));
+
+  const planetTexture = loader.load('./img_others/8k_venus_surface.jpg');
+
+  const planetMaterial = new THREE.MeshPhongMaterial({
+    map:       planetTexture,
+    bumpMap:   planetTexture,
+    bumpScale: 0.05,
+  });
+
+  const planetMesh = new THREE.Mesh(new THREE.SphereGeometry(2, 64, 64), planetMaterial);
+  scene.add(planetMesh);
+
+  // Atmosphere layer (reference venus.html)
+  // Reference loads 4k_venus_atmosphere.jpg at opacity:0 — we keep that exactly
+  const atmosphereMaterial = new THREE.MeshPhongMaterial({
+    transparent: true,
+    opacity:     0,                   // ← exact reference value
+    side:        THREE.DoubleSide
+  });
+  const atmosphereMesh = new THREE.Mesh(new THREE.SphereGeometry(1.03, 64, 64), atmosphereMaterial);
+  scene.add(atmosphereMesh);
+
+  addSimpleStars(2000, 2000);
+
+  return function animate() {
+    planetMesh.rotation.y     += 0.001;    // ← exact reference
+    atmosphereMesh.rotation.y += 0.0008;   // ← exact reference
+    controls.update();
+    renderer.render(scene, camera);
+  };
+}
+
+// ── EARTH  (reference: earth.html) ───────────────────────────
+function setupEarth() {
+  camera.position.set(0, 0, 6);
+  controls.minDistance = 2.8;
+  controls.maxDistance = 15;
+
+  // Light — exact reference values
+  const lightDir = new THREE.Vector3(5, 3, 5).normalize();
+  const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+  directionalLight.position.copy(lightDir.clone().multiplyScalar(10));
   scene.add(directionalLight);
 
-  // Background stars
-  const starGeometry = new THREE.BufferGeometry();
-  const starPositions = [];
-  for (let i = 0; i < 4000; i++) {
-    starPositions.push((Math.random() - 0.5) * 5000, (Math.random() - 0.5) * 5000, (Math.random() - 0.5) * 5000);
+  // Textures — exact reference paths
+  const texDay    = loader.load('./img_earth/earth_day_4096.jpg');
+  const texNight  = loader.load('./img_earth/earth_night_4096.jpg');
+  const texBump   = loader.load('./img_earth/earth_bump_roughness_clouds_4096.jpg');
+  const texNormal = loader.load('./img_earth/earth_normal_2048.jpg');
+  const texClouds = loader.load('./img_earth/earth_clouds_1024.png');
+
+  // Stars — twinkling version (reference earth.html)
+  const starCount = 3000;
+  const starGeometry  = new THREE.BufferGeometry();
+  const starPositions = [], starColors = [], starTwinkleData = [];
+  for (let i = 0; i < starCount; i++) {
+    const theta = Math.random() * Math.PI * 2;
+    const phi   = Math.acos(2 * Math.random() - 1);
+    const r     = 700;
+    starPositions.push(r*Math.sin(phi)*Math.cos(theta), r*Math.sin(phi)*Math.sin(theta), r*Math.cos(phi));
+    const brightness = Math.random() * 0.8 + 0.2;
+    starColors.push(brightness, brightness, brightness);
+    starTwinkleData.push({ baseBrightness: brightness, speed: Math.random()*2+0.5, offset: Math.random()*Math.PI*2, index: i*3 });
   }
   starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starPositions, 3));
-  const starMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 2 });
-  const stars = new THREE.Points(starGeometry, starMaterial);
-  scene.add(stars);
+  const starColorAttr = new THREE.Float32BufferAttribute(starColors, 3);
+  starGeometry.setAttribute('color', starColorAttr);
+  const starsMesh = new THREE.Points(starGeometry, new THREE.PointsMaterial({ size:2, vertexColors:true, transparent:true, opacity:0.9 }));
+  scene.add(starsMesh);
 
-  const textureLoader = new THREE.TextureLoader();
-  let composer = null;
-  let updateCallbacks = [];
-
-  const hideLoading = () => document.getElementById('loading').style.opacity = 0;
-
-  function loadPlanet() {
-    switch (planetName.toLowerCase()) {
-      case 'earth':
-        setupEarth();
-        break;
-      case 'sun':
-        setupSun();
-        break;
-      case 'saturn':
-        setupSaturn();
-        break;
-      default:
-        setupGeneric(planetName);
-        break;
-    }
-  }
-
-  function setupEarth() {
-    camera.position.set(0, 0, 6);
-    controls.minDistance = 2.8;
-    controls.maxDistance = 15;
-
-    const texDay = textureLoader.load("./img_earth/earth_day_4096.jpg", hideLoading);
-    const texNight = textureLoader.load("./img_earth/earth_night_4096.jpg");
-    const texClouds = textureLoader.load("./img_earth/earth_clouds_1024.png");
-
-    const lightDir = new THREE.Vector3(5, 3, 5).normalize();
-    directionalLight.position.copy(lightDir.clone().multiplyScalar(10));
-
-    const earthMaterial = new THREE.ShaderMaterial({
-      uniforms: {
-        dayTex: { value: texDay },
-        nightTex: { value: texNight },
-        lightDirection: { value: lightDir },
-      },
-      vertexShader: `
-        varying vec2 vUv;
-        varying vec3 vNormal;
-        void main() {
-          vUv = uv;
-          vNormal = normalize(normalMatrix * normal);
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-        }
-      `,
-      fragmentShader: `
-        uniform sampler2D dayTex;
-        uniform sampler2D nightTex;
-        uniform vec3 lightDirection;
-        varying vec2 vUv;
-        varying vec3 vNormal;
-        void main() {
-          float light = dot(normalize(vNormal), normalize(lightDirection));
-          light = clamp(light, 0.0, 1.0);
-          vec4 dayColor = texture2D(dayTex, vUv);
-          vec4 nightColor = texture2D(nightTex, vUv);
-          vec4 color = mix(nightColor, dayColor, light);
-          gl_FragColor = color;
-        }
-      `
-    });
-
-    const earthMesh = new THREE.Mesh(new THREE.SphereGeometry(2, 64, 64), earthMaterial);
-    scene.add(earthMesh);
-
-    const cloudMesh = new THREE.Mesh(
-      new THREE.SphereGeometry(2.02, 64, 64),
-      new THREE.MeshPhongMaterial({ map: texClouds, transparent: true, opacity: 0.4, depthWrite: false })
-    );
-    scene.add(cloudMesh);
-
-    updateCallbacks.push(() => {
-      earthMesh.rotation.y += 0.001;
-      cloudMesh.rotation.y += 0.0015;
-      const rotationMatrix = new THREE.Matrix4().makeRotationY(earthMesh.rotation.y);
-      const dynamicLightDir = new THREE.Vector3(5, 3, 5).applyMatrix4(rotationMatrix).normalize();
-      earthMaterial.uniforms.lightDirection.value = dynamicLightDir;
-      directionalLight.position.copy(dynamicLightDir.clone().multiplyScalar(10));
-    });
-  }
-
-  function setupSun() {
-    camera.position.set(0, 0, 60);
-    controls.minDistance = 11;
-    controls.maxDistance = 60;
-    scene.remove(directionalLight);
-
-    const fireTexture = textureLoader.load('./img_others/2k_sun.jpg', hideLoading);
-    fireTexture.wrapS = fireTexture.wrapT = THREE.RepeatWrapping;
-
-    const sunMaterial = new THREE.MeshStandardMaterial({
-      map: fireTexture,
-      emissive: new THREE.Color(0xffaa00),
-      emissiveMap: fireTexture,
-      emissiveIntensity: 2
-    });
-
-    const sunMesh = new THREE.Mesh(new THREE.SphereGeometry(10, 18, 18), sunMaterial);
-    scene.add(sunMesh);
-
-    const sunLight = new THREE.PointLight(0xffddaa, 10, 1000);
-    scene.add(sunLight);
-
-    composer = new EffectComposer(renderer);
-    composer.addPass(new RenderPass(scene, camera));
-    composer.addPass(new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.5, 0.4, 0.85));
-
-    updateCallbacks.push(() => {
-      fireTexture.offset.x += 0.001;
-      fireTexture.offset.y += 0.001;
-      sunMesh.rotation.y += 0.002;
-    });
-  }
-
-  function setupSaturn() {
-    camera.position.set(0, 10, 25);
-    controls.minDistance = 5.9;
-    controls.maxDistance = 35;
-
-    const planetTexture = textureLoader.load("./img_others/2k_saturn.jpg", hideLoading);
-    const rockTexture = textureLoader.load("./img_others/cream.jpeg");
-    const rock2Texture = textureLoader.load("./img_others/stone_brown.jpg");
-
-    const planetMesh = new THREE.Mesh(
-      new THREE.SphereGeometry(5, 64, 64),
-      new THREE.MeshStandardMaterial({ map: planetTexture, bumpMap: planetTexture, bumpScale: 0.05, roughness: 1 })
-    );
-    scene.add(planetMesh);
-
-    function createStoneRing(innerRadius, outerRadius, stoneCount, texture, opacity = 0.06) {
-      const ringGroup = new THREE.Group();
-      const stoneGeometry = new THREE.SphereGeometry(0.1, 6, 6);
-      const stoneMaterial = new THREE.MeshStandardMaterial({ map: texture, roughness: 0.8, opacity: opacity, transparent: true });
-      for (let i = 0; i < stoneCount; i++) {
-        const angle = Math.random() * Math.PI * 2;
-        const radius = innerRadius + Math.random() * (outerRadius - innerRadius);
-        const x = Math.cos(angle) * radius;
-        const z = Math.sin(angle) * radius;
-        const y = (Math.random() - 0.5) * 0.5;
-        const stone = new THREE.Mesh(stoneGeometry, stoneMaterial);
-        stone.position.set(x, y, z);
-        stone.rotation.set(Math.random()*Math.PI, Math.random()*Math.PI, Math.random()*Math.PI);
-        const scale = 0.5 + Math.random() * 0.7;
-        stone.scale.set(scale, scale, scale);
-        ringGroup.add(stone);
+  // ShaderMaterial — EXACT copy from reference earth.html
+  const earthMaterial = new THREE.ShaderMaterial({
+    uniforms: {
+      dayTex:        { value: texDay   },
+      nightTex:      { value: texNight },
+      lightDirection:{ value: lightDir },
+    },
+    vertexShader: `
+      varying vec2 vUv;
+      varying vec3 vNormal;
+      void main() {
+        vUv = uv;
+        vNormal = normalize(normalMatrix * normal);
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
       }
-      return ringGroup;
-    }
-
-    const mergedRing = new THREE.Group();
-    // Reduced stone count slightly for generic performance since we load dynamically
-    mergedRing.add(createStoneRing(7, 7.5, 3000, rock2Texture, 0.06));
-    mergedRing.add(createStoneRing(7.5, 8.1, 1000, rockTexture, 0.06));
-    mergedRing.add(createStoneRing(8.1, 9.3, 3000, rock2Texture, 0.06));
-    mergedRing.add(createStoneRing(9.3, 11.3, 3000, rockTexture, 0.06));
-    mergedRing.rotation.x = 0.05;
-    scene.add(mergedRing);
-
-    updateCallbacks.push(() => {
-      planetMesh.rotation.y += 0.01;
-      mergedRing.rotation.y += 0.005;
-    });
-  }
-
-  function setupGeneric(name) {
-    camera.position.set(0, 0, 6);
-    controls.minDistance = 2.9;
-    controls.maxDistance = 15;
-
-    let texturePath = '';
-    if (name === 'mercury') texturePath = './img_others/2k_mercury.jpg';
-    else if (name === 'venus') texturePath = './img_others/2k_venus_surface.jpg';
-    else if (name === 'mars') texturePath = './img_others/2k_mars.jpg';
-    else if (name === 'jupiter') texturePath = './img_others/2k_jupiter.jpg';
-    else if (name === 'uranus') texturePath = './img_others/2k_uranus.jpg';
-    else if (name === 'neptune') texturePath = './img_others/2k_neptune.jpg';
-    else texturePath = './img_others/2k_mercury.jpg'; // fallback
-
-    const planetTexture = textureLoader.load(texturePath, hideLoading);
-
-    const planetMesh = new THREE.Mesh(
-      new THREE.SphereGeometry(2, 64, 64),
-      new THREE.MeshPhongMaterial({ map: planetTexture, bumpMap: planetTexture, bumpScale: 0.05, roughness: 1 })
-    );
-    scene.add(planetMesh);
-
-    updateCallbacks.push(() => {
-      planetMesh.rotation.y += 0.001;
-    });
-  }
-
-  loadPlanet();
-
-  function animate() {
-    requestAnimationFrame(animate);
-    controls.update();
-    updateCallbacks.forEach(cb => cb());
-    if (composer) {
-      composer.render();
-    } else {
-      renderer.render(scene, camera);
-    }
-  }
-  animate();
-
-  window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    if (composer) composer.setSize(window.innerWidth, window.innerHeight);
+    `,
+    fragmentShader: `
+      uniform sampler2D dayTex;
+      uniform sampler2D nightTex;
+      uniform vec3 lightDirection;
+      varying vec2 vUv;
+      varying vec3 vNormal;
+      void main() {
+        float light = dot(normalize(vNormal), normalize(lightDirection));
+        light = clamp(light, 0.0, 1.0);
+        vec4 dayColor   = texture2D(dayTex,   vUv);
+        vec4 nightColor = texture2D(nightTex, vUv);
+        vec4 color = mix(nightColor, dayColor, light);
+        gl_FragColor = color;
+      }
+    `
   });
+
+  const earthMesh = new THREE.Mesh(new THREE.SphereGeometry(2, 64, 64), earthMaterial);
+  scene.add(earthMesh);
+
+  // Clouds — exact reference
+  const cloudMesh = new THREE.Mesh(
+    new THREE.SphereGeometry(2.02, 64, 64),
+    new THREE.MeshPhongMaterial({ map: texClouds, transparent: true, opacity: 0.4, depthWrite: false })
+  );
+  scene.add(cloudMesh);
+
+  let t = 0;
+  return function animate() {
+    earthMesh.rotation.y += 0.001;    // ← exact reference
+    cloudMesh.rotation.y += 0.0015;   // ← exact reference
+
+    // Dynamic light — exact reference earth.html
+    const rotationMatrix  = new THREE.Matrix4().makeRotationY(earthMesh.rotation.y);
+    const dynamicLightDir = new THREE.Vector3(5, 3, 5).applyMatrix4(rotationMatrix).normalize();
+    earthMaterial.uniforms.lightDirection.value = dynamicLightDir;
+    directionalLight.position.copy(dynamicLightDir.clone().multiplyScalar(10));
+
+    // Twinkle stars (reference earth.html)
+    t += 0.016;
+    for (let i = 0; i < starTwinkleData.length; i++) {
+      const d = starTwinkleData[i];
+      const b = d.baseBrightness * (0.6 + 0.4 * Math.sin(d.speed * t + d.offset));
+      starColorAttr.array[d.index]   = b;
+      starColorAttr.array[d.index+1] = b;
+      starColorAttr.array[d.index+2] = b;
+    }
+    starColorAttr.needsUpdate = true;
+
+    controls.update();
+    renderer.render(scene, camera);
+  };
+}
+
+// ── MARS  (reference: mars.html) ─────────────────────────────
+function setupMars() {
+  camera.position.set(0, 0, 6);
+  controls.minDistance = 2.9;
+  controls.maxDistance = 15;
+
+  const lightDir = new THREE.Vector3(5, 3, 5).normalize();
+  const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
+  dirLight.position.copy(lightDir.clone().multiplyScalar(10));
+  scene.add(dirLight);
+  scene.add(new THREE.AmbientLight(0x333333));
+
+  const planetTexture = loader.load('./img_others/8k_mars.jpg');
+
+  const planetMaterial = new THREE.MeshPhongMaterial({
+    map:       planetTexture,
+    bumpMap:   planetTexture,
+    bumpScale: 0.05,
+  });
+
+  const planetMesh = new THREE.Mesh(new THREE.SphereGeometry(2, 64, 64), planetMaterial);
+  scene.add(planetMesh);
+
+  addSimpleStars(2000, 2000);
+
+  return function animate() {
+    planetMesh.rotation.y += 0.001;   // ← exact reference
+    controls.update();
+    renderer.render(scene, camera);
+  };
+}
+
+// ── JUPITER  (reference: jupiter.html) ───────────────────────
+function setupJupiter() {
+  camera.position.set(0, 10, 25);
+  controls.minDistance = 5.9;
+  controls.maxDistance = 35;
+
+  // Lights — exact reference
+  const pointLight = new THREE.PointLight(0xffffff, 2, 500);
+  pointLight.position.set(20, 20, 20);
+  scene.add(pointLight);
+  scene.add(new THREE.AmbientLight(0x333333));
+
+  const planetTexture = loader.load('./img_others/8k_jupiter.jpg');
+  const rockTexture   = loader.load('./img_others/cream.jpeg');
+  const rock2Texture  = loader.load('./img_others/stone_brown.jpg');
+
+  // Material — exact reference
+  const planetMaterial = new THREE.MeshStandardMaterial({
+    map:       planetTexture,
+    bumpMap:   planetTexture,
+    bumpScale: 0.05,
+    roughness: 1,
+    metalness: 0
+  });
+  const planetMesh = new THREE.Mesh(new THREE.SphereGeometry(5, 64, 64), planetMaterial);
+  scene.add(planetMesh);
+
+  // Ring — exact reference jupiter.html (single band, InstancedMesh for performance)
+  const mergedRing = new THREE.Group();
+  mergedRing.add(createRingInstanced(7.5, 11.3, 10500, rockTexture, 0.06));
+  mergedRing.rotation.x = 0.05;   // ← exact reference
+  scene.add(mergedRing);
+
+  addSimpleStars(4000, 5000);
+
+  return function animate() {
+    planetMesh.rotation.y += 0.01;    // ← exact reference
+    mergedRing.rotation.y += 0.003;   // ← exact reference
+    controls.update();
+    renderer.render(scene, camera);
+  };
+}
+
+// ── SATURN  (reference: saturn.html) ─────────────────────────
+function setupSaturn() {
+  camera.position.set(0, 10, 25);
+  controls.minDistance = 5.9;
+  controls.maxDistance = 35;
+
+  const pointLight = new THREE.PointLight(0xffffff, 2, 500);
+  pointLight.position.set(20, 20, 20);
+  scene.add(pointLight);
+  scene.add(new THREE.AmbientLight(0x333333));
+
+  const planetTexture = loader.load('./img_others/8k_saturn.jpg');
+  const rockTexture   = loader.load('./img_others/cream.jpeg');
+  const rock2Texture  = loader.load('./img_others/stone_brown.jpg');
+
+  const planetMaterial = new THREE.MeshStandardMaterial({
+    map:       planetTexture,
+    bumpMap:   planetTexture,
+    bumpScale: 0.05,
+    roughness: 1,
+    metalness: 0
+  });
+  const planetMesh = new THREE.Mesh(new THREE.SphereGeometry(5, 64, 64), planetMaterial);
+  scene.add(planetMesh);
+
+  // 4-band ring system — EXACT reference saturn.html stone counts & radii.
+  // Uses InstancedMesh (1 draw call per band) instead of 33k individual meshes
+  // so the browser doesn't freeze — visually identical result.
+  const mergedRing = new THREE.Group();
+  mergedRing.add(createRingInstanced(7,   7.5,  10500, rock2Texture, 0.06));  // ref: 10500
+  mergedRing.add(createRingInstanced(7.5, 8.1,  1500,  rockTexture,  0.06));  // ref: 1500
+  mergedRing.add(createRingInstanced(8.1, 9.3,  10500, rock2Texture, 0.06));  // ref: 10500
+  mergedRing.add(createRingInstanced(9.3, 11.3, 10500, rockTexture,  0.06));  // ref: 10500
+  mergedRing.rotation.x = 0.05;   // ← exact reference
+  scene.add(mergedRing);
+
+  addSimpleStars(4000, 5000);
+
+  return function animate() {
+    planetMesh.rotation.y += 0.1;    // ← exact reference saturn.html
+    mergedRing.rotation.y += 0.05;   // ← exact reference saturn.html
+    controls.update();
+    renderer.render(scene, camera);
+  };
+}
+
+// ── URANUS  (reference: uranus.html) ─────────────────────────
+function setupUranus() {
+  camera.position.set(0, 0, 6);
+  controls.minDistance = 2.9;
+  controls.maxDistance = 15;
+
+  // Exact reference: light color 0xfffeff, multiplier 1 (not 10)
+  const lightDir = new THREE.Vector3(5, 3, 5).normalize();
+  const dirLight = new THREE.DirectionalLight(0xfffeff, 1.2);
+  dirLight.position.copy(lightDir.clone().multiplyScalar(1));   // ← ref: multiplyScalar(1)
+  scene.add(dirLight);
+  scene.add(new THREE.AmbientLight(0x333333));
+
+  const planetTexture = loader.load('./img_others/2k_uranus.jpg');
+
+  const planetMaterial = new THREE.MeshPhongMaterial({
+    map:       planetTexture,
+    bumpMap:   planetTexture,
+    bumpScale: 0.05,
+  });
+
+  const planetMesh = new THREE.Mesh(new THREE.SphereGeometry(2, 64, 64), planetMaterial);
+  scene.add(planetMesh);
+
+  addSimpleStars(2000, 2000);
+
+  return function animate() {
+    planetMesh.rotation.y += 0.01;   // ← exact reference
+    controls.update();
+    renderer.render(scene, camera);
+  };
+}
+
+// ── NEPTUNE  (reference: neptune.html) ───────────────────────
+function setupNeptune() {
+  camera.position.set(0, 0, 6);
+  controls.minDistance = 2.9;
+  controls.maxDistance = 15;
+
+  const lightDir = new THREE.Vector3(5, 3, 5).normalize();
+  const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
+  dirLight.position.copy(lightDir.clone().multiplyScalar(10));
+  scene.add(dirLight);
+  scene.add(new THREE.AmbientLight(0x333333));
+
+  const planetTexture = loader.load('./img_others/2k_neptune.jpg');
+
+  const planetMaterial = new THREE.MeshPhongMaterial({
+    map:       planetTexture,
+    bumpMap:   planetTexture,
+    bumpScale: 0.05,
+  });
+
+  const planetMesh = new THREE.Mesh(new THREE.SphereGeometry(2, 64, 64), planetMaterial);
+  scene.add(planetMesh);
+
+  addSimpleStars(2000, 2000);
+
+  return function animate() {
+    planetMesh.rotation.y += 0.01;   // ← exact reference
+    controls.update();
+    renderer.render(scene, camera);
+  };
+}
+
+// ════════════════════════════════════════════════════════════
+//  HELPER UTILITIES
+// ════════════════════════════════════════════════════════════
+
+// Simple star field matching reference sun/mercury/mars/etc. style
+function addSimpleStars(count, spread) {
+  const geo  = new THREE.BufferGeometry();
+  const pos  = [];
+  for (let i = 0; i < count; i++) {
+    pos.push((Math.random()-.5)*spread, (Math.random()-.5)*spread, (Math.random()-.5)*spread);
+  }
+  geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  scene.add(new THREE.Points(geo, new THREE.PointsMaterial({ color:0xffffff, size:2 })));
+}
+
+// InstancedMesh ring band — identical visual to reference Group-of-Spheres
+// but rendered in a single GPU draw call, so no browser freeze
+function createRingInstanced(innerR, outerR, count, texture, opacity) {
+  const geo   = new THREE.SphereGeometry(0.1, 6, 6);
+  const mat   = new THREE.MeshStandardMaterial({ map:texture, roughness:0.8, opacity, transparent:true });
+  const iMesh = new THREE.InstancedMesh(geo, mat, count);
+  const dummy = new THREE.Object3D();
+  for (let i = 0; i < count; i++) {
+    const angle  = Math.random() * Math.PI * 2;
+    const radius = innerR + Math.random() * (outerR - innerR);
+    dummy.position.set(Math.cos(angle)*radius, (Math.random()-.5)*0.5, Math.sin(angle)*radius);
+    dummy.rotation.set(Math.random()*Math.PI, Math.random()*Math.PI, Math.random()*Math.PI);
+    dummy.scale.setScalar(0.5 + Math.random() * 0.7);
+    dummy.updateMatrix();
+    iMesh.setMatrixAt(i, dummy.matrix);
+  }
+  iMesh.instanceMatrix.needsUpdate = true;
+  return iMesh;
+}
+
+// ════════════════════════════════════════════════════════════
+//  ROUTE — pick the right setup then start the loop
+// ════════════════════════════════════════════════════════════
+let perFrameFn;
+switch (planet) {
+  case 'sun':     perFrameFn = setupSun();     break;
+  case 'mercury': perFrameFn = setupMercury(); break;
+  case 'venus':   perFrameFn = setupVenus();   break;
+  case 'earth':   perFrameFn = setupEarth();   break;
+  case 'mars':    perFrameFn = setupMars();    break;
+  case 'jupiter': perFrameFn = setupJupiter(); break;
+  case 'saturn':  perFrameFn = setupSaturn();  break;
+  case 'uranus':  perFrameFn = setupUranus();  break;
+  case 'neptune': perFrameFn = setupNeptune(); break;
+  default:        perFrameFn = setupEarth();   break;
+}
+
+function loop() {
+  requestAnimationFrame(loop);
+  perFrameFn();
+}
+loop();
+
+// ─── Resize ───────────────────────────────────────────────────
+window.addEventListener('resize', () => {
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
 </script>
 </body>
 </html>

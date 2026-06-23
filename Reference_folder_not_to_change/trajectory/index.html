@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Orbit Simulation with Polar Graph and Theta</title>
+<style>
+    body {
+        margin: 0;
+        overflow: hidden;
+        background: black;
+        color: #fff;
+        font-family: sans-serif;
+    }
+
+    #controls {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        width: 300px;
+        background: rgba(255, 255, 255, 0.05); /* very subtle transparent bg */
+        padding: 15px;
+        border-radius: 12px;
+        border: 1px solid rgba(255,255,255,0.2);
+        backdrop-filter: blur(5px); /* subtle blur behind */
+        box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        z-index: 1001; /* Ensure controls are above other elements */
+    }
+
+    #controls label {
+        display: block;
+        margin-top: 12px;
+        font-size: 16px;
+    }
+
+    #controls input[type=range] {
+        width: 100%;
+        height: 16px;
+        margin-top: 4px;
+        accent-color: #00ffff;
+    }
+
+    #params {
+        margin-top: 15px;
+        font-size: 14px;
+        line-height: 1.5;
+        padding: 8px;
+        background: rgba(255,255,255,0.05);
+        border-radius: 8px;
+        border: 1px solid rgba(255,255,255,0.15);
+    }
+
+    #thetaGraph {
+        width: 100%;
+        height: 200px;
+        border: 1px solid #00ffff;
+        margin-top: 15px;
+        display: block;
+        border-radius: 8px;
+        background: rgba(255,255,255,0.05);
+    }
+
+    #thetaValue {
+        margin-top: 8px;
+        font-size: 14px;
+        text-align: center;
+        color: #00ffff;
+    }
+
+    /* Optional: nice scrollbar for the panel if needed */
+    #controls::-webkit-scrollbar {
+        width: 6px;
+    }
+    #controls::-webkit-scrollbar-thumb {
+        background-color: rgba(0,255,255,0.5);
+        border-radius: 3px;
+    }
+
+    #messageOverlay {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 4em;
+        color: red;
+        font-weight: bold;
+        text-shadow: 0 0 10px rgba(255, 0, 0, 0.8), 0 0 20px rgba(255, 0, 0, 0.6);
+        display: none; /* Hidden by default */
+        z-index: 1000;
+    }
+
+    #orbitalChangeMessage { /* New element for orbital change message */
+        position: absolute;
+        top: 80px; /* Positioned below controls */
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 1.5em;
+        color: #00ffff;
+        text-shadow: 0 0 5px rgba(0, 255, 255, 0.8);
+        background: rgba(0,0,0,0.7);
+        padding: 8px 15px;
+        border-radius: 8px;
+        border: 1px solid rgba(0,255,255,0.5);
+        display: none; /* Hidden by default */
+        z-index: 999;
+    }
+
+    /* === Sidebar Base Styles === */
+    .sidebar {
+        position: absolute;
+        top: 20px;
+        width: 350px;
+        background: rgba(255, 255, 255, 0.05);
+        padding: 15px;
+        border-radius: 12px;
+        border: 1px solid rgba(255,255,255,0.2);
+        backdrop-filter: blur(5px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        z-index: 1000;
+        display: none; /* Hidden by default */
+        max-height: 90vh;
+        overflow-y: auto;
+        color: #e0e0e0;
+        line-height: 1.6;
+    }
+
+    .sidebar h3 {
+        color: #00ffff;
+        margin-top: 0;
+        margin-bottom: 15px;
+        text-align: center;
+    }
+
+    .sidebar ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .sidebar li {
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+        border-bottom: 1px dashed rgba(255,255,255,0.1);
+    }
+
+    .sidebar li:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+
+    .sidebar strong {
+        color: #00ffff;
+    }
+
+    .sidebar code {
+        display: block;
+        background: rgba(0,0,0,0.3);
+        padding: 5px 8px;
+        border-radius: 5px;
+        font-family: monospace;
+        font-size: 0.9em;
+        margin-top: 5px;
+        color: #e0e0e0;
+        overflow-x: auto;
+    }
+
+    /* === Specific Sidebar Positioning === */
+    #physicsSidebar {
+        right: 20px;
+    }
+
+    #explanationSidebar {
+        right: 400px; /* Positioned to the left of physicsSidebar + some margin */
+    }
+
+    /* === Button Base Styles === */
+    .toggle-button {
+        position: absolute;
+        top: 20px;
+        background: #00ffff;
+        color: black;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+        z-index: 1002;
+        box-shadow: 0 4px 10px rgba(0,255,255,0.4);
+        white-space: nowrap; /* Prevent text wrapping */
+    }
+
+    .toggle-button:hover {
+        background: #00e6e6;
+        box-shadow: 0 6px 15px rgba(0,255,255,0.6);
+    }
+
+    /* === Specific Button Positioning === */
+    #togglePhysics {
+        right: 20px;
+    }
+
+    #toggleExplanation {
+        right: 200px; /* Positioned to the left of togglePhysics */
+    }
+
+    /* Scrollbars for sidebars */
+    .sidebar::-webkit-scrollbar {
+        width: 8px;
+    }
+    .sidebar::-webkit-scrollbar-thumb {
+        background-color: rgba(0,255,255,0.5);
+        border-radius: 4px;
+    }
+    .sidebar::-webkit-scrollbar-track {
+        background-color: rgba(255,255,255,0.1);
+        border-radius: 4px;
+    }
+
+</style>
+
+</head>
+<body>
+<div id="controls">
+    <label>Sun Mass (M) <span id="Mval"></span>
+        <input type="range" id="Mslider" min="0" max="10" step="0.01" value="1">
+    </label>
+    <label>Earth Mass (m) <span id="mval"></span>
+        <input type="range" id="mslider" min="0" max="1000" step="0.01" value="1">
+    </label>
+    <label>Distance (r) <span id="rval"></span>
+        <input type="range" id="rslider" min="0" max="10" step="0.01" value="1">
+    </label>
+    <label>Velocity (vo) <span id="vval"></span>
+        <input type="range" id="vslider" min="0" max="10" step="0.01" value="1">
+    </label>
+    <div id="params">
+        <strong>Orbit Parameters:</strong><br>
+        e = <span id="eval"></span><br>
+        a = <span id="aval"></span><br>
+        b = <span id="bval"></span><br>
+        h = <span id="hval"></span><br>
+        ε = <span id="epsval"></span><br>
+        Tangential Velocity = <span id="velval"></span> m/s<br>
+        Orbital Period = <span id="periodval"></span> years<br>
+        Theta (θ) = <span id="thetaval"></span>
+    </div>
+    <canvas id="thetaGraph" width="300" height="300"></canvas>
+    <div id="thetaValue">Theta Value: 0 rad | 0°</div>
+</div>
+
+<button id="toggleExplanation" class="toggle-button">Show Explanation</button>
+<button id="togglePhysics" class="toggle-button">Show Physics Info</button>
+
+
+<div id="explanationSidebar" class="sidebar">
+    <h3>Simulation Explanation:</h3>
+    <p id="explanationContent">
+        This simulation visually demonstrates the principles of orbital mechanics governed by Newtonian gravity. At its core, it models the two-body problem, specifically the interaction between a massive central star (the Sun) and a much smaller orbiting planet (the Earth). By adjusting parameters like the masses of the Sun and Earth, their initial distance, and the Earth's initial tangential velocity, you can observe fundamental concepts such as the conservation of angular momentum and specific orbital energy. The simulation calculates key orbital characteristics like eccentricity (e), semi-major axis (a), and semi-minor axis (b). Eccentricity, a measure of how much an orbit deviates from a perfect circle, is crucial: an 'e' value less than 1 results in an elliptical orbit (like planets in our solar system), 'e' equal to 1 signifies a parabolic escape trajectory, and 'e' greater than 1 represents a hyperbolic, unbound path. The simulation dynamically draws the resulting orbital path, tracks the planet's position and velocity, and even includes a polar graph illustrating its angular displacement (theta) and radial distance. A collision detection system highlights when the planet's path would intersect the Sun, demonstrating the dramatic consequences of insufficient orbital velocity, pausing the simulation and resetting parameters for a new exploration.
+    </p>
+</div>
+
+<div id="physicsSidebar" class="sidebar">
+    <h3>Physics Principles & Formulas:</h3>
+    <ul>
+        <li>
+            <strong>Newton's Law of Universal Gravitation:</strong> <code>F = G * M * m / r^2</code><br>
+            This fundamental force dictates the gravitational attraction between the Sun and Earth, underlying all orbital motion.
+        </li>
+        <li>
+            <strong>Specific Angular Momentum (h):</strong> <code>h = r * v_tangential</code><br>
+            A conserved quantity in central force motion, explaining why the planet speeds up closer to the Sun and slows down farther away.
+        </li>
+        <li>
+            <strong>Specific Orbital Energy (ε):</strong> <code>ε = (1/2) * v^2 - G * M / r</code><br>
+            The total energy per unit mass, also conserved, which combines kinetic and potential energy to define the orbit's overall energy state.
+        </li>
+        <li>
+            <strong>Orbital Eccentricity (e):</strong> <code>e = sqrt(1 + (2 * ε * h^2) / (G^2 * M^2))</code><br>
+            Determines the shape of the orbit: <code>e &lt; 1</code> for an ellipse, <code>e = 1</code> for a parabola, and <code>e &gt; 1</code> for a hyperbola.
+        </li>
+        <li>
+            <strong>Semi-major Axis (a):</strong> <code>a = -G * M / (2 * ε)</code> (for ellipses)<br>
+            Defines the overall size of an elliptical orbit. For parabolic/hyperbolic, it's a parameter related to curvature.
+        </li>
+        <li>
+            <strong>Semi-minor Axis (b):</strong> <code>b = a * sqrt(1 - e^2)</code> (for ellipses)<br>
+            Defines the 'width' of an elliptical orbit. For hyperbolic, it's the semi-conjugate axis.
+        </li>
+        <li>
+            <strong>Kepler's Third Law (Orbital Period T):</strong> <code>T = 2 * π * sqrt(a^3 / (G * M))</code><br>
+            Relates the orbital period to the semi-major axis and the central mass for elliptical orbits.
+        </li>
+    </ul>
+</div>
+
+<div id="messageOverlay"></div>
+<div id="orbitalChangeMessage"></div> <!-- New message div for orbital changes -->
+<script type="importmap">
+{
+    "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+    }
+}
+</script>
+<script type="module">
+    
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+
+// === Three.js Scene ===
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(85, window.innerWidth/window.innerHeight, 0.1, 10000);
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+
+     scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+scene.add(new THREE.PointLight(0xffffff, 2, 3000));
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.05;
+camera.position.z = 30;
+
+// Constants
+const original = {
+    M: 1.98847e30,
+    m: 5.97237e24,
+    rmin: 1.47095e11,
+    vo: 3.029195106e4,
+    G: 6.67430e-11
+};
+const SCALE_FACTOR = 1e-10;
+
+// DOM Elements - direct references to sliders
+const Mslider = document.getElementById("Mslider");
+const mslider = document.getElementById("mslider");
+const rslider = document.getElementById("rslider");
+const vslider = document.getElementById("vslider");
+
+const sliders = { M: Mslider, m: mslider, rmin: rslider, vo: vslider };
+
+const labels = { M: document.getElementById("Mval"), m: document.getElementById("mval"),
+                 rmin: document.getElementById("rval"), vo: document.getElementById("vval") };
+const paramLabels = { e: document.getElementById("eval"), a: document.getElementById("aval"),
+                      b: document.getElementById("bval"), h: document.getElementById("hval"),
+                      eps: document.getElementById("epsval"), vel: document.getElementById("velval"),
+                      period: document.getElementById("periodval"), theta: document.getElementById("thetaval") };
+const thetaValueDiv = document.getElementById("thetaValue");
+const messageOverlay = document.getElementById("messageOverlay");
+const orbitalChangeMessage = document.getElementById("orbitalChangeMessage"); // New orbital change message div
+
+for (let key in sliders) {
+    labels[key].innerText = sliders[key].value;
+    sliders[key].addEventListener("input", () => {
+        labels[key].innerText = sliders[key].value;
+        updateOrbit(true); // Pass true to indicate user input
+    });
+}
+
+// Canvas for theta graph
+const thetaCanvas = document.getElementById("thetaGraph");
+const thetaCtx = thetaCanvas.getContext("2d");
+
+// Sun
+const textureLoader1 = new THREE.TextureLoader();
+const fireTexture = textureLoader1.load('./sun.jpg'); // Ensure you have this image
+fireTexture.wrapS = fireTexture.wrapT = THREE.RepeatWrapping;
+// Sun Material
+const sunMaterial = new THREE.MeshStandardMaterial({
+  map: fireTexture,
+  emissive: new THREE.Color(0xffaa00),
+  emissiveMap: fireTexture,
+  emissiveIntensity: 2
+});
+// Sun Mesh
+const sunGeometry = new THREE.SphereGeometry(2, 18, 18); // Sun's visual radius is 2
+const sun = new THREE.Mesh(sunGeometry, sunMaterial);
+scene.add(sun);
+const sunLight = new THREE.PointLight(0xffddaa, 10, 1000);
+sunLight.position.copy(sun.position);
+scene.add(sunLight);
+const composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+composer.addPass(new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.5, 0.4, 0.85));
+ // Texture Loader
+  const loader = new THREE.TextureLoader();
+  const planetTexture = loader.load("./earth_day_4096.jpg"); // Ensure you have this image
+
+  // Planet Material & Mesh
+  const planetMaterial = new THREE.MeshPhongMaterial({
+    map: planetTexture,
+          bumpMap: planetTexture,
+  bumpScale: 0.05,
+  roughness: 1,
+  metalness: 0
+
+  });
+// Earth
+const earth1 = new THREE.SphereGeometry(0.5,32,32); // Earth's visual radius is 0.5
+const earth = new THREE.Mesh(earth1,planetMaterial);
+scene.add(earth);
+
+// Velocity Arrow
+const velocityArrow = new THREE.ArrowHelper(new THREE.Vector3(1,0,0), new THREE.Vector3(0,0,0), 2, 0xff0000);
+scene.add(velocityArrow);
+
+let orbitLine = null;
+let orbitPoints = [];
+let orbitTheta = 0;
+
+// Store previous orbit type for comparison (re-introduced)
+let previousOrbitType = null; // 'ellipse', 'parabola', 'hyperbola'
+let orbitalChangeMessageTimeout = null; // To clear previous timeouts
+
+function getOrbitType(e) {
+    if (e < 1 - Number.EPSILON) return 'ellipse'; // Use a small epsilon for floating point comparison
+    if (Math.abs(e - 1) < Number.EPSILON) return 'parabola';
+    return 'hyperbola';
+}
+
+
+// Orbit calculations
+function computeOrbit(M, m, G, rmin, vo){
+    const h = rmin * vo;
+    const eps = 0.5 * vo * vo - (G * M) / rmin;
+    const e = Math.sqrt(1 + (2 * eps * h*h)/(G*M*G*M));
+    let a = (e<1)? -(G*M)/(2*eps) : Math.abs(G*M/(2*eps));
+    if(e===1) a=h*h/(G*M);
+    return {h, eps, e, a};
+}
+// 1. Create the light
+const earthInternalLight = new THREE.PointLight(0xffddaa, 10, 20); 
+
+// 2. Add the light TO the earth (this makes it follow the earth automatically)
+earth.add(earthInternalLight); 
+
+// 3. Set position to 0,0,0 (this is the center of the Earth)
+earthInternalLight.position.set(0, 0, 0);
+function createOrbit(a,e,numPoints=500){
+    const points = [];
+    if(e<1){
+        const centerX=-a*e;
+        const b=a*Math.sqrt(1-e*e);
+        for(let i=0;i<=numPoints;i++){
+            const theta=i/numPoints*2*Math.PI;
+            const x=centerX+a*Math.cos(theta);
+            const z=b*Math.sin(theta);
+            points.push(new THREE.Vector3(x*SCALE_FACTOR,0,z*SCALE_FACTOR));
+        }
+    }else{
+        const thetaMax = (e>=1)? Math.acos(-1/e)*0.95 : Math.PI*0.95;
+        for(let i=0;i<=numPoints;i++){
+            const theta=i/numPoints*2*thetaMax - thetaMax;
+            const r = (e===1)? a/(1+e*Math.cos(theta)) : a*(e*e-1)/(1+e*Math.cos(theta));
+            if(r>0){
+                points.push(new THREE.Vector3(r*Math.cos(theta)*SCALE_FACTOR,0,r*Math.sin(theta)*SCALE_FACTOR));
+            }
+        }
+    }
+    return points;
+}
+
+function updateOrbit(fromUserInput = false){
+    if(orbitLine) scene.remove(orbitLine);
+    const Mval=original.M*parseFloat(Mslider.value); // Use direct slider value
+    const mval=original.m*parseFloat(mslider.value); // Use direct slider value
+    const rval=original.rmin*parseFloat(rslider.value); // Use direct slider value
+    const vval=original.vo*parseFloat(vslider.value); // Use direct slider value
+    const orbit=computeOrbit(Mval,mval,original.G,rval,vval);
+
+    let b=(orbit.e<1)? orbit.a*Math.sqrt(1-orbit.e*orbit.e) :
+          (orbit.e>1)? orbit.a*Math.sqrt(orbit.e*orbit.e-1) : orbit.a;
+
+    // Orbital period in years
+    let period="Infinity";
+    if(orbit.e<1){
+        period = (2*Math.PI*Math.sqrt(Math.pow(orbit.a,3)/(original.G*Mval)))/(60*60*24*365.25);
+        period = period.toFixed(3);
+    }
+
+    paramLabels.e.innerText=orbit.e.toFixed(5);
+    paramLabels.a.innerText=orbit.a.toExponential(5);
+    paramLabels.b.innerText=(typeof b==="number")? b.toExponential(5) : b;
+    paramLabels.h.innerText=orbit.h.toExponential(5);
+    paramLabels.eps.innerText=orbit.eps.toExponential(5);
+    paramLabels.period.innerText=period;
+
+    orbitPoints=createOrbit(orbit.a,orbit.e,500);
+    orbitLine=new THREE.Line(new THREE.BufferGeometry().setFromPoints(orbitPoints),
+                             new THREE.LineBasicMaterial({color:0x00FFFF}));
+    scene.add(orbitLine);
+    orbitTheta=0;
+
+    // *** Re-introducing orbit type change detection, separate from collision ***
+    const currentOrbitType = getOrbitType(orbit.e);
+    if (fromUserInput && previousOrbitType && currentOrbitType !== previousOrbitType) {
+        // Clear any existing timeout for the orbital change message
+        if (orbitalChangeMessageTimeout) {
+            clearTimeout(orbitalChangeMessageTimeout);
+        }
+        orbitalChangeMessage.innerText = `ORBIT TYPE CHANGED TO ${currentOrbitType.toUpperCase()}!`;
+        orbitalChangeMessage.style.display = 'block';
+        // Set a timeout to hide the message after 4 seconds
+        orbitalChangeMessageTimeout = setTimeout(() => {
+            orbitalChangeMessage.style.display = 'none';
+        }, PAUSE_DURATION); // Use the same duration for consistency
+    }
+    previousOrbitType = currentOrbitType; // Update previous orbit type
+
+    // Reset collision state when orbit updates (only if not already in a collision pause)
+    if (simulationState !== 'collision') {
+        earth.visible = true;
+        messageOverlay.style.display = 'none'; // Ensure collision message is hidden
+        velocityArrow.visible = true;
+        simulationState = 'running'; // Ensure state is reset to running
+    }
+}
+// / Light
+const pointLight = new THREE.PointLight(0xffffff, 2, 2000);
+pointLight.position.set(50, 50, 50);
+scene.add(pointLight);
+scene.add(new THREE.AmbientLight(0x333333));
+
+// ------------ Function: Create Sphere with Surface Particles ------------
+function createSphereWithParticles(radius, numParticles, opacity, color, position) {
+  const particlesGeometry = new THREE.BufferGeometry();
+  const positions = [];
+
+  for (let i = 0; i < numParticles; i++) {
+    // Random direction on a sphere (normalized vector)
+    const theta = Math.random() * Math.PI * 2;  // azimuth
+    const phi = Math.acos(2 * Math.random() - 1); // polar angle
+    const x = radius * Math.sin(phi) * Math.cos(theta);
+    const y = radius * Math.sin(phi) * Math.sin(theta);
+    const z = radius * Math.cos(phi);
+    positions.push(x, y, z);
+  }
+
+  particlesGeometry.setAttribute(
+    "position",
+    new THREE.Float32BufferAttribute(positions, 3)
+  );
+
+  const particlesMaterial = new THREE.PointsMaterial({
+    color: color,
+    size: 0.3,
+    transparent: true,
+    opacity: opacity,
+    blending: THREE.AdditiveBlending
+  });
+
+  const particleSystem = new THREE.Points(particlesGeometry, particlesMaterial);
+  particleSystem.position.copy(position);
+  scene.add(particleSystem);
+
+  return particleSystem;
+}
+
+// ------------ Create Multiple Spheres with Particles ------------
+const spheres = [];
+spheres.push(createSphereWithParticles(109000, 1000, 0.8, 0xff0f00, new THREE.Vector3(-50, 0, 0)));
+spheres.push(createSphereWithParticles(107000, 1000, 0.8, 0xf00f00, new THREE.Vector3(-50, 0, 0)));
+spheres.push(createSphereWithParticles(6000, 1000, 0.8, 0xefff00, new THREE.Vector3(-50, 0, 0)));
+spheres.push(createSphereWithParticles(10500, 1000, 0.8, 0xfeef00, new THREE.Vector3(-50, 0, 0)));
+spheres.push(createSphereWithParticles(100000, 1000, 0.8, 0xffef00, new THREE.Vector3(-50, 0, 0)));
+spheres.push(createSphereWithParticles(100300, 1000, 0.8, 0xff0000, new THREE.Vector3(-50, 0, 0)));
+
+// Draw polar graph
+function drawPolarGraph(theta,r){
+    thetaCtx.clearRect(0,0,thetaCanvas.width,thetaCanvas.height);
+    const cx = thetaCanvas.width/2;
+    const cy = thetaCanvas.height/2;
+
+    // Draw axes
+    thetaCtx.strokeStyle = "white";
+    thetaCtx.beginPath();
+    thetaCtx.moveTo(cx,0); thetaCtx.lineTo(cx,thetaCanvas.height);
+    thetaCtx.moveTo(0,cy); thetaCtx.lineTo(thetaCanvas.width,cy);
+    thetaCtx.stroke();
+
+    // Draw radial line at theta
+    const maxR = 1.5e11; // This is a maximum real-world distance for scaling the graph
+    const len = (r>maxR)? maxR : r;
+    const scale = (thetaCanvas.width/2)/maxR;
+    const x = cx + len*scale*Math.cos(theta);
+    const y = cy - len*scale*Math.sin(theta);
+
+    thetaCtx.strokeStyle = "red";
+    thetaCtx.beginPath();
+    thetaCtx.moveTo(cx,cy);
+    thetaCtx.lineTo(x,y);
+    thetaCtx.stroke();
+
+    // Update theta value display
+    const deg = (theta<0?theta+2*Math.PI:theta)*(180/Math.PI);
+    thetaValueDiv.innerText = `Theta Value: ${ (theta<0?theta+2*Math.PI:theta).toFixed(3) } rad | ${deg.toFixed(1)}°`;
+}
+
+// Animation
+const TIME_SCALE = .01*24*3600;
+let lastTime = performance.now();
+controls.minDistance =10;   // how close camera can zoom in
+controls.maxDistance = 1000;
+
+// Define visual radii for collision detection in Three.js units
+const sunVisualRadius = 2;
+const earthVisualRadius = 0.5;
+const collisionDistanceThreshold = sunVisualRadius + earthVisualRadius; // When they "touch" visually
+
+// New state variables for collision and pause
+let simulationState = 'running'; // 'running', 'collision', 'reset'
+let pauseStartTime = 0; // Use a single pause start time for collision
+const PAUSE_DURATION = 4000; // 4 seconds in milliseconds for both collision and orbital change message
+
+function animate(){
+    const now = performance.now();
+    const dt = (now-lastTime)/1000*TIME_SCALE;
+    lastTime = now;
+
+    if (simulationState === 'reset') {
+        // Reset slider values to 1
+        Mslider.value = "1";
+        mslider.value = "1";
+        rslider.value = "1";
+        vslider.value = "1";
+
+        // Update slider labels
+        labels.M.innerText = Mslider.value;
+        labels.m.innerText = mslider.value;
+        labels.rmin.innerText = rslider.value;
+        labels.vo.innerText = vslider.value;
+
+        updateOrbit(); // Recalculate orbit with new slider values
+    }
+
+    if (simulationState === 'running' && orbitPoints.length > 0) {
+        // Recalculate orbit for the current frame, but only update the visual path if the sliders haven't changed
+        // This is important because orbitTheta advances based on the *current* orbit,
+        // but `updateOrbit()` is only called on slider change or reset.
+        const orbit=computeOrbit(original.M*parseFloat(Mslider.value),
+                                 original.m*parseFloat(mslider.value),
+                                 original.G,
+                                 original.rmin*parseFloat(rslider.value),
+                                 original.vo*parseFloat(vslider.value));
+
+        if(orbit.e<1){ orbitTheta+=dt*0.00001; if(orbitTheta>=1) orbitTheta=0; }
+        else{ if(orbitTheta<1) orbitTheta+=dt*0.00001; }
+
+        if(orbitTheta<1){
+            const idx=Math.floor(orbitTheta*orbitPoints.length);
+            const pos=orbitPoints[idx];
+            earth.position.set(pos.x,pos.y,pos.z);
+
+            // Collision Detection
+            const distanceBetweenBodies = sun.position.distanceTo(earth.position);
+
+            if (distanceBetweenBodies <= collisionDistanceThreshold) {
+                messageOverlay.innerText = "SUN AND EARTH HIT!";
+                simulationState = 'collision'; // Set state to collision
+                pauseStartTime = now; // Record collision time
+
+                earth.visible = false; // Hide Earth
+                messageOverlay.style.display = 'block'; // Show collision message
+                velocityArrow.visible = false; // Hide velocity arrow
+                // No further orbit updates in this frame
+            } else {
+                // Normal running state: ensure everything is visible and updated
+                earth.visible = true;
+                messageOverlay.style.display = 'none'; // Ensure collision message is hidden
+                velocityArrow.visible = true;
+
+                const rVec=new THREE.Vector3(pos.x,0,pos.z);
+                const tangDir=new THREE.Vector3(-pos.z,0,pos.x).normalize();
+                const vMag=orbit.h/(rVec.length()/SCALE_FACTOR);
+                velocityArrow.position.set(pos.x,pos.y,pos.z);
+                velocityArrow.setDirection(tangDir);
+                velocityArrow.setLength(2);
+                paramLabels.vel.innerText=vMag.toExponential(3);
+
+                const theta = Math.atan2(pos.z,pos.x);
+                const r = rVec.length()/SCALE_FACTOR;
+                drawPolarGraph(theta,r);
+            }
+        }
+    } else if (simulationState === 'collision') {
+        // Check if pause duration has passed for collision
+        if (now - pauseStartTime >= PAUSE_DURATION) {
+            simulationState = 'reset'; // Trigger reset
+        }
+        // Keep earth hidden, collision message shown, velocity arrow hidden during collision pause
+        earth.visible = false;
+        messageOverlay.style.display = 'block';
+        velocityArrow.visible = false;
+    }
+    // Particle spheres always animate regardless of main simulation state
+    spheres.forEach((particleSystem) => {
+        particleSystem.rotation.y += 0.001;
+    });
+
+    controls.update();
+    composer.render(); // Use composer.render() for bloom effect
+    requestAnimationFrame(animate);
+}
+
+updateOrbit(); // Initial call
+animate();
+
+window.addEventListener("resize",()=>{
+    camera.aspect = window.innerWidth/window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth,window.innerHeight);
+    composer.setSize(window.innerWidth, window.innerHeight); // Update composer size too
+});
+
+// Physics Sidebar Toggle Logic
+const physicsSidebar = document.getElementById("physicsSidebar");
+const togglePhysicsBtn = document.getElementById("togglePhysics");
+
+togglePhysicsBtn.addEventListener("click", () => {
+    if (physicsSidebar.style.display === "block") {
+        physicsSidebar.style.display = "none";
+        togglePhysicsBtn.innerText = "Show Physics Info";
+    } else {
+        physicsSidebar.style.display = "block";
+        togglePhysicsBtn.innerText = "Hide Physics Info";
+        // Hide explanation sidebar if physics is shown to avoid overlap
+        explanationSidebar.style.display = "none";
+        toggleExplanationBtn.innerText = "Show Explanation";
+    }
+});
+
+// Explanation Sidebar Toggle Logic (New)
+const explanationSidebar = document.getElementById("explanationSidebar");
+const toggleExplanationBtn = document.getElementById("toggleExplanation");
+
+toggleExplanationBtn.addEventListener("click", () => {
+    if (explanationSidebar.style.display === "block") {
+        explanationSidebar.style.display = "none";
+        toggleExplanationBtn.innerText = "Show Explanation";
+    } else {
+        explanationSidebar.style.display = "block";
+        toggleExplanationBtn.innerText = "Hide Explanation";
+        // Hide physics sidebar if explanation is shown to avoid overlap
+        physicsSidebar.style.display = "none";
+        togglePhysicsBtn.innerText = "Show Physics Info";
+    }
+});
+</script>
+</body>
+</html>
+
+

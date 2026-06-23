@@ -1,0 +1,102 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Realistic Fiery Sun</title>
+  <style>
+    body { margin: 0; overflow: hidden; background: black; }
+    canvas { display: block; }
+  </style>
+  <script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.skypack.dev/three@0.152.2",
+    "three/examples/jsm/": "https://cdn.skypack.dev/three@0.152.2/examples/jsm/"
+  }
+}
+</script>
+</head>
+<body>
+<script type="module">
+import * as THREE from 'https://unpkg.com/three@0.152.2/build/three.module.js';
+import { OrbitControls } from 'https://unpkg.com/three@0.152.2/examples/jsm/controls/OrbitControls.js';
+import { EffectComposer } from 'https://unpkg.com/three@0.152.2/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from 'https://unpkg.com/three@0.152.2/examples/jsm/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'https://unpkg.com/three@0.152.2/examples/jsm/postprocessing/UnrealBloomPass.js';
+
+// Scene & Camera
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 5000);
+camera.position.set(0, 0, 60);
+
+// Renderer
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+
+// Controls
+const controls = new OrbitControls(camera, renderer.domElement);
+
+// Texture Loader
+const textureLoader = new THREE.TextureLoader();
+const fireTexture = textureLoader.load('./img_others/8k_sun.jpg');
+fireTexture.wrapS = fireTexture.wrapT = THREE.RepeatWrapping;
+
+// Sun Material
+const sunMaterial = new THREE.MeshStandardMaterial({
+  map: fireTexture,
+  emissive: new THREE.Color(0xffaa00),
+  emissiveMap: fireTexture,
+  emissiveIntensity: 2
+});
+controls.minDistance = 11;   // how close camera can zoom in
+controls.maxDistance = 60; 
+// Sun Mesh
+const sunGeometry = new THREE.SphereGeometry(10, 18, 18);
+const sunMesh = new THREE.Mesh(sunGeometry, sunMaterial);
+scene.add(sunMesh);
+// Light Source
+const sunLight = new THREE.PointLight(0xffddaa, 10, 1000);
+sunLight.position.copy(sunMesh.position);
+scene.add(sunLight);
+
+// Stars
+const starGeometry = new THREE.BufferGeometry();
+const starPositions = [];
+for (let i = 0; i < 4000; i++) {
+  starPositions.push((Math.random() - 0.5) * 5000, (Math.random() - 0.5) * 5000, (Math.random() - 0.5) * 5000);
+}
+starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starPositions, 3));
+const starMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 2 });
+const stars = new THREE.Points(starGeometry, starMaterial);
+scene.add(stars);
+
+// Bloom Effect
+const composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+composer.addPass(new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.5, 0.4, 0.85));
+
+// Animate
+function animate() {
+  requestAnimationFrame(animate);
+  fireTexture.offset.x += 0.001;
+  fireTexture.offset.y += 0.001;
+  sunMesh.rotation.y += 0.002;
+  controls.update();
+  composer.render();
+}
+animate();
+
+// Resize
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  composer.setSize(window.innerWidth, window.innerHeight);
+});
+</script>
+</body>
+
+</html>
+
