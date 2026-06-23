@@ -150,9 +150,17 @@ function buildViewer(canvasId, wrapperId, loaderId) {
       "God is admiring the final masterpiece..."
     ];
     const span = loader.querySelector('span');
+    if (span) span.style.transition = "opacity 0.4s ease-in-out";
+
     const phraseInterval = setInterval(() => {
-      if (span) span.innerText = phrases[Math.floor(Math.random() * phrases.length)];
-    }, 800);
+      if (span) {
+        span.style.opacity = "0"; // fade out
+        setTimeout(() => {
+          span.innerText = phrases[Math.floor(Math.random() * phrases.length)];
+          span.style.opacity = "1"; // fade in
+        }, 400);
+      }
+    }, 2000);
 
     const pd = PLANET_DATA[key];
     const radius = visualRadius(key);
@@ -193,7 +201,7 @@ function buildViewer(canvasId, wrapperId, loaderId) {
       }
 
       const elapsed = Date.now() - startTime;
-      const delay = Math.max(0, 2500 - elapsed);
+      const delay = Math.max(0, 4500 - elapsed);
       
       setTimeout(() => {
         clearInterval(phraseInterval);

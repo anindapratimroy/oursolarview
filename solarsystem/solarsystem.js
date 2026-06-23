@@ -131,10 +131,16 @@ orbitsData.forEach(o => scene.add(createEllipseRing(o.a,o.b,o.cx)));
   ];
   let currentPct = 0;
   
+  loadingText.style.transition = "opacity 0.4s ease-in-out";
+  
   const phraseInterval = setInterval(() => {
-    const randPhrase = phrases[Math.floor(Math.random() * phrases.length)];
-    loadingText.innerText = `${randPhrase} (${currentPct}%)`;
-  }, 800);
+    loadingText.style.opacity = "0"; // fade out
+    setTimeout(() => {
+      const randPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+      loadingText.innerText = `${randPhrase} (${currentPct}%)`;
+      loadingText.style.opacity = "1"; // fade in
+    }, 400);
+  }, 2000);
 
   manager.onProgress = function (url, itemsLoaded, itemsTotal) {
     currentPct = Math.round((itemsLoaded / itemsTotal) * 100);
@@ -143,7 +149,7 @@ orbitsData.forEach(o => scene.add(createEllipseRing(o.a,o.b,o.cx)));
   };
   manager.onLoad = function () {
     const elapsed = Date.now() - startTime;
-    const delay = Math.max(0, 3000 - elapsed);
+    const delay = Math.max(0, 5000 - elapsed);
     setTimeout(() => {
       clearInterval(phraseInterval);
       loadingOverlay.style.opacity = '0';

@@ -47,12 +47,19 @@ export function initEarth() {
     ];
     let currentPct = 0;
     
+    // Make label fadeable
+    if (preLabel) preLabel.style.transition = "opacity 0.4s ease-in-out";
+
     const phraseInterval = setInterval(() => {
       if (preLabel) {
-        const randPhrase = phrases[Math.floor(Math.random() * phrases.length)];
-        preLabel.innerText = `${randPhrase} (${currentPct}%)`;
+        preLabel.style.opacity = "0"; // Fade out
+        setTimeout(() => {
+          const randPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+          preLabel.innerText = `${randPhrase} (${currentPct}%)`;
+          preLabel.style.opacity = "1"; // Fade in
+        }, 400);
       }
-    }, 800);
+    }, 2000);
 
     manager.onProgress = function (url, itemsLoaded, itemsTotal) {
       currentPct = Math.round((itemsLoaded / itemsTotal) * 100);
@@ -64,7 +71,7 @@ export function initEarth() {
 
     manager.onLoad = function () {
       const elapsed = Date.now() - startTime;
-      const delay = Math.max(0, 3000 - elapsed);
+      const delay = Math.max(0, 5000 - elapsed);
       setTimeout(() => {
         clearInterval(phraseInterval);
         preloader.classList.add('out');
