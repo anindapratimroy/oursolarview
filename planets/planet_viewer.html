@@ -105,8 +105,31 @@ document.getElementById('ld-name').textContent       = cap;
 // ─── Loading overlay ─────────────────────────────────────────
 const ldEl  = document.getElementById('loading');
 const ldPct = document.getElementById('ld-pct');
+
+const phrases = [
+  "God is shaping the planet...",
+  "God is painting the textures...",
+  "God is adding the atmosphere...",
+  "God is positioning the moons...",
+  "God is calculating gravity..."
+];
+
+let currentPhrase = phrases[0];
+setInterval(() => {
+  currentPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+}, 800);
+
+let fakePct = 0;
+const pctInterval = setInterval(() => {
+  fakePct += 1;
+  if (fakePct > 99) fakePct = 99; 
+  ldPct.textContent = `${currentPhrase} (${fakePct}%)`;
+}, 30); // 99% in ~3 seconds
+
 function hideLoader() {
   clearTimeout(safeTimer);
+  clearInterval(pctInterval);
+  ldPct.textContent = `${currentPhrase} (100%)`;
   ldEl.classList.add('done');
   setTimeout(() => ldEl.remove?.(), 800);
 }
@@ -114,9 +137,18 @@ function hideLoader() {
 const safeTimer = setTimeout(hideLoader, 15000);
 
 const manager = new THREE.LoadingManager();
-manager.onProgress = (_,l,t) => { ldPct.textContent = `Textures  ${Math.round(l/t*100)}%`; };
-manager.onLoad     = ()      => setTimeout(hideLoader, 300);
-manager.onError    = ()      => {};   // don't block on a missing file
+let texturesLoaded = false;
+manager.onLoad = () => { texturesLoaded = true; };
+manager.onError = () => {};
+
+// Force a cinematic minimum delay of 3 seconds
+setTimeout(() => {
+  if (texturesLoaded) {
+    hideLoader();
+  } else {
+    manager.onLoad = hideLoader;
+  }
+}, 3000);
 
 const loader = new THREE.TextureLoader(manager);
 
