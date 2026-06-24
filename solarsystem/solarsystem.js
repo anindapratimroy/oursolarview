@@ -740,10 +740,6 @@ scaleSlider.addEventListener("input", e => {
   scaleValue.innerText = periodScale;
 });
 
-const sunLightToggle = document.getElementById("toggleSunLight");
-sunLightToggle.addEventListener("change", () => {
-  sunLight.visible = sunLightToggle.checked;
-});
 
 
 // --- Function to create stone rings ---
