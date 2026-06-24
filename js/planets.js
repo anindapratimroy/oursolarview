@@ -1,15 +1,15 @@
 export function initPlanets() {
 // Planet Data
 const PLANETS = [
-  { name: 'Sun',     image: './planets/img_others/2k_sun.jpg',          desc: 'The G-type main-sequence star at the centre of our Solar System — a colossal sphere of hot plasma generating energy via nuclear fusion.' },
-  { name: 'Mercury', image: './planets/img_others/2k_mercury.jpg',      desc: 'The smallest and innermost planet, with a heavily cratered surface, negligible atmosphere, and extreme temperature swings.' },
-  { name: 'Venus',   image: './planets/img_others/2k_venus_surface.jpg',desc: 'Earth\'s twin in size but a hellscape in reality — a dense CO₂ atmosphere creates a runaway greenhouse effect reaching 465 °C.' },
-  { name: 'Earth',   image: './planets/img_earth/earth_day_4096.jpg',   desc: 'Our home world: vast oceans, dynamic weather systems, and the only confirmed site of complex life in the known universe.' },
-  { name: 'Mars',    image: './planets/img_others/2k_mars.jpg',         desc: 'The Red Planet, home to Olympus Mons — the tallest volcano in the Solar System — and a thin, dusty CO₂ atmosphere.' },
-  { name: 'Jupiter', image: './planets/img_others/2k_jupiter.jpg',      desc: 'The largest gas giant, whose iconic Great Red Spot is a centuries-old anticyclonic storm wider than Earth itself.' },
-  { name: 'Saturn',  image: './planets/img_others/2k_saturn.jpg',       desc: 'Renowned for its breathtaking ring system — vast sheets of ice and rock particles stretching hundreds of thousands of kilometres.' },
-  { name: 'Uranus',  image: './planets/img_others/2k_uranus.jpg',       desc: 'An ice giant with a unique 98° axial tilt, causing each pole to experience 42 years of continuous sunlight and 42 of darkness.' },
-  { name: 'Neptune', image: './planets/img_others/2k_neptune.jpg',      desc: 'The windiest planet — supersonic storms exceed 2,100 km/h in its frigid, deep-blue methane atmosphere.' },
+  { name: 'Sun',     image: './planets/img_others/2k_sun.jpg',          desc: 'I forged this colossal sphere of plasma as the engine of my creation. Its nuclear fire gives warmth and light to everything I built.' },
+  { name: 'Mercury', image: './planets/img_others/2k_mercury.jpg',      desc: 'I placed this tiny rock closest to my fire. I stripped its atmosphere to see how it would endure the harshest temperatures of my design.' },
+  { name: 'Venus',   image: './planets/img_others/2k_venus_surface.jpg',desc: 'An experiment in extremes. I gave it Earth\\'s scale, but wrapped it in a suffocating shroud, crafting a beautiful but deadly hellscape.' },
+  { name: 'Earth',   image: './planets/img_earth/earth_day_4096.jpg',   desc: 'My greatest masterpiece. I sculpted its vast oceans and dynamic weather specifically to cradle you. It is the jewel of my canvas.' },
+  { name: 'Mars',    image: './planets/img_others/2k_mars.jpg',         desc: 'I painted it in rusted red and sculpted Olympus Mons, the tallest volcano in my collection. A quiet monument to what could have been.' },
+  { name: 'Jupiter', image: './planets/img_others/2k_jupiter.jpg',      desc: 'My majestic giant. I spun its violent, swirling clouds and commanded a colossal storm to rage endlessly across its face for centuries.' },
+  { name: 'Saturn',  image: './planets/img_others/2k_saturn.jpg',       desc: 'My most delicate sculpture. I shattered moons and commanded the icy remnants to orbit in an eternal, breathtaking ring of perfect geometry.' },
+  { name: 'Uranus',  image: './planets/img_others/2k_uranus.jpg',       desc: 'A twist in my rules. I tilted this frozen giant on its side, condemning its poles to endure 42 years of unbroken daylight and utter darkness.' },
+  { name: 'Neptune', image: './planets/img_others/2k_neptune.jpg',      desc: 'I pushed my atmospheric engine to the absolute limit here. I unleashed supersonic winds and violent storms within a frigid, deep-blue sphere.' },
 ];
 
 const grid = document.getElementById('planetGrid');
