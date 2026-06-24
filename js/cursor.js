@@ -36,26 +36,23 @@ if (!window.matchMedia("(pointer: coarse)").matches) {
       mouseY = e.clientY;
     });
 
-    function bindHover(el) {
-      el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hovering'));
-      el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hovering'));
-    }
-
     const hoverSelectors = 'a, button, select, input, .btn, summary, .mobile-toggle, label, .nav-brand, .planet-card, [onclick]';
     
-    document.querySelectorAll(hoverSelectors).forEach(bindHover);
-
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        mutation.addedNodes.forEach((node) => {
-          if (node.nodeType === 1) {
-            if (node.matches && node.matches(hoverSelectors)) bindHover(node);
-            node.querySelectorAll(hoverSelectors).forEach(bindHover);
-          }
-        });
-      });
+    // Robust Event Delegation for Hover States
+    document.addEventListener('mouseover', (e) => {
+      if (e.target.closest && e.target.closest(hoverSelectors)) {
+        document.body.classList.add('cursor-hovering');
+      }
     });
-    observer.observe(document.body, { childList: true, subtree: true });
+
+    document.addEventListener('mouseout', (e) => {
+      if (e.target.closest && e.target.closest(hoverSelectors)) {
+        // Only remove if we aren't moving into a child of the interactive element
+        if (!e.relatedTarget || !e.relatedTarget.closest(hoverSelectors)) {
+          document.body.classList.remove('cursor-hovering');
+        }
+      }
+    });
 
     // Handle Dragging State for Canvases
     document.addEventListener('mousedown', () => document.body.classList.add('cursor-dragging'));
