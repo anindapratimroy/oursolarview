@@ -11,7 +11,7 @@ export function initModal() {
   let isFullscreen = false;
 
   window.openPlanetModal = function(p, pushState = true) {
-    modalTitle.innerHTML = `<span>${p.name}</span> — Data Stream`;
+    modalTitle.innerHTML = `<span>${p.name}</span> — Divine Blueprint`;
     modalIframe.src = `./planets/planet_viewer.html?planet=${p.name.toLowerCase()}`;
     modal.classList.add('open');
     document.body.style.overflow = 'hidden';
