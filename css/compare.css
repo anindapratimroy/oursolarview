@@ -135,36 +135,40 @@
   cursor: grabbing;
 }
 
-/* ── Loader ── */
-.compare-loader {
-  position: absolute;
-  inset: 0;
+/* ── Visual Data Bars ── */
+.ratio-bar-container {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
   gap: 15px;
-  background: rgba(0, 0, 0, 0.5);
-  border-radius: 50%;
-  z-index: 10;
-  backdrop-filter: blur(4px);
+  width: 100%;
 }
 
-.compare-loader span {
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  color: var(--accent-blue);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+.ratio-bar-left, .ratio-bar-right {
+  display: flex;
+  flex: 1;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 2px;
+  overflow: hidden;
 }
 
-.spinner {
-  width: 40px;
-  height: 40px;
-  border: 3px solid rgba(138, 180, 248, 0.2);
-  border-top-color: var(--accent-blue);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
+.ratio-bar-left {
+  justify-content: flex-end;
+}
+
+.ratio-fill {
+  height: 100%;
+  background: var(--gold);
+  border-radius: 2px;
+  transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ratio-fill-left {
+  background: linear-gradient(90deg, transparent, var(--gold));
+}
+
+.ratio-fill-right {
+  background: linear-gradient(90deg, var(--gold), transparent);
 }
 
 /* ── Data Table HUD Style ── */
@@ -231,21 +235,29 @@
   color: #8ab4f8;
   font-family: var(--font-mono);
   font-weight: 600;
-  font-size: 0.9rem;
-  border-right: 1px solid rgba(0, 255, 255, 0.1);
-  letter-spacing: 0.05em;
-}
-
-.compare-data-table td.compare-td-val {
-  color: #e0f2fe;
+  color: var(--text-dim);
   font-family: var(--font-body);
-  font-weight: 400;
-  width: 35%;
-  font-size: 1.05rem;
+  font-weight: 500;
+  width: 30%;
+  text-align: right;
+  padding-right: 20px;
 }
 
-.compare-data-table tbody tr:hover td {
-  background: rgba(0, 255, 255, 0.04);
+.compare-td-val {
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 1.05rem;
+  width: 35%;
+  position: relative;
+}
+
+/* Hover effects */
+.compare-data-table tbody tr {
+  transition: background 0.2s ease;
+}
+
+.compare-data-table tbody tr:hover {
+  background: rgba(197, 160, 72, 0.05);
 }
 
 /* Highlight style for dynamic JS updates */

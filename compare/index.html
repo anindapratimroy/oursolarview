@@ -20,6 +20,7 @@
   <link rel="stylesheet" href="../css/components.css" />
   <!-- Feature Specific CSS -->
   <link rel="stylesheet" href="../css/compare.css" />
+  <link rel="stylesheet" href="../css/cursor.css" />
 </head>
 <body>
 
@@ -49,6 +50,12 @@
   </div>
 </nav>
 
+<!-- Global Loader -->
+<div id="compare-global-loader" style="position:fixed; top:0; left:0; width:100%; height:100%; background:var(--navy); z-index:9999; display:flex; justify-content:center; align-items:center; flex-direction:column; gap:20px; color:var(--gold); font-family:'Space Mono', monospace; font-size:1.2rem; transition:opacity 0.6s ease;">
+  <i class="fa-solid fa-circle-notch fa-spin fa-2x"></i>
+  <span id="compare-global-text" style="transition: opacity 0.4s ease-in-out;">God is aligning the celestial bodies... (0%)</span>
+</div>
+
 <main class="compare-container">
   
   <div class="compare-header">
@@ -74,10 +81,6 @@
       </div>
       
       <div class="compare-canvas-container" id="compare-canvas-wrap-left">
-        <div class="compare-loader" id="compare-loader-left">
-          <div class="spinner"></div>
-          <span>God is retrieving this celestial body...</span>
-        </div>
         <canvas id="compare-canvas-left"></canvas>
       </div>
     </div>
@@ -99,10 +102,6 @@
       </div>
       
       <div class="compare-canvas-container" id="compare-canvas-wrap-right">
-        <div class="compare-loader" id="compare-loader-right">
-          <div class="spinner"></div>
-          <span>God is retrieving this celestial body...</span>
-        </div>
         <canvas id="compare-canvas-right"></canvas>
       </div>
     </div>
@@ -138,5 +137,6 @@
 }
 </script>
 <script type="module" src="../js/compare_init.js"></script>
+<script src="../js/cursor.js"></script>
 </body>
 </html>

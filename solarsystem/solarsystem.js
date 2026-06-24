@@ -129,7 +129,7 @@ orbitsData.forEach(o => scene.add(createEllipseRing(o.a,o.b,o.cx)));
     "God is scattering cosmic dust...",
     "God is admiring the final masterpiece..."
   ];
-  let currentPct = 0;
+  let displayPct = 0;
   
   loadingText.style.transition = "opacity 0.4s ease-in-out";
   
@@ -137,21 +137,35 @@ orbitsData.forEach(o => scene.add(createEllipseRing(o.a,o.b,o.cx)));
     loadingText.style.opacity = "0"; // fade out
     setTimeout(() => {
       const randPhrase = phrases[Math.floor(Math.random() * phrases.length)];
-      loadingText.innerText = `${randPhrase} (${currentPct}%)`;
+      loadingText.innerText = `${randPhrase} (${displayPct}%)`;
       loadingText.style.opacity = "1"; // fade in
     }, 400);
   }, 2000);
 
-  manager.onProgress = function (url, itemsLoaded, itemsTotal) {
-    currentPct = Math.round((itemsLoaded / itemsTotal) * 100);
-    const currentText = loadingText.innerText.split(' (')[0] || phrases[0];
-    loadingText.innerText = `${currentText} (${currentPct}%)`;
+  const pctInterval = setInterval(() => {
+    if (displayPct < 99) {
+      displayPct += Math.floor(Math.random() * 2) + 1;
+      if (displayPct > 99) displayPct = 99;
+      
+      if (loadingText.style.opacity !== "0") {
+        const currentText = loadingText.innerText.split(' (')[0] || phrases[0];
+        loadingText.innerText = `${currentText} (${displayPct}%)`;
+      }
+    }
+  }, 45); // Reaches ~99% over ~4.5 seconds
+
+  manager.onProgress = function () {
+    // Ignored for smoother simulated loader
   };
   manager.onLoad = function () {
     const elapsed = Date.now() - startTime;
     const delay = Math.max(0, 5000 - elapsed);
     setTimeout(() => {
+      displayPct = 100;
+      const currentText = loadingText.innerText.split(' (')[0] || phrases[0];
+      loadingText.innerText = `${currentText} (100%)`;
       clearInterval(phraseInterval);
+      clearInterval(pctInterval);
       loadingOverlay.style.opacity = '0';
       setTimeout(() => loadingOverlay.remove(), 500);
     }, delay);

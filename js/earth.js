@@ -45,7 +45,7 @@ export function initEarth() {
       "God is painting the atmospheric clouds...",
       "God is scattering cosmic dust..."
     ];
-    let currentPct = 0;
+    let displayPct = 0;
     
     // Make label fadeable
     if (preLabel) preLabel.style.transition = "opacity 0.4s ease-in-out";
@@ -55,25 +55,40 @@ export function initEarth() {
         preLabel.style.opacity = "0"; // Fade out
         setTimeout(() => {
           const randPhrase = phrases[Math.floor(Math.random() * phrases.length)];
-          preLabel.innerText = `${randPhrase} (${currentPct}%)`;
+          preLabel.innerText = `${randPhrase} (${displayPct}%)`;
           preLabel.style.opacity = "1"; // Fade in
         }, 400);
       }
     }, 2000);
 
-    manager.onProgress = function (url, itemsLoaded, itemsTotal) {
-      currentPct = Math.round((itemsLoaded / itemsTotal) * 100);
-      if (preLabel) {
-        const currentText = preLabel.innerText.split(' (')[0] || phrases[0];
-        preLabel.innerText = `${currentText} (${currentPct}%)`;
+    const pctInterval = setInterval(() => {
+      if (displayPct < 99) {
+        displayPct += Math.floor(Math.random() * 2) + 1;
+        if (displayPct > 99) displayPct = 99;
+        
+        // Only update if it's currently visible to not break the fade transition
+        if (preLabel && preLabel.style.opacity !== "0") {
+          const currentText = preLabel.innerText.split(' (')[0] || phrases[0];
+          preLabel.innerText = `${currentText} (${displayPct}%)`;
+        }
       }
+    }, 45); // Reaches ~99% over ~4.5 seconds
+
+    manager.onProgress = function () {
+      // Ignored for smoother simulated loader
     };
 
     manager.onLoad = function () {
       const elapsed = Date.now() - startTime;
       const delay = Math.max(0, 5000 - elapsed);
       setTimeout(() => {
+        displayPct = 100;
+        if (preLabel) {
+          const currentText = preLabel.innerText.split(' (')[0] || phrases[0];
+          preLabel.innerText = `${currentText} (100%)`;
+        }
         clearInterval(phraseInterval);
+        clearInterval(pctInterval);
         preloader.classList.add('out');
         setTimeout(() => preloader.remove(), 700);
       }, delay);

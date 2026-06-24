@@ -137,92 +137,68 @@ function buildViewer(canvasId, wrapperId, loaderId) {
   const texLoader = new THREE.TextureLoader();
 
   function loadPlanet(key) {
-    if (mesh) { scene.remove(mesh); mesh.geometry.dispose(); mesh.material.dispose(); mesh = null; }
-    if (animId) { cancelAnimationFrame(animId); animId = null; }
-    loader.style.display = 'flex';
-    const startTime = Date.now();
-    
-    const phrases = [
-      "God is retrieving this celestial body...",
-      "God is forging the heavy elements...",
-      "God is calculating the planetary mass...",
-      "God is painting the surface textures...",
-      "God is admiring the final masterpiece..."
-    ];
-    const span = loader.querySelector('span');
-    if (span) span.style.transition = "opacity 0.4s ease-in-out";
+    return new Promise((resolve) => {
+      if (mesh) { scene.remove(mesh); mesh.geometry.dispose(); mesh.material.dispose(); mesh = null; }
+      if (animId) { cancelAnimationFrame(animId); animId = null; }
 
-    const phraseInterval = setInterval(() => {
-      if (span) {
-        span.style.opacity = "0"; // fade out
-        setTimeout(() => {
-          span.innerText = phrases[Math.floor(Math.random() * phrases.length)];
-          span.style.opacity = "1"; // fade in
-        }, 400);
-      }
-    }, 2000);
+      const pd = PLANET_DATA[key];
+      const radius = visualRadius(key);
 
-    const pd = PLANET_DATA[key];
-    const radius = visualRadius(key);
+      function onLoaded(tex) {
+        const matParams = { 
+          map: tex, 
+          shininess: pd.name === 'Earth' ? 25 : 5,
+          color: tex ? 0xffffff : pd.color 
+        };
+        
+        const mat = new THREE.MeshPhongMaterial(matParams);
+        
+        if (pd.normalMap) {
+          texLoader.load(pd.normalMap, (nmap) => {
+            mat.normalMap = nmap;
+            mat.normalScale = new THREE.Vector2(0.8, 0.8);
+            mat.needsUpdate = true;
+          });
+        }
+        
+        const geo = new THREE.SphereGeometry(radius, 64, 64);
+        mesh = new THREE.Mesh(geo, mat);
+        scene.add(mesh);
 
-    function onLoaded(tex) {
-      // Create a highly realistic material
-      const matParams = { 
-        map: tex, 
-        shininess: pd.name === 'Earth' ? 25 : 5,
-        color: tex ? 0xffffff : pd.color 
-      };
-      
-      const mat = new THREE.MeshPhongMaterial(matParams);
-      
-      // If the planet has a normal map (like Earth), load and apply it
-      if (pd.normalMap) {
-        texLoader.load(pd.normalMap, (nmap) => {
-          mat.normalMap = nmap;
-          mat.normalScale = new THREE.Vector2(0.8, 0.8);
-          mat.needsUpdate = true;
-        });
-      }
-      
-      const geo = new THREE.SphereGeometry(radius, 64, 64);
-      mesh = new THREE.Mesh(geo, mat);
-      scene.add(mesh);
+        if (pd.name === 'Earth') {
+          const cloudTex = texLoader.load('../planets/img_earth/earth_clouds_1024.png');
+          const cloudMat = new THREE.MeshPhongMaterial({ map: cloudTex, transparent: true, opacity: 0.5, depthWrite: false, blending: THREE.AdditiveBlending });
+          const cloudMesh = new THREE.Mesh(new THREE.SphereGeometry(radius * 1.015, 64, 64), cloudMat);
+          mesh.add(cloudMesh);
 
-      // Add clouds and atmosphere specifically for Earth
-      if (pd.name === 'Earth') {
-        const cloudTex = texLoader.load('../planets/img_earth/earth_clouds_1024.png');
-        const cloudMat = new THREE.MeshPhongMaterial({ map: cloudTex, transparent: true, opacity: 0.5, depthWrite: false, blending: THREE.AdditiveBlending });
-        const cloudMesh = new THREE.Mesh(new THREE.SphereGeometry(radius * 1.015, 64, 64), cloudMat);
-        mesh.add(cloudMesh);
-
-        const atmoMat = new THREE.MeshPhongMaterial({ color: 0x4488cc, transparent: true, opacity: 0.15, side: THREE.BackSide, depthWrite: false });
-        const atmoMesh = new THREE.Mesh(new THREE.SphereGeometry(radius * 1.08, 64, 64), atmoMat);
-        mesh.add(atmoMesh);
-      }
-
-      const elapsed = Date.now() - startTime;
-      const delay = Math.max(0, 4500 - elapsed);
-      
-      setTimeout(() => {
-        clearInterval(phraseInterval);
-        loader.style.display = 'none';
+          const atmoMat = new THREE.MeshPhongMaterial({ color: 0x4488cc, transparent: true, opacity: 0.15, side: THREE.BackSide, depthWrite: false });
+          const atmoMesh = new THREE.Mesh(new THREE.SphereGeometry(radius * 1.08, 64, 64), atmoMat);
+          mesh.add(atmoMesh);
+        }
 
         function animate() {
           animId = requestAnimationFrame(animate);
           if (mesh && !controls.state) {
-            mesh.rotation.y += 0.002; // Slower auto-rotate
+            mesh.rotation.y += 0.002;
             if (mesh.children.length > 0) {
-               mesh.children[0].rotation.y += 0.001; // Clouds move slightly faster
+               mesh.children[0].rotation.y += 0.001;
             }
           }
           controls.update();
           renderer.render(scene, camera);
         }
         animate();
-      }, delay);
-    }
+        
+        // Canvas fade-in effect on swap
+        canvas.style.opacity = '0';
+        canvas.style.transition = 'opacity 0.5s ease';
+        setTimeout(() => canvas.style.opacity = '1', 50);
 
-    texLoader.load(pd.texture, onLoaded, undefined, () => onLoaded(null));
+        resolve();
+      }
+
+      texLoader.load(pd.texture, onLoaded, undefined, () => onLoaded(null));
+    });
   }
 
   window.addEventListener('resize', () => {
@@ -248,15 +224,37 @@ function updateTable(leftKey, rightKey) {
     const lv = lp.data[prop] || '—';
     const rv = rp.data[prop] || '—';
     
-    // Add visual HUD highlight if the values differ
-    const hlLeft  = (lv !== rv && lv !== '—' && rv !== '—') ? ' highlight-diff' : '';
-    const hlRight = (lv !== rv && lv !== '—' && rv !== '—') ? ' highlight-diff' : '';
+    // Attempt to parse numbers to create visual ratio bars
+    let leftRatio = 0;
+    let rightRatio = 0;
+    
+    if (lv !== '—' && rv !== '—') {
+      const ln = parseFloat(lv.replace(/,/g, '').split(' ')[0]);
+      const rn = parseFloat(rv.replace(/,/g, '').split(' ')[0]);
+      if (!isNaN(ln) && !isNaN(rn) && (ln !== 0 || rn !== 0)) {
+        const max = Math.max(ln, rn);
+        leftRatio = (ln / max) * 100;
+        rightRatio = (rn / max) * 100;
+      }
+    }
+    
+    // Build bar HTML if we have valid ratios
+    let barHtml = '';
+    if (leftRatio > 0 || rightRatio > 0) {
+      barHtml = `
+        <div class="ratio-bar-container" style="position:absolute; bottom:0; left:0; padding: 0 10px; width: 100%; pointer-events:none;">
+          <div class="ratio-bar-left"><div class="ratio-fill ratio-fill-left" style="width: ${leftRatio}%"></div></div>
+          <div class="ratio-bar-right"><div class="ratio-fill ratio-fill-right" style="width: ${rightRatio}%"></div></div>
+        </div>
+      `;
+    }
     
     const tr = document.createElement('tr');
+    tr.style.position = 'relative';
     tr.innerHTML =
       '<td class="compare-td-label">' + prop + '</td>' +
-      '<td class="compare-td-val' + hlLeft + '">' + lv + '</td>' +
-      '<td class="compare-td-val' + hlRight + '">' + rv + '</td>';
+      '<td class="compare-td-val">' + lv + '</td>' +
+      '<td class="compare-td-val">' + rv + barHtml + '</td>';
     tbody.appendChild(tr);
   });
   
@@ -277,9 +275,53 @@ export function initComparison() {
   const nameLeft  = document.getElementById('compare-name-left');
   const nameRight = document.getElementById('compare-name-right');
 
-  function refresh() {
+  const globalLoader = document.getElementById('compare-global-loader');
+  const globalText = document.getElementById('compare-global-text');
+  const phrases = [
+    "God is retrieving celestial bodies...",
+    "God is forging the heavy elements...",
+    "God is aligning the orbits...",
+    "God is calibrating the scales...",
+    "God is admiring the masterpiece..."
+  ];
+
+  async function refresh(isInitialLoad = false) {
+    if (isInitialLoad && globalLoader) {
+      globalLoader.style.display = 'flex';
+      globalLoader.style.opacity = '1';
+      let currentPct = 0;
+      globalLoader.dataset.phraseInterval = setInterval(() => {
+        if (globalText) {
+          globalText.style.opacity = "0";
+          setTimeout(() => {
+            const currentText = phrases[Math.floor(Math.random() * phrases.length)];
+            globalText.innerText = `${currentText} (${currentPct}%)`;
+            globalText.style.opacity = "1";
+          }, 400);
+        }
+      }, 2000);
+
+      globalLoader.dataset.pctInterval = setInterval(() => {
+        if (currentPct < 99) {
+          currentPct += Math.floor(Math.random() * 2) + 1;
+          if (currentPct > 99) currentPct = 99;
+          
+          if (globalText && globalText.style.opacity !== "0") {
+            const baseText = globalText.innerText.split(' (')[0] || phrases[0];
+            globalText.innerText = `${baseText} (${currentPct}%)`;
+          }
+        }
+      }, 45);
+    }
+
     const lk = selLeft.value;
     const rk = selRight.value;
+
+    const startTime = Date.now();
+    await Promise.all([
+      leftViewer.loadPlanet(lk),
+      rightViewer.loadPlanet(rk)
+    ]);
     
     // Dynamic synchronized camera logic for true 1:1 scale
     const lRad = visualRadius(lk);
@@ -298,12 +340,26 @@ export function initComparison() {
     if (nameLeft) nameLeft.textContent = PLANET_DATA[lk].name;
     if (nameRight) nameRight.textContent = PLANET_DATA[rk].name;
     
-    leftViewer.loadPlanet(lk);
-    rightViewer.loadPlanet(rk);
     updateTable(lk, rk);
+
+    if (isInitialLoad && globalLoader) {
+      const elapsed = Date.now() - startTime;
+      const delay = Math.max(0, 4500 - Math.min(elapsed, 4500)); // wait up to 4.5s
+      setTimeout(() => {
+        if (globalText) {
+          const baseText = globalText.innerText.split(' (')[0] || phrases[0];
+          globalText.innerText = `${baseText} (100%)`;
+        }
+        clearInterval(globalLoader.dataset.phraseInterval);
+        clearInterval(globalLoader.dataset.pctInterval);
+        globalLoader.style.opacity = '0';
+        setTimeout(() => globalLoader.style.display = 'none', 600);
+      }, delay);
+    }
   }
 
-  selLeft.addEventListener('change',  refresh);
-  selRight.addEventListener('change', refresh);
-  refresh();
+  selLeft.addEventListener('change', () => refresh(false));
+  selRight.addEventListener('change', () => refresh(false));
+
+  refresh(true);
 }
