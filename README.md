@@ -122,7 +122,7 @@ Deployed on Vercel with automatic CI from the `main` branch.
 
 ## 👨‍💻 About the Developer
 
-**Manish Kumawat** — B.Tech, Space Science & Engineering, IIT Indore
+**Manish Kumawat** — B.Tech, AASE, IIT Indore
 
 Combining a passion for astrophysics and frontend engineering to build tools that make science visual and accessible. This project was built to deepen understanding of orbital mechanics while practicing real-time 3D rendering techniques.
 
