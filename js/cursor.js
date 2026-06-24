@@ -1,7 +1,7 @@
 // js/cursor.js
-document.addEventListener('DOMContentLoaded', () => {
-  // Disable on touch devices
-  if (window.matchMedia("(pointer: coarse)").matches) return;
+
+// Disable on touch devices
+if (!window.matchMedia("(pointer: coarse)").matches) {
 
   const center = document.createElement('div');
   center.id = 'custom-cursor-center';
@@ -16,84 +16,92 @@ document.addEventListener('DOMContentLoaded', () => {
   system.appendChild(p2);
   system.appendChild(p3);
   
-  document.body.appendChild(system);
-  document.body.appendChild(center);
+  // Wait for body to be available if script runs in head, otherwise append immediately
+  function initCursor() {
+    if (!document.body) {
+      requestAnimationFrame(initCursor);
+      return;
+    }
+    document.body.appendChild(system);
+    document.body.appendChild(center);
 
-  let mouseX = window.innerWidth / 2;
-  let mouseY = window.innerHeight / 2;
-  let currentX = mouseX;
-  let currentY = mouseY;
-  let angle = 0;
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    let currentX = mouseX;
+    let currentY = mouseY;
+    let angle = 0;
 
-  document.addEventListener('mousemove', (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-  });
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
 
-  function bindHover(el) {
-    el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hovering'));
-    el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hovering'));
-  }
+    function bindHover(el) {
+      el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hovering'));
+      el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hovering'));
+    }
 
-  const hoverSelectors = 'a, button, select, input, .btn, summary, .mobile-toggle, label, .nav-brand, .planet-card, [onclick]';
-  
-  document.querySelectorAll(hoverSelectors).forEach(bindHover);
+    const hoverSelectors = 'a, button, select, input, .btn, summary, .mobile-toggle, label, .nav-brand, .planet-card, [onclick]';
+    
+    document.querySelectorAll(hoverSelectors).forEach(bindHover);
 
-  const observer = new MutationObserver((mutations) => {
-    mutations.forEach((mutation) => {
-      mutation.addedNodes.forEach((node) => {
-        if (node.nodeType === 1) {
-          if (node.matches && node.matches(hoverSelectors)) bindHover(node);
-          node.querySelectorAll(hoverSelectors).forEach(bindHover);
-        }
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        mutation.addedNodes.forEach((node) => {
+          if (node.nodeType === 1) {
+            if (node.matches && node.matches(hoverSelectors)) bindHover(node);
+            node.querySelectorAll(hoverSelectors).forEach(bindHover);
+          }
+        });
       });
     });
-  });
-  observer.observe(document.body, { childList: true, subtree: true });
+    observer.observe(document.body, { childList: true, subtree: true });
 
-  // Handle Dragging State for Canvases
-  document.addEventListener('mousedown', () => document.body.classList.add('cursor-dragging'));
-  document.addEventListener('mouseup', () => document.body.classList.remove('cursor-dragging'));
+    // Handle Dragging State for Canvases
+    document.addEventListener('mousedown', () => document.body.classList.add('cursor-dragging'));
+    document.addEventListener('mouseup', () => document.body.classList.remove('cursor-dragging'));
 
-  function render() {
+    function render() {
+      // Smooth lerping for the center dot
+      currentX += (mouseX - currentX) * 0.25;
+      currentY += (mouseY - currentY) * 0.25;
 
-    // Smooth lerping for the center dot
-    currentX += (mouseX - currentX) * 0.25;
-    currentY += (mouseY - currentY) * 0.25;
+      center.style.transform = `translate(${currentX}px, ${currentY}px) translate(-50%, -50%)`;
+      system.style.left = `${currentX}px`;
+      system.style.top = `${currentY}px`;
 
-    center.style.transform = `translate(${currentX}px, ${currentY}px) translate(-50%, -50%)`;
-    system.style.left = `${currentX}px`;
-    system.style.top = `${currentY}px`;
+      // Dynamic speed based on movement
+      const dx = mouseX - currentX;
+      const dy = mouseY - currentY;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      
+      // When dragging, speed up the orbit massively
+      const isDragging = document.body.classList.contains('cursor-dragging');
+      const dragMultiplier = isDragging ? 5 : 1;
+      const speedMultiplier = (1 + Math.min(dist / 20, 4)) * dragMultiplier; 
+      
+      // Increment angle
+      angle += 0.05 * speedMultiplier;
 
-    // Dynamic speed based on movement
-    const dx = mouseX - currentX;
-    const dy = mouseY - currentY;
-    const dist = Math.sqrt(dx*dx + dy*dy);
-    
-    // When dragging, speed up the orbit massively
-    const isDragging = document.body.classList.contains('cursor-dragging');
-    const dragMultiplier = isDragging ? 5 : 1;
-    const speedMultiplier = (1 + Math.min(dist / 20, 4)) * dragMultiplier; 
-    
-    // Increment angle
-    angle += 0.05 * speedMultiplier;
+      // Radius logic
+      const isHovering = document.body.classList.contains('cursor-hovering');
+      let targetR = 12;
+      if (isHovering) targetR = 30; // Expands to wrap buttons
+      if (isDragging) targetR = 8;  // Constricts tightly when grabbing
+      
+      if (!window.orbRadius) window.orbRadius = 12;
+      window.orbRadius += (targetR - window.orbRadius) * 0.15;
+      
+      const R = window.orbRadius;
 
-    // Radius logic
-    const isHovering = document.body.classList.contains('cursor-hovering');
-    let targetR = 12;
-    if (isHovering) targetR = 30; // Expands to wrap buttons
-    if (isDragging) targetR = 8;  // Constricts tightly when grabbing
-    
-    if (!window.orbRadius) window.orbRadius = 12;
-    window.orbRadius += (targetR - window.orbRadius) * 0.15;
-    
-    const R = window.orbRadius;
+      p1.style.transform = `translate(${Math.cos(angle) * R}px, ${Math.sin(angle) * R}px) translate(-50%, -50%)`;
+      p2.style.transform = `translate(${Math.cos(angle + 2.094) * R}px, ${Math.sin(angle + 2.094) * R}px) translate(-50%, -50%)`;
+      p3.style.transform = `translate(${Math.cos(angle + 4.188) * R}px, ${Math.sin(angle + 4.188) * R}px) translate(-50%, -50%)`;
 
-    p1.style.transform = `translate(${Math.cos(angle) * R}px, ${Math.sin(angle) * R}px) translate(-50%, -50%)`;
-    p2.style.transform = `translate(${Math.cos(angle + 2.094) * R}px, ${Math.sin(angle + 2.094) * R}px) translate(-50%, -50%)`;
-    p3.style.transform = `translate(${Math.cos(angle + 4.188) * R}px, ${Math.sin(angle + 4.188) * R}px) translate(-50%, -50%)`;
-
+      requestAnimationFrame(render);
+    }
     requestAnimationFrame(render);
   }
-  requestAnimationFrame(render);
-});
+  
+  initCursor();
+}
