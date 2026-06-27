@@ -126,7 +126,7 @@ function buildViewer(canvasId, wrapperId, loaderId) {
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
 
   const scene  = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(45, W / H, 0.1, 1000);
+  const camera = new THREE.PerspectiveCamera(45, W / H, 0.1, 50000);
   camera.position.set(0, 0, 7);
 
   const controls = new OrbitControls(camera, renderer.domElement);
@@ -134,7 +134,7 @@ function buildViewer(canvasId, wrapperId, loaderId) {
   controls.dampingFactor = 0.05;
   controls.enablePan = false;
   controls.minDistance = 2;
-  controls.maxDistance = 500;
+  controls.maxDistance = 50000;
 
   scene.add(new THREE.AmbientLight(0x222244, 1.2));
   const sun = new THREE.DirectionalLight(0xfff4e0, 2.5);
@@ -182,6 +182,9 @@ function buildViewer(canvasId, wrapperId, loaderId) {
         const geo = new THREE.SphereGeometry(radius, 64, 64);
         mesh = new THREE.Mesh(geo, mat);
         scene.add(mesh);
+        
+        // Dynamically adjust camera based on body size to prevent clipping
+        camera.position.set(0, 0, Math.max(7, radius * 3.5));
 
         if (pd.name === 'Earth') {
           const cloudTex = texLoader.load('../planets/img_earth/earth_clouds_1024.png');
