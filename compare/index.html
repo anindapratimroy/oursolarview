@@ -20,6 +20,18 @@
   <link rel="stylesheet" href="../css/components.css" />
   <!-- Feature Specific CSS -->
   <link rel="stylesheet" href="../css/compare.css" />
+  <style>
+    .back-btn {
+      position: absolute; top: 90px; left: 40px; z-index: 2000;
+      color: #fff; text-decoration: none; font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.1rem; font-weight: 800; padding: 14px 28px;
+      background: var(--lg-bg); border: 1px solid var(--lg-border);
+      backdrop-filter: blur(16px); border-radius: 40px;
+      display: flex; align-items: center; gap: 9px;
+      transition: all 0.3s ease;
+    }
+    .back-btn:hover { border-color: var(--gold); transform: translateX(-4px); }
+  </style>
 </head>
 <body>
 
@@ -34,6 +46,7 @@
       Behold My <em>Masterpiece</em>
     </a>
     
+    <!-- Mobile Hamburger -->
     <button class="mobile-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="nav-links">
       <span class="bar"></span>
       <span class="bar"></span>
@@ -41,7 +54,6 @@
     </button>
 
     <ul class="nav-links" id="nav-links">
-
       <li><a href="../solarsystem/index.html">Witness My Clockwork</a></li>
       <li><a href="../trajectory/index.html">Toy With My Physics</a></li>
       <li><a href="index.html" aria-current="page">Measure My Titans</a></li>
@@ -49,6 +61,11 @@
     </ul>
   </div>
 </nav>
+
+<!-- Back Button (Placed below Nav) -->
+<a href="../index.html" class="back-btn" aria-label="Return to Eternity">
+  <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Return to Eternity
+</a>
 
 <!-- Global Loader -->
 <div id="compare-global-loader" style="position:fixed; top:0; left:0; width:100%; height:100%; background:var(--navy); z-index:9999; display:flex; justify-content:center; align-items:center; flex-direction:column; gap:20px; color:var(--gold); font-family:'Space Mono', monospace; font-size:1.2rem; transition:opacity 0.6s ease;">
@@ -126,6 +143,23 @@
     </table>
   </div>
 </main>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-team">
+      <span class="footer-label">God of this Universe</span>
+      <a href="https://www.linkedin.com/in/aninda-pratim-roy" target="_blank" rel="noopener" class="footer-name-link">Aninda Pratim Roy <span class="footer-deg">(M.Tech AASE)</span></a>
+      <span class="footer-divider">|</span>
+      <a href="https://www.linkedin.com/in/manish-kumawat-iiti" target="_blank" rel="noopener" class="footer-name-link">Manish Kumawat <span class="footer-deg">(B.Tech AASE)</span></a>
+    </div>
+    <div class="footer-inst">
+      <a href="http://aase.iiti.ac.in" target="_blank" rel="noopener" class="footer-inst-link">
+        <i class="fa-solid fa-building-columns"></i> AASE, IIT Indore
+      </a>
+    </div>
+  </div>
+</footer>
 
 <script type="importmap">
 {

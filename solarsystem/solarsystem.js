@@ -57,6 +57,62 @@ document.body.appendChild(labelRenderer.domElement);
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 
+// Custom Google Earth style Zoom-to-Cursor
+renderer.domElement.addEventListener('wheel', (event) => {
+  if (!controls.enabled) return;
+  // If it's a trackpad pan gesture (has a noticeable horizontal component or is a direct horizontal swipe)
+  if (Math.abs(event.deltaX) > 1) {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    const distToTarget = camera.position.distanceTo(controls.target);
+    const panSpeed = 0.0015 * distToTarget; 
+    
+    const v = new THREE.Vector3();
+    // Pan X (left/right)
+    v.setFromMatrixColumn(camera.matrix, 0); // camera right vector
+    v.multiplyScalar(event.deltaX * panSpeed);
+    camera.position.add(v);
+    controls.target.add(v);
+
+    // Pan Y (up/down)
+    v.setFromMatrixColumn(camera.matrix, 1); // camera up vector
+    v.multiplyScalar(-event.deltaY * panSpeed);
+    camera.position.add(v);
+    controls.target.add(v);
+
+    controls.update();
+    return;
+  }
+
+  event.preventDefault();
+  event.stopImmediatePropagation(); // Block default OrbitControls wheel zoom
+
+  const zoomSpeed = 0.15;
+  // Invert delta: scrolling up (deltaY < 0) zooms in, scrolling down (deltaY > 0) zooms out
+  const delta = event.deltaY > 0 ? -1 : 1;
+  
+  const rect = renderer.domElement.getBoundingClientRect();
+  const x = (event.clientX - rect.left) / rect.width;
+  const y = (event.clientY - rect.top) / rect.height;
+  const ndcX = (x * 2) - 1;
+  const ndcY = -(y * 2) + 1;
+
+  const ray = new THREE.Raycaster();
+  ray.setFromCamera({ x: ndcX, y: ndcY }, camera);
+  const dir = ray.ray.direction;
+
+  const dist = camera.position.distanceTo(controls.target);
+  const step = dist * zoomSpeed * delta;
+
+  // Ensure we don't zoom through the center if zooming in too far
+  if (delta > 0 && dist < 1.0) return;
+
+  camera.position.addScaledVector(dir, step);
+  controls.target.addScaledVector(dir, step);
+  
+  controls.update();
+}, { passive: false, capture: true });
+
 // --- Lights ---
 scene.add(new THREE.AmbientLight(0xffffff, 0.6));
 scene.add(new THREE.PointLight(0xffffff, 2, 3000));
@@ -735,10 +791,6 @@ const angles1= new Array(planets.length).fill(0);
 let periodScale = 1000; 
 const scaleSlider = document.getElementById("scaleSlider");
 const scaleValue = document.getElementById("scaleValue");
-scaleSlider.addEventListener("input", e => {
-  periodScale = parseFloat(e.target.value);
-  scaleValue.innerText = periodScale;
-});
 
 
 
@@ -821,9 +873,51 @@ const angles=new Array(planets.length).fill(0);
  const sunRotationPeriod = 2164320.0;
 // --- Simulation speed ---
 let simScale=100000;
-document.getElementById("scaleSlider").addEventListener("input",e=>{
-  simScale=parseFloat(e.target.value);
-  document.getElementById("scaleValue").innerText=simScale;
+// scaleSlider and scaleValue are declared above
+const timeRefTarget = document.getElementById("timeRefTarget");
+const timeRefUnitGroup = document.getElementById("timeRefUnitGroup");
+const timeRefUnit = document.getElementById("timeRefUnit");
+
+function updateSimScaleFromReference() {
+  const target = timeRefTarget.value;
+  if (target === "custom") {
+    timeRefUnitGroup.style.display = "none";
+    return;
+  }
+  
+  let targetSeconds = 0;
+  if (target === "sun_eq") {
+    timeRefUnitGroup.style.display = "none";
+    targetSeconds = realSeconds.sun_eq;
+  } else {
+    timeRefUnitGroup.style.display = "flex";
+    const unit = timeRefUnit.value;
+    targetSeconds = realSeconds[unit][target];
+  }
+  
+  if (targetSeconds) {
+    simScale = targetSeconds;
+    periodScale = targetSeconds; // Update the other scale variable too
+    scaleSlider.value = simScale;
+    scaleValue.innerText = simScale.toLocaleString(undefined, {maximumFractionDigits:1});
+  }
+}
+
+if (timeRefTarget) {
+  timeRefTarget.addEventListener("change", updateSimScaleFromReference);
+}
+if (timeRefUnit) {
+  timeRefUnit.addEventListener("change", updateSimScaleFromReference);
+}
+
+scaleSlider.addEventListener("input", e => {
+  simScale = parseFloat(e.target.value);
+  periodScale = simScale; // Ensure both scales are in sync
+  scaleValue.innerText = simScale.toLocaleString(undefined, {maximumFractionDigits:1});
+  if (timeRefTarget) {
+    timeRefTarget.value = "custom";
+    timeRefUnitGroup.style.display = "none";
+  }
 });
 
 // --- Info Panel Elements ---
@@ -1012,7 +1106,7 @@ function hideInfoPanel() {
 }
 
 // --- Mouse/Touch click event ---
-window.addEventListener("pointerdown", (event) => {
+renderer.domElement.addEventListener("pointerdown", (event) => {
   mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
   mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
   
@@ -1035,11 +1129,10 @@ window.addEventListener("pointerdown", (event) => {
     currentView = "none"; // Ensure internal view state is "none"
     planetView.value = "none"; // Update dropdown visually
     hideInfoPanel();
-    // Re-enable controls and reset target to sun
+    // Re-enable controls, letting target stay where it is for smooth handoff
     controls.enabled = true;
-    controls.target.set(0, 0, 0); 
   }
-});
+}, { capture: true });
 
 // --- Animation loop ---
 function animate(){
@@ -1138,17 +1231,17 @@ if (cameraFollow && currentTargetPlanet) {
     shouldEnableControls = false; // Disable orbit controls when using dropdown view
   }
 } else {
-  // Free view (orbit around Sun)
-  targetLookAt = new THREE.Vector3(0, 0, 0);
-  // controls.enabled is true by default
+  // Free view (allow user to orbit their current location without snapping to Sun)
+  // targetLookAt remains undefined here so we don't force a camera jump
 }
 
 // Smoothly interpolate camera position and controls target
 if (targetPosition) { // Only interpolate if a targetPosition is defined (i.e., not in "Free View" implicitly)
   camera.position.lerp(targetPosition, 0.05);
 }
-controls.target.lerp(targetLookAt, 0.1);
-
+if (targetLookAt) {
+  controls.target.lerp(targetLookAt, 0.1);
+}
 
 // Apply controls enablement based on the flag
 controls.enabled = shouldEnableControls;

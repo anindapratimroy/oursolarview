@@ -19,6 +19,18 @@
   <link rel="stylesheet" href="../css/animations.css" />
   <!-- Page styles -->
   <link rel="stylesheet" href="./spacecraft.css" />
+  <style>
+    .back-btn {
+      position: absolute; top: 90px; left: 40px; z-index: 2000;
+      color: #fff; text-decoration: none; font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.1rem; font-weight: 800; padding: 14px 28px;
+      background: var(--lg-bg); border: 1px solid var(--lg-border);
+      backdrop-filter: blur(16px); border-radius: 40px;
+      display: flex; align-items: center; gap: 9px;
+      transition: all 0.3s ease;
+    }
+    .back-btn:hover { border-color: var(--gold); transform: translateX(-4px); }
+  </style>
 </head>
 <body>
 
@@ -45,6 +57,11 @@
     </ul>
   </div>
 </nav>
+
+<!-- Back Button (Placed below Nav) -->
+<a href="../index.html" class="back-btn" aria-label="Return to Eternity">
+  <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Return to Eternity
+</a>
 
 <!-- ══════════════════════════════════════════════════════════
      MAIN CONTENT
@@ -160,17 +177,19 @@
   <!-- Viewer Header Bar -->
   <div class="craft-viewer-header">
     <div class="craft-viewer-header-left">
-      <div class="craft-viewer-breadcrumb">
-        <span>My Fleet of Titans</span>
-        <i class="fa-solid fa-chevron-right"></i>
-        <span id="craftViewerCat" class="viewer-cat-label">Spacecraft</span>
-      </div>
-      <h2 class="craft-viewer-title" id="craftViewerName">—</h2>
-    </div>
-    <div class="craft-viewer-header-right">
-      <button class="craft-viewer-close-btn" id="craftViewerClose" aria-label="Go Back">
+      <button class="craft-viewer-close-btn" id="craftViewerClose" aria-label="Go Back" style="margin-right: 24px;">
         <i class="fa-solid fa-arrow-left"></i> Back
       </button>
+      <div class="craft-viewer-header-text">
+        <div class="craft-viewer-breadcrumb">
+          <span>My Fleet of Titans</span>
+          <i class="fa-solid fa-chevron-right"></i>
+          <span id="craftViewerCat" class="viewer-cat-label">Spacecraft</span>
+        </div>
+        <h2 class="craft-viewer-title" id="craftViewerName">—</h2>
+      </div>
+    </div>
+    <div class="craft-viewer-header-right">
     </div>
   </div>
 

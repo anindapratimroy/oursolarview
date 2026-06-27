@@ -23,6 +23,20 @@
       align-items: center;
       justify-content: space-between;
     }
+    
+    .nav-back-btn {
+      display: flex; align-items: center; gap: 8px;
+      color: var(--text-dim); text-decoration: none;
+      font-family: 'Space Grotesk', sans-serif; font-size: 0.9rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.05em;
+      padding: 6px 14px; border-radius: 20px;
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+      transition: all 0.2s;
+      margin-right: 20px;
+    }
+    .nav-back-btn:hover {
+      color: var(--text); background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2);
+    }
 
     .nav-brand {
       font-family: 'Merriweather', serif;
@@ -34,8 +48,23 @@
       display: flex;
       align-items: center;
       gap: 10px;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.3);
+      animation: text-pulse 2s infinite alternate;
     }
-    .nav-brand em { color: var(--gold); font-style: normal; }
+    @keyframes text-pulse {
+      from { text-shadow: 0 0 8px rgba(255, 255, 255, 0.4), 0 0 16px rgba(255, 255, 255, 0.2); }
+      to { text-shadow: 0 0 12px rgba(255, 255, 255, 0.6), 0 0 24px rgba(255, 255, 255, 0.4); }
+    }
+    .nav-brand em { 
+      color: var(--gold); 
+      font-style: normal;
+      text-shadow: 0 0 10px rgba(197, 160, 72, 0.6), 0 0 20px rgba(197, 160, 72, 0.4);
+      animation: gold-pulse 2s infinite alternate;
+    }
+    @keyframes gold-pulse {
+      from { text-shadow: 0 0 8px rgba(197, 160, 72, 0.5), 0 0 16px rgba(197, 160, 72, 0.3); }
+      to { text-shadow: 0 0 15px rgba(197, 160, 72, 0.8), 0 0 30px rgba(197, 160, 72, 0.5); }
+    }
     .nav-brand .brand-dot {
       width: 8px; height: 8px;
       border-radius: 50%;
@@ -428,11 +457,13 @@
     
     .footer-label {
       font-family: 'Space Mono', monospace;
-      font-size: 0.85rem;
+      font-size: 1.4rem;
+      font-weight: 900;
       text-transform: uppercase;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.15em;
       color: var(--gold-light);
-      opacity: 0.8;
+      opacity: 1;
+      text-shadow: 0 0 12px rgba(197,160,72,0.8), 0 0 24px rgba(197,160,72,0.4);
     }
 
     .footer-name-link {

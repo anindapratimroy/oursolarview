@@ -99,12 +99,17 @@
       color: var(--text); text-align: center;
       animation: pre-brand-in 1.2s cubic-bezier(0.16,1,0.3,1) forwards;
       opacity: 0;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.3);
     }
     @keyframes pre-brand-in {
-      from { opacity:0; transform: translateY(16px) scale(0.96); }
-      to   { opacity:1; transform: translateY(0) scale(1); }
+      from { opacity:0; transform: translateY(16px) scale(0.96); text-shadow: 0 0 8px rgba(255, 255, 255, 0.4), 0 0 16px rgba(255, 255, 255, 0.2); }
+      to   { opacity:1; transform: translateY(0) scale(1); text-shadow: 0 0 12px rgba(255, 255, 255, 0.6), 0 0 24px rgba(255, 255, 255, 0.4); }
     }
-    .pre-brand em { color: var(--gold); font-style: normal; }
+    .pre-brand em { 
+      color: var(--gold); 
+      font-style: normal;
+      text-shadow: 0 0 10px rgba(197, 160, 72, 0.6), 0 0 20px rgba(197, 160, 72, 0.4);
+    }
 
     .pre-tagline {
       font-family: 'Space Mono', monospace;

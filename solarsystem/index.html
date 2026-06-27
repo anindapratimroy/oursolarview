@@ -21,9 +21,9 @@
     .back-btn {
       position: absolute; top: 18px; left: 18px; z-index: 2000;
       color: #fff; text-decoration: none; font-family: 'Space Grotesk', sans-serif;
-      font-size: 13.5px; font-weight: 700; padding: 9px 20px;
+      font-size: 1.1rem; font-weight: 800; padding: 14px 28px;
       background: var(--lg-bg); border: 1px solid var(--lg-border);
-      backdrop-filter: blur(16px); border-radius: 30px;
+      backdrop-filter: blur(16px); border-radius: 40px;
       display: flex; align-items: center; gap: 9px;
       transition: all 0.3s ease;
     }
@@ -131,8 +131,32 @@
   <!-- Unified Control Panel -->
   <aside class="control-panel">
     <div class="control-group">
-      <label>🌌 Accelerate Eternity: <span id="scaleValue">1000</span>x</label>
-      <input id="scaleSlider" type="range" min="1" max="10000000" value="1000000" step="100">
+      <label>⏱️ Time Reference:</label>
+      <select id="timeRefTarget">
+        <option value="custom">Custom Scale</option>
+        <option value="sun_eq">The Sun</option>
+        <option value="mercury">Mercury</option>
+        <option value="venus">Venus</option>
+        <option value="earth">Earth</option>
+        <option value="mars">Mars</option>
+        <option value="jupiter">Jupiter</option>
+        <option value="saturn">Saturn</option>
+        <option value="uranus">Uranus</option>
+        <option value="neptune">Neptune</option>
+      </select>
+    </div>
+    
+    <div class="control-group" id="timeRefUnitGroup" style="display: none;">
+      <label>⏳ Reference Unit (Per Second):</label>
+      <select id="timeRefUnit">
+        <option value="rotation">1 Day (Rotation)</option>
+        <option value="orbit">1 Year (Orbit)</option>
+      </select>
+    </div>
+
+    <div class="control-group">
+      <label>🌌 Accelerate Eternity: <span id="scaleValue">100000</span>x</label>
+      <input id="scaleSlider" type="range" min="1" max="6000000000" value="100000" step="100">
     </div>
     
     <div class="control-group">

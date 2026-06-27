@@ -22,7 +22,64 @@ controls.enableDamping = true;
 controls.dampingFactor = 0.06;
 controls.minDistance = 5;
 controls.maxDistance = 800;
-camera.position.set(10, 35, 120);
+
+// Custom Google Earth style Zoom-to-Cursor
+renderer.domElement.addEventListener('wheel', (event) => {
+  if (!controls.enabled) return;
+  // If it's a trackpad pan gesture (has a noticeable horizontal component or is a direct horizontal swipe)
+  if (Math.abs(event.deltaX) > 1) {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    const distToTarget = camera.position.distanceTo(controls.target);
+    const panSpeed = 0.0015 * distToTarget; 
+    
+    const v = new THREE.Vector3();
+    // Pan X (left/right)
+    v.setFromMatrixColumn(camera.matrix, 0); // camera right vector
+    v.multiplyScalar(event.deltaX * panSpeed);
+    camera.position.add(v);
+    controls.target.add(v);
+
+    // Pan Y (up/down)
+    v.setFromMatrixColumn(camera.matrix, 1); // camera up vector
+    v.multiplyScalar(-event.deltaY * panSpeed);
+    camera.position.add(v);
+    controls.target.add(v);
+
+    controls.update();
+    return;
+  }
+
+  event.preventDefault();
+  event.stopImmediatePropagation(); // Block default OrbitControls wheel zoom
+
+  const zoomSpeed = 0.15;
+  // Invert delta: scrolling up (deltaY < 0) zooms in, scrolling down (deltaY > 0) zooms out
+  const delta = event.deltaY > 0 ? -1 : 1;
+  
+  const rect = renderer.domElement.getBoundingClientRect();
+  const x = (event.clientX - rect.left) / rect.width;
+  const y = (event.clientY - rect.top) / rect.height;
+  const ndcX = (x * 2) - 1;
+  const ndcY = -(y * 2) + 1;
+
+  const ray = new THREE.Raycaster();
+  ray.setFromCamera({ x: ndcX, y: ndcY }, camera);
+  const dir = ray.ray.direction;
+
+  const dist = camera.position.distanceTo(controls.target);
+  const step = dist * zoomSpeed * delta;
+
+  // Ensure we don't zoom through the center if zooming in too far
+  if (delta > 0 && dist < 1.0) return;
+
+  camera.position.addScaledVector(dir, step);
+  controls.target.addScaledVector(dir, step);
+  
+  controls.update();
+}, { passive: false, capture: true });
+
+camera.position.set(0, 25, 150);
 
 // ── Lighting ──────────────────────────────────────────────────
 scene.add(new THREE.AmbientLight(0x112244, 1.5));
@@ -62,7 +119,7 @@ const sunMat = new THREE.MeshStandardMaterial({
   map: sunTex, emissive: 0xff6600, emissiveMap: sunTex, emissiveIntensity: 1.8,
   roughness: 1, metalness: 0
 });
-const sunMesh = new THREE.Mesh(new THREE.SphereGeometry(5.0, 32, 32), sunMat);
+const sunMesh = new THREE.Mesh(new THREE.SphereGeometry(12.0, 32, 32), sunMat);
 scene.add(sunMesh);
 
 // Sun corona
@@ -72,9 +129,9 @@ function addCorona(radius, color, opacity) {
     new THREE.MeshBasicMaterial({ color, transparent: true, opacity, side: THREE.BackSide, depthWrite: false })
   ));
 }
-addCorona(5.5, 0xff8800, 0.18);
-addCorona(6.5, 0xff6600, 0.08);
-addCorona(8.5, 0xff4400, 0.04);
+addCorona(13.5, 0xff8800, 0.18);
+addCorona(15.5, 0xff6600, 0.08);
+addCorona(19.5, 0xff4400, 0.04);
 
 // ── Earth ─────────────────────────────────────────────────────
 const earthMat = new THREE.MeshPhongMaterial({
@@ -82,21 +139,21 @@ const earthMat = new THREE.MeshPhongMaterial({
   normalScale: new THREE.Vector2(0.6, 0.6),
   shininess: 20, specular: new THREE.Color(0x2244aa)
 });
-const earthMesh = new THREE.Mesh(new THREE.SphereGeometry(2.0, 32, 32), earthMat);
+const earthMesh = new THREE.Mesh(new THREE.SphereGeometry(4.0, 32, 32), earthMat);
 scene.add(earthMesh);
 
 const cloudMat = new THREE.MeshPhongMaterial({ map: cloudTex, transparent: true, opacity: 0.45, depthWrite: false });
-const cloudMesh = new THREE.Mesh(new THREE.SphereGeometry(2.03, 32, 32), cloudMat);
+const cloudMesh = new THREE.Mesh(new THREE.SphereGeometry(4.06, 32, 32), cloudMat);
 scene.add(cloudMesh);
 
 const atmoMesh = new THREE.Mesh(
-  new THREE.SphereGeometry(2.15, 32, 32),
+  new THREE.SphereGeometry(4.3, 32, 32),
   new THREE.MeshPhongMaterial({ color: 0x4488cc, transparent: true, opacity: 0.1, side: THREE.BackSide, depthWrite: false })
 );
 scene.add(atmoMesh);
 
-// ── Velocity Arrow ────────────────────────────────────────────
-const velArrow = new THREE.ArrowHelper(new THREE.Vector3(1, 0, 0), new THREE.Vector3(), 8, 0x00ffff, 1.5, 0.8);
+// ── Velocity Vector Arrow ───────────────────────────────────────
+const velArrow = new THREE.ArrowHelper(new THREE.Vector3(1, 0, 0), new THREE.Vector3(), 15, 0xff3333, 4.0, 2.5);
 scene.add(velArrow);
 
 // ── Orbit Line ───────────────────────────────────────────────
@@ -218,6 +275,8 @@ function orbitColor(type) {
   return 0xff6644;
 }
 
+let orbitPath = null;
+
 function buildAndSetOrbit() {
   const e   = parseFloat(eccSlider.value);
   const a   = parseFloat(aSlider.value);
@@ -232,10 +291,10 @@ function buildAndSetOrbit() {
 
   const color = orbitColor(type);
   const isClosed = type === 'ellipse';
-  const path = new THREE.CatmullRomCurve3(orbitPts, isClosed);
+  orbitPath = new THREE.CatmullRomCurve3(orbitPts, isClosed);
   
   // Create a glowing 3D tube with subtle thickness
-  const tubeGeo = new THREE.TubeGeometry(path, Math.min(orbitPts.length, 400), 0.15, 8, isClosed);
+  const tubeGeo = new THREE.TubeGeometry(orbitPath, Math.min(orbitPts.length, 400), 0.15, 8, isClosed);
   orbitLine = new THREE.Mesh(
     tubeGeo,
     new THREE.MeshStandardMaterial({ 
@@ -379,12 +438,13 @@ function animate() {
   const dt = ((now - lastT) / 1000) * BASE_SPEED * simSpeed;
   lastT = now;
 
-  if (simState === 'running' && orbitPts.length > 0) {
+  if (simState === 'running' && orbitPath) {
     const e = parseFloat(eccSlider.value);
-    const idx = Math.floor(orbitTheta * orbitPts.length);
+    
+    // Smoothly evaluate the position directly from the CatmullRom spline
+    const pos = orbitPath.getPointAt(orbitTheta);
 
-    if (orbitPts[idx]) {
-      const pos = orbitPts[idx];
+    if (pos) {
       const dist2Sun = pos.length();
 
       // Angular speed proportional to 1/r² (Kepler 2nd law)
@@ -439,7 +499,7 @@ function animate() {
         const tangDir = new THREE.Vector3(-pos.z, 0, pos.x).normalize();
         velArrow.position.copy(pos);
         velArrow.setDirection(tangDir);
-        velArrow.setLength(Math.min((v_ms / 1000) * 0.3 + 1.5, 8), 0.9, 0.45);
+        velArrow.setLength(Math.min((v_ms / 1000) * 0.4 + 3.0, 15), 4.0, 2.5);
         velArrow.visible = true;
       } else {
         velArrow.visible = false;

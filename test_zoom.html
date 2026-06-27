@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html><body><script type="module">
+import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
+import { OrbitControls } from 'https://unpkg.com/three@0.160.0/examples/jsm/controls/OrbitControls.js';
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize(500, 500);
+document.body.appendChild(renderer.domElement);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.zoomToCursor = true;
+console.log(controls.zoomToCursor);
+</script></body></html>
