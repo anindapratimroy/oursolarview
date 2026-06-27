@@ -366,32 +366,44 @@ function openViewer(model) {
       $viewerLoading.style.display = 'flex';
     }
 
-    const embedUrl = `https://sketchfab.com/models/${model.sketchfabId}/embed?` + [
-      'autostart=1',
-      'preload=1',
-      'ui_theme=dark',
-      'ui_hint=0',
-      'camera=0',
-      'transparent=0',
-      'ui_watermark=0',
-      'ui_infos=0'
-    ].join('&');
-
-    // Wait for the iframe load event to remove our internal loader overlay
-    let loadTimeout;
     const hideLoader = () => {
       if ($viewerLoading) $viewerLoading.classList.add('hidden');
     };
 
-    if ($viewerIframe) {
+    if (window.Sketchfab) {
+      $viewerIframe.src = '';
+      const client = new Sketchfab('1.12.1', $viewerIframe);
+      client.init(model.sketchfabId, {
+        success: function onSuccess(api) {
+          api.start();
+          api.addEventListener('viewerready', function() {
+            hideLoader();
+          });
+        },
+        error: function onError() {
+          hideLoader();
+        },
+        autostart: 1,
+        preload: 1,
+        ui_theme: 'dark',
+        ui_hint: 0,
+        camera: 0,
+        transparent: 0,
+        ui_watermark: 0,
+        ui_infos: 0
+      });
+    } else {
+      // Fallback if API script failed to load
+      const embedUrl = `https://sketchfab.com/models/${model.sketchfabId}/embed?` + [
+        'autostart=1', 'preload=1', 'ui_theme=dark', 'ui_hint=0', 'camera=0', 'transparent=0', 'ui_watermark=0', 'ui_infos=0'
+      ].join('&');
+      
+      let loadTimeout;
       $viewerIframe.onload = () => {
         clearTimeout(loadTimeout);
-        setTimeout(hideLoader, 2000); // Additional delay to allow sketchfab to fully mount
+        setTimeout(hideLoader, 3000);
       };
-      
-      // Fallback: If onload fails or takes too long, hide it after 6 seconds
-      loadTimeout = setTimeout(hideLoader, 6000);
-      
+      loadTimeout = setTimeout(hideLoader, 8000);
       $viewerIframe.src = embedUrl;
     }
   }

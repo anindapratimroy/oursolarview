@@ -525,15 +525,15 @@
 
 .craft-viewer-header-left { display: flex; flex-direction: column; justify-content: center; }
 .craft-viewer-breadcrumb {
-  display: flex; align-items: center; gap: 7px;
-  font-family: 'Space Mono', monospace; font-size: 0.66rem;
-  color: var(--text-dim); margin-bottom: 3px;
+  display: flex; align-items: center; gap: 8px;
+  font-family: 'Space Mono', monospace; font-size: 0.85rem;
+  color: var(--text-dim); margin-bottom: 5px;
 }
-.craft-viewer-breadcrumb i { font-size: 0.55rem; opacity: 0.5; }
+.craft-viewer-breadcrumb i { font-size: 0.75rem; opacity: 0.5; }
 .viewer-cat-label { font-weight: 700; }
 .craft-viewer-title {
   font-family: 'Merriweather', serif;
-  font-size: 1.18rem; font-weight: 700;
+  font-size: 1.8rem; font-weight: 700;
   color: var(--text); line-height: 1.2; margin: 0;
 }
 
@@ -555,12 +555,12 @@
   border-color: rgba(197,160,72,0.4); color: var(--gold-light);
 }
 .craft-viewer-close-btn {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 8px 20px; border-radius: 22px;
-  border: 1.5px solid rgba(197,160,72,0.3);
-  background: rgba(197,160,72,0.08);
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 12px 28px; border-radius: 30px;
+  border: 1.5px solid rgba(197,160,72,0.4);
+  background: rgba(197,160,72,0.12);
   color: var(--gold);
-  font-family: 'Space Mono', monospace; font-size: 0.7rem; font-weight: 700;
+  font-family: 'Space Mono', monospace; font-size: 1.1rem; font-weight: 800;
   cursor: pointer; white-space: nowrap;
   transition: all 0.22s;
 }
