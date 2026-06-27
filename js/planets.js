@@ -35,22 +35,34 @@ PLANETS.forEach(p => {
 
 // Search Filter Logic
 const searchInput = document.getElementById('planetSearch');
+const noPlanetMsg = document.getElementById('noPlanetMsg');
 if (searchInput) {
   searchInput.addEventListener('input', (e) => {
     const term = e.target.value.toLowerCase();
     const cards = grid.querySelectorAll('.planet-card');
+    let visibleCount = 0;
     cards.forEach(card => {
       const name = card.querySelector('.planet-name').innerText.toLowerCase();
       const desc = card.querySelector('.planet-desc').innerText.toLowerCase();
       if (name.includes(term) || desc.includes(term)) {
         card.style.display = '';
+        visibleCount++;
       } else {
         card.style.display = 'none';
       }
     });
+    if (noPlanetMsg) {
+      noPlanetMsg.style.display = visibleCount === 0 ? 'block' : 'none';
+    }
   });
-  searchInput.addEventListener('focus', () => searchInput.style.borderColor = 'var(--gold)');
-  searchInput.addEventListener('blur', () => searchInput.style.borderColor = 'rgba(255,255,255,0.15)');
+  searchInput.addEventListener('focus', () => {
+    searchInput.style.borderColor = 'var(--gold)';
+    searchInput.style.boxShadow = '0 4px 20px rgba(0,0,0,0.35), 0 0 0 3px rgba(197,160,72,0.1)';
+  });
+  searchInput.addEventListener('blur', () => {
+    searchInput.style.borderColor = 'rgba(255,255,255,0.15)';
+    searchInput.style.boxShadow = '0 4px 20px rgba(0,0,0,0.35)';
+  });
 }
 
 // History State URL Parameter logic

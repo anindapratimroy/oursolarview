@@ -173,11 +173,14 @@
         <h2 class="section-title">Behold My Planets</h2>
         <div class="section-title-bar"></div>
       </div>
-      <div class="catalog-controls" style="text-align:center; margin-bottom: 20px;">
-        <input type="text" id="planetSearch" placeholder="Search planets..." aria-label="Search planets" style="padding: 12px 20px; width: 80%; max-width: 400px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.15); background: rgba(0,10,25,0.8); color: var(--text); font-family: 'Space Grotesk', sans-serif; font-size: 1rem; outline: none; transition: border-color 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.3);" />
+      <div class="catalog-controls" style="text-align:center; margin-bottom: 30px;">
+        <input type="text" id="planetSearch" placeholder="Search planets..." aria-label="Search planets" style="padding: 16px 24px; width: 90%; max-width: 500px; border-radius: 40px; border: 1px solid rgba(255,255,255,0.15); background: rgba(0,10,25,0.85); color: var(--text); font-family: 'Space Grotesk', sans-serif; font-size: 1.15rem; outline: none; transition: border-color 0.3s, box-shadow 0.3s; box-shadow: 0 4px 20px rgba(0,0,0,0.35);" />
       </div>
       <hr class="catalog-divider" />
       <div class="planet-grid" id="planetGrid" role="list"></div>
+      <div id="noPlanetMsg" style="display: none; text-align: center; margin-top: 40px; font-family: 'Space Grotesk', sans-serif; font-size: 1.15rem; color: var(--text-muted); font-style: italic;">
+        The architect has not yet sculpted a world by this name.
+      </div>
   </section>
 
   <!-- Modules -->
