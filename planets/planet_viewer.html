@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=1280" />
   <title>Planet Viewer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
@@ -37,21 +38,9 @@
     }
     #back-btn:hover { border-color:rgba(197,160,72,.7); background:rgba(197,160,72,.12); transform:translateX(-4px); }
 
-    /* ── Planet HUD ───────────────────────────────────────────── */
-    #planet-label {
-      position:fixed; top:18px; left:50%; transform:translateX(-50%); z-index:10000;
-      padding:10px 26px;
-      background:rgba(0,7,20,.75); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
-      border:1.5px solid rgba(197,160,72,.35); border-radius:30px;
-      color:#c5a048; font-family:'Space Grotesk',sans-serif;
-      font-size:13px; font-weight:700;
-      text-transform:uppercase; letter-spacing:.12em;
-      pointer-events:none; white-space:nowrap;
-    }
 
     @media (max-width:480px) {
       #back-btn    { padding:8px 14px; font-size:12px; top:12px; left:12px; }
-      #planet-label{ font-size:11px; padding:8px 16px; top:12px; }
     }
   </style>
 
@@ -69,7 +58,6 @@
 <button id="back-btn" aria-label="Go back">
   <i class="fa-solid fa-arrow-left"></i> Step Back
 </button>
-<div id="planet-label">🪐 Loading...</div>
 
 <div id="loading">
   <div id="ld-name">Loading...</div>
@@ -99,7 +87,7 @@ import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
 // ─── planet from URL ─────────────────────────────────────────
 const planet = (new URLSearchParams(location.search).get('planet') || 'earth').toLowerCase();
 const cap    = planet.charAt(0).toUpperCase() + planet.slice(1);
-document.getElementById('planet-label').textContent = '🪐 ' + cap;
+
 document.getElementById('ld-name').textContent       = cap;
 
 // ─── Loading overlay ─────────────────────────────────────────

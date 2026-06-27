@@ -1,0 +1,762 @@
+/* ═══════════════════════════════════════════════════════════
+   MY FLEET OF TITANS — spacecraft.css  (v2 — IMMERSIVE VIEWER)
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Page Base ───────────────────────────────────────────── */
+.spacecraft-main {
+  min-height: 100vh;
+  padding-top: 80px;
+}
+
+/* ── Hero ────────────────────────────────────────────────── */
+.craft-hero {
+  padding: 90px 0 56px;
+  position: relative;
+  overflow: hidden;
+}
+.craft-hero::before {
+  content: '';
+  position: absolute;
+  top: -20%; left: -10%;
+  width: 70%; height: 140%;
+  background: radial-gradient(ellipse at 30% 50%, rgba(197,160,72,0.07) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+.craft-hero-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 48px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 60px;
+  align-items: center;
+}
+@media (max-width: 1100px) {
+  .craft-hero-inner { grid-template-columns: 1fr; padding: 0 24px; }
+  .craft-hero-visual { display: none; }
+}
+
+.craft-hero-content { max-width: 680px; }
+
+.craft-hero-content .hero-eyebrow {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.85rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 18px;
+  display: flex; align-items: center; gap: 10px;
+}
+.craft-hero-content .hero-eyebrow::before {
+  content: ''; display: inline-block; width: 28px; height: 1px;
+  background: var(--gold); flex-shrink: 0;
+}
+.craft-hero-content .hero-title {
+  font-family: 'Merriweather', serif;
+  font-size: clamp(3rem, 6vw, 4.8rem);
+  font-weight: 900; line-height: 1.1;
+  color: var(--text); margin-bottom: 12px;
+}
+.craft-hero-content .hero-title-bar {
+  width: 60px; height: 3px;
+  background: linear-gradient(90deg, var(--gold), var(--gold-light));
+  border-radius: 2px; margin-bottom: 28px;
+}
+.craft-hero-content .hero-desc {
+  font-size: 1.25rem; line-height: 1.85;
+  color: var(--text); margin-bottom: 36px; max-width: 620px;
+}
+
+.craft-hero-stats { display: flex; gap: 12px; flex-wrap: wrap; }
+.stat-pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-top-color: rgba(255,255,255,0.22);
+  border-radius: 40px; padding: 8px 18px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.06em;
+  color: var(--gold-light); transition: background 0.3s, border-color 0.3s;
+}
+.stat-pill i { color: var(--gold); font-size: 0.82rem; }
+.stat-pill:hover { background: rgba(197,160,72,0.1); border-color: rgba(197,160,72,0.3); }
+
+/* Gyroscope / Reactor Core Visual */
+.craft-hero-visual {
+  position: relative; width: 340px; height: 340px; flex-shrink: 0;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+.orbit-ring {
+  position: absolute; inset: 0; border-radius: 50%;
+  border: 1px solid rgba(197,160,72,0.4);
+  box-shadow: 0 0 15px rgba(197,160,72,0.1), inset 0 0 15px rgba(197,160,72,0.1);
+  transform-style: preserve-3d;
+}
+.orbit-1 { 
+  width:260px;height:260px;top:40px;left:40px; border-width: 2px; 
+  border-color: rgba(197,160,72,0.6) rgba(197,160,72,0.1) rgba(197,160,72,0.1) rgba(197,160,72,0.6);
+  animation: gyro-1 12s linear infinite; 
+}
+.orbit-2 { 
+  width:220px;height:220px;top:60px;left:60px; border-width: 2px; border-style: dashed; 
+  border-color: rgba(255,255,255,0.4) rgba(255,255,255,0.1) rgba(255,255,255,0.4) rgba(255,255,255,0.1);
+  animation: gyro-2 15s linear infinite; 
+}
+.orbit-3 { 
+  width:180px;height:180px;top:80px;left:80px; border-width: 1.5px; 
+  border-color: rgba(197,160,72,0.1) rgba(197,160,72,0.8) rgba(197,160,72,0.1) rgba(197,160,72,0.1);
+  animation: gyro-3 8s linear infinite; 
+}
+
+.orbit-ring::after {
+  content: '';
+  position: absolute;
+  top: -3px; left: 50%;
+  width: 6px; height: 6px;
+  background: var(--gold-light);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--gold-light), 0 0 20px var(--gold-light);
+  transform: translateX(-50%);
+}
+
+@keyframes gyro-1 { from { transform: rotateX(70deg) rotateZ(0deg); } to { transform: rotateX(70deg) rotateZ(360deg); } }
+@keyframes gyro-2 { from { transform: rotateY(70deg) rotateX(45deg) rotateZ(0deg); } to { transform: rotateY(70deg) rotateX(45deg) rotateZ(-360deg); } }
+@keyframes gyro-3 { from { transform: rotateX(30deg) rotateY(60deg) rotateZ(0deg); } to { transform: rotateX(30deg) rotateY(60deg) rotateZ(360deg); } }
+
+.orbit-center-glow {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90px; height: 90px; border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, rgba(255,217,122,0.9) 0%, rgba(197,160,72,0.8) 40%, rgba(32,16,0,0.9) 80%, rgba(0,0,0,1) 100%);
+  border: 1px solid rgba(197,160,72,0.6);
+  box-shadow: 0 0 40px rgba(197,160,72,0.6), 0 0 100px rgba(197,160,72,0.3);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 10;
+  animation: pulse-core 4s ease-in-out infinite alternate;
+}
+@keyframes pulse-core {
+  0% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 0 30px rgba(197,160,72,0.5), 0 0 80px rgba(197,160,72,0.2); }
+  100% { transform: translate(-50%, -50%) scale(1.05); box-shadow: 0 0 50px rgba(197,160,72,0.8), 0 0 120px rgba(197,160,72,0.4); }
+}
+
+.orbit-center-glow::after {
+  content: '\f135';
+  font-family: 'FontAwesome', 'Font Awesome 6 Free';
+  font-weight: 900;
+  font-size: 2rem;
+  color: #fff;
+  text-shadow: 0 0 15px rgba(255,255,255,0.8);
+}
+
+.craft-icon-orb { display: none; } /* Removing the individual icon orbs for a cleaner core visual */
+
+/* ── Controls ────────────────────────────────────────────── */
+.craft-controls-section { padding: 0 0 28px; }
+.craft-controls-inner, .craft-section-inner {
+  max-width: 1280px; margin: 0 auto; padding: 0 48px;
+}
+@media (max-width: 768px) {
+  .craft-controls-inner, .craft-section-inner { padding: 0 18px; }
+}
+
+.craft-search-wrap {
+  position: relative; display: flex; align-items: center; margin-bottom: 20px;
+}
+.craft-search-icon {
+  position: absolute; left: 22px; color: var(--gold); font-size: 1.25rem; pointer-events: none;
+}
+#craftSearch {
+  width: 100%; padding: 18px 50px 18px 58px; border-radius: 40px;
+  border: 1px solid rgba(255,255,255,0.15); background: rgba(0,10,25,0.85);
+  color: var(--text); font-family: 'Space Grotesk', sans-serif; font-size: 1.15rem;
+  outline: none; transition: border-color 0.3s, box-shadow 0.3s;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.35);
+}
+#craftSearch:focus {
+  border-color: rgba(197,160,72,0.5);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.35), 0 0 0 3px rgba(197,160,72,0.1);
+}
+#craftSearch::placeholder { color: rgba(255,255,255,0.3); }
+.craft-search-clear {
+  position: absolute; right: 14px; background: rgba(255,255,255,0.1);
+  border: none; border-radius: 50%; width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; color: var(--text-dim); font-size: 0.85rem;
+  transition: background 0.2s, color 0.2s;
+}
+.craft-search-clear:hover { background: rgba(197,160,72,0.2); color: var(--gold-light); }
+
+.craft-filters { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 18px; }
+.filter-chip {
+  display: inline-flex; align-items: center; gap: 9px;
+  padding: 10px 22px; border-radius: 40px;
+  border: 1.5px solid rgba(255,255,255,0.14); background: rgba(255,255,255,0.05);
+  color: var(--text-muted); font-family: 'Space Grotesk', sans-serif;
+  font-size: 1rem; font-weight: 600; cursor: pointer;
+  transition: all 0.25s ease; position: relative; overflow: hidden;
+}
+.filter-chip:hover {
+  border-color: rgba(197,160,72,0.35); color: var(--gold-light);
+  background: rgba(197,160,72,0.08); transform: translateY(-2px);
+}
+.filter-chip.active {
+  background: linear-gradient(135deg, rgba(197,160,72,0.25), rgba(197,160,72,0.1));
+  border-color: rgba(197,160,72,0.6); border-top-color: rgba(255,215,100,0.7);
+  color: var(--gold-light); box-shadow: 0 4px 16px rgba(197,160,72,0.15);
+}
+.filter-chip i { font-size: 0.95rem; }
+
+.craft-results-info {
+  display: flex; align-items: center; gap: 10px;
+  font-family: 'Space Mono', monospace; font-size: 0.72rem; color: var(--text-dim);
+}
+.results-divider { opacity: 0.4; }
+.craft-results-info a { color: var(--gold); text-decoration: none; }
+.craft-results-info a:hover { color: var(--gold-light); }
+
+/* ── Section divider ─────────────────────────────────────── */
+.craft-section-divider { margin-bottom: 0; }
+
+/* ── Section header subtitle / inline badge ──────────────── */
+.section-subtitle {
+  font-size: 0.97rem; color: var(--text-dim); margin-top: 8px;
+  line-height: 1.7; max-width: 620px; margin-left: auto; margin-right: auto;
+}
+.live-badge-inline {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: rgba(197,160,72,0.15); border: 1px solid rgba(197,160,72,0.35);
+  border-radius: 20px; padding: 2px 10px;
+  font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--gold-light);
+}
+
+/* ══════════════════════════════════════════════════════════
+   SHOWCASE CARDS (Featured Grid)
+   ══════════════════════════════════════════════════════════ */
+.craft-featured-section { padding: 56px 0 44px; }
+.featured-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+  margin-top: 36px;
+}
+
+.showcase-card {
+  position: relative;
+  background: rgba(8,14,30,0.92);
+  border: 1px solid rgba(255,255,255,0.09);
+  border-top: 1px solid rgba(255,255,255,0.18);
+  border-radius: 20px; overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.42s cubic-bezier(0.16,1,0.3,1), box-shadow 0.38s, border-color 0.3s;
+  box-shadow: 0 6px 30px rgba(0,0,0,0.55);
+  display: flex; flex-direction: column;
+}
+.showcase-card:hover {
+  transform: translateY(-10px) scale(1.015);
+  border-color: rgba(197,160,72,0.5);
+  border-top-color: rgba(255,210,80,0.7);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.65), 0 0 40px rgba(197,160,72,0.13);
+}
+
+/* Thumbnail */
+.showcase-thumb {
+  height: 220px; position: relative; overflow: hidden;
+  background: linear-gradient(135deg, #060d1e 0%, #0a0622 100%);
+  flex-shrink: 0;
+}
+.showcase-thumb-img {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; object-position: center;
+  transition: transform 0.55s cubic-bezier(0.16,1,0.3,1), opacity 0.4s;
+  opacity: 0;
+  filter: brightness(0.85) saturate(1.1);
+}
+.showcase-thumb-img.loaded { opacity: 1; }
+.showcase-card:hover .showcase-thumb-img { transform: scale(1.07); filter: brightness(1) saturate(1.2); }
+
+/* CSS gradient placeholder while image loads */
+.showcase-thumb-placeholder {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.8rem; color: rgba(197,160,72,0.18);
+  background: radial-gradient(ellipse at 50% 40%, rgba(197,160,72,0.06) 0%, transparent 70%);
+  transition: opacity 0.4s;
+}
+.showcase-thumb-img.loaded + .showcase-thumb-placeholder,
+.showcase-thumb-img.loaded ~ .showcase-thumb-placeholder { opacity: 0; pointer-events: none; }
+
+.showcase-thumb-overlay {
+  position: absolute; inset: 0; z-index: 2;
+  background: linear-gradient(to bottom,
+    rgba(0,5,20,0.05) 0%,
+    rgba(0,5,20,0.08) 50%,
+    rgba(0,5,20,0.82) 100%
+  );
+}
+/* Live 3D badge with pulse ring */
+.showcase-3d-badge {
+  position: absolute; top: 14px; right: 14px; z-index: 5;
+  background: rgba(197,160,72,0.95);
+  backdrop-filter: blur(10px); border-radius: 22px;
+  padding: 5px 13px;
+  font-family: 'Space Mono', monospace; font-size: 0.63rem; font-weight: 700;
+  color: #050c08; display: flex; align-items: center; gap: 6px;
+  box-shadow: 0 3px 14px rgba(197,160,72,0.5);
+  animation: badge-appear 0.5s cubic-bezier(0.16,1,0.3,1) both;
+}
+.showcase-3d-badge::before {
+  content: '';
+  width: 7px; height: 7px; border-radius: 50%;
+  background: rgba(0,0,0,0.6);
+  box-shadow: 0 0 0 0 rgba(50,50,10,0.7);
+  animation: live-pulse 1.8s infinite;
+  display: inline-block; flex-shrink: 0;
+}
+@keyframes live-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(50,50,10,0.7); }
+  70%  { box-shadow: 0 0 0 7px rgba(50,50,10,0); }
+  100% { box-shadow: 0 0 0 0 rgba(50,50,10,0); }
+}
+@keyframes badge-appear { from { opacity:0; transform: scale(0.7) translateY(-4px); } to { opacity:1; transform: scale(1) translateY(0); } }
+.showcase-3d-badge.secondary {
+  background: rgba(255,255,255,0.11);
+  backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.14);
+  color: rgba(255,255,255,0.75);
+  box-shadow: none;
+  animation: none;
+}
+.showcase-3d-badge.secondary::before { display: none; }
+
+.showcase-category-tag {
+  position: absolute; bottom: 14px; left: 14px; z-index: 5;
+  padding: 4px 12px; border-radius: 22px; border: 1px solid;
+  font-family: 'Space Mono', monospace; font-size: 0.62rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--cat-color, #8ba3c0);
+  border-color: var(--cat-color, #8ba3c0);
+  background: rgba(0,0,0,0.55); backdrop-filter: blur(8px);
+  display: flex; align-items: center; gap: 5px;
+}
+
+
+.showcase-info {
+  padding: 20px 22px 22px; display: flex; flex-direction: column;
+  gap: 0; flex: 1;
+}
+.showcase-name {
+  font-family: 'Merriweather', serif;
+  font-size: 1.15rem; font-weight: 700; letter-spacing: 0.01em;
+  color: var(--text); margin-bottom: 8px; line-height: 1.35;
+}
+.showcase-teaser {
+  font-size: 0.84rem; color: var(--text-muted); line-height: 1.68;
+  margin-bottom: 18px; flex: 1;
+}
+.showcase-cta {
+  display: inline-flex; align-items: center; justify-content: space-between; gap: 15px;
+  font-family: 'Space Grotesk', sans-serif; font-size: 0.85rem; font-weight: 700;
+  letter-spacing: 0.05em; text-transform: uppercase; color: var(--gold-light);
+  padding: 12px 24px; margin-top: auto;
+  background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.08) 100%);
+  border: 1px solid rgba(197,160,72,0.3);
+  border-radius: 6px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  width: fit-content;
+}
+.showcase-cta-label { display: flex; align-items: center; gap: 7px; }
+.showcase-arrow {
+  transition: transform 0.28s cubic-bezier(0.34,1.56,0.64,1); font-size: 0.78rem;
+}
+.showcase-card:hover .showcase-arrow { transform: translateX(6px); }
+.showcase-card:hover .showcase-cta {
+  background: linear-gradient(135deg, rgba(197,160,72,0.15) 0%, rgba(197,160,72,0.3) 100%);
+  border-color: rgba(197,160,72,0.6);
+  color: #fff;
+  box-shadow: 0 6px 20px rgba(197,160,72,0.3), inset 0 1px 0 rgba(255,255,255,0.2);
+  transform: translateY(-2px);
+}
+
+/* ══════════════════════════════════════════════════════════
+   ALL-MODELS GALLERY GRID
+   ══════════════════════════════════════════════════════════ */
+.craft-all-section { padding: 36px 0 80px; }
+.craft-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 16px; margin-top: 32px;
+}
+
+.craft-card {
+  position: relative; overflow: hidden;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-top: 1px solid rgba(255,255,255,0.2);
+  border-radius: 18px; padding: 22px 20px 20px;
+  display: flex; flex-direction: column; gap: 14px;
+  transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s, border-color 0.3s;
+  box-shadow: 0 3px 16px rgba(0,0,0,0.38);
+}
+.craft-card::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(160deg, rgba(255,255,255,0.1) 0%, transparent 55%);
+  border-radius: inherit; pointer-events: none; opacity: 0.7;
+}
+.craft-card::after {
+  content: ''; position: absolute; top:0; left:-110%;
+  width: 70%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+  transform: skewX(-20deg); transition: left 0.6s ease; pointer-events: none;
+}
+.craft-card:hover::after { left: 150%; }
+.craft-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(197,160,72,0.35); border-top-color: rgba(197,160,72,0.6);
+  background: rgba(197,160,72,0.055);
+  box-shadow: 0 10px 32px rgba(0,0,0,0.5), 0 0 18px rgba(197,160,72,0.07);
+}
+
+.craft-card-header { display: flex; align-items: flex-start; gap: 13px; position: relative; z-index: 1; }
+.craft-card-icon {
+  width: 46px; height: 46px; border-radius: 14px; flex-shrink: 0;
+  background: rgba(var(--cat-color, 139,163,192), 0.1);
+  border: 1px solid rgba(197,160,72,0.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem; color: var(--gold);
+  background: rgba(197,160,72,0.08);
+}
+.craft-card-info { flex: 1; min-width: 0; }
+.craft-card-name {
+  font-family: 'Space Grotesk', sans-serif; font-size: 0.95rem; font-weight: 600;
+  color: var(--text); line-height: 1.35; margin-bottom: 6px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.craft-cat-tag {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 3px 10px; border-radius: 20px;
+  font-family: 'Space Mono', monospace; font-size: 0.62rem; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--cat-color, #8ba3c0);
+  border: 1px solid var(--cat-color, #8ba3c0);
+  background: rgba(0,0,0,0.35);
+  opacity: 0.9;
+}
+
+.craft-card-actions { position: relative; z-index: 1; display: flex; gap: 8px; }
+.craft-card-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 13px; border-radius: 20px;
+  font-family: 'Space Mono', monospace; font-size: 0.63rem; font-weight: 700;
+  letter-spacing: 0.07em; text-transform: uppercase; cursor: pointer;
+  text-decoration: none; transition: all 0.2s ease; white-space: nowrap;
+}
+.craft-card-btn.primary {
+  border: 1.5px solid rgba(197,160,72,0.4); background: rgba(197,160,72,0.1); color: var(--gold);
+}
+.craft-card-btn.primary:hover {
+  background: rgba(197,160,72,0.22); border-color: rgba(197,160,72,0.7); color: var(--gold-light);
+  transform: translateY(-1px);
+}
+.craft-card-btn.secondary {
+  border: 1.5px solid rgba(255,255,255,0.13); background: rgba(255,255,255,0.05); color: var(--text-dim);
+}
+.craft-card-btn.secondary:hover { border-color: rgba(255,255,255,0.25); color: var(--text); }
+
+/* Loading / error states */
+.craft-loading, .craft-error, .craft-no-results {
+  text-align: center; padding: 72px 20px; color: var(--text-dim);
+}
+.craft-loading-spinner {
+  width: 50px; height: 50px;
+  border: 2px solid rgba(255,255,255,0.08); border-top-color: var(--gold);
+  border-radius: 50%; animation: spin 0.9s linear infinite; margin: 0 auto 22px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.craft-loading p, .craft-error p, .craft-no-results p { font-size: 0.97rem; color: var(--text-muted); margin-top: 14px; }
+.craft-error i, .craft-no-results i { font-size: 2.4rem; color: rgba(197,160,72,0.35); display: block; }
+.craft-error a { color: var(--gold); text-decoration: underline; }
+
+/* ══════════════════════════════════════════════════════════
+   FULL-SCREEN IMMERSIVE VIEWER
+   ══════════════════════════════════════════════════════════ */
+.craft-viewer {
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  display: none;
+  flex-direction: column;
+  background: rgba(0,3,12,0.97);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+.craft-viewer.open {
+  display: flex;
+  animation: viewer-slide-in 0.42s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+@keyframes viewer-slide-in {
+  from { opacity: 0; transform: translateY(24px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ── Viewer Header ── */
+.craft-viewer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  height: 64px;
+  background: rgba(255,255,255,0.035);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  flex-shrink: 0;
+  gap: 20px;
+  position: relative;
+  z-index: 10;
+}
+/* specular sheen on header */
+.craft-viewer-header::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg, rgba(255,255,255,0.04) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.craft-viewer-header-left { display: flex; flex-direction: column; justify-content: center; }
+.craft-viewer-breadcrumb {
+  display: flex; align-items: center; gap: 7px;
+  font-family: 'Space Mono', monospace; font-size: 0.66rem;
+  color: var(--text-dim); margin-bottom: 3px;
+}
+.craft-viewer-breadcrumb i { font-size: 0.55rem; opacity: 0.5; }
+.viewer-cat-label { font-weight: 700; }
+.craft-viewer-title {
+  font-family: 'Merriweather', serif;
+  font-size: 1.18rem; font-weight: 700;
+  color: var(--text); line-height: 1.2; margin: 0;
+}
+
+.craft-viewer-header-right {
+  display: flex; align-items: center; gap: 10px; flex-shrink: 0;
+}
+.craft-viewer-header-btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 7px 16px; border-radius: 22px;
+  border: 1.5px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.06);
+  color: var(--text-dim);
+  font-family: 'Space Mono', monospace; font-size: 0.67rem; font-weight: 700;
+  text-decoration: none; white-space: nowrap;
+  transition: all 0.22s;
+}
+.craft-viewer-header-btn:hover {
+  background: rgba(197,160,72,0.14);
+  border-color: rgba(197,160,72,0.4); color: var(--gold-light);
+}
+.craft-viewer-close-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 20px; border-radius: 22px;
+  border: 1.5px solid rgba(197,160,72,0.3);
+  background: rgba(197,160,72,0.08);
+  color: var(--gold);
+  font-family: 'Space Mono', monospace; font-size: 0.7rem; font-weight: 700;
+  cursor: pointer; white-space: nowrap;
+  transition: all 0.22s;
+}
+.craft-viewer-close-btn:hover {
+  background: rgba(197,160,72,0.2); border-color: rgba(197,160,72,0.6);
+  color: var(--gold-light); transform: scale(1.04);
+}
+
+/* ── Viewer Body ── */
+.craft-viewer-body {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  min-height: 0;
+  overflow: hidden;
+}
+
+@media (max-width: 900px) {
+  .craft-viewer-body { grid-template-columns: 1fr; }
+  .craft-viewer-sidebar { display: none; }
+  .craft-viewer-close-btn span { display: none; }
+}
+
+/* ── 3D Panel ── */
+.craft-viewer-3d-panel {
+  position: relative;
+  background: #000812;
+  overflow: hidden;
+  display: flex;
+  align-items: stretch;
+}
+
+/* Loading overlay inside 3D panel */
+.craft-viewer-loading {
+  position: absolute; inset: 0; z-index: 10;
+  background: #030508;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+.craft-viewer-loading.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.craft-viewer-spinner {
+  width: 56px; height: 56px;
+  border: 2px solid rgba(255,255,255,0.08); border-top-color: var(--gold);
+  border-radius: 50%; animation: spin 0.9s linear infinite;
+}
+
+.craft-viewer-iframe {
+  width: 100%; height: 100%;
+  border: none; display: block;
+  background: #000812;
+  flex: 1;
+}
+
+/* Controls hint */
+.craft-viewer-hint {
+  position: absolute; bottom: 18px; left: 50%; transform: translateX(-50%);
+  background: rgba(0,0,0,0.65); backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.1); border-radius: 30px;
+  padding: 7px 22px;
+  font-family: 'Space Mono', monospace; font-size: 0.63rem; color: var(--text-dim);
+  white-space: nowrap; z-index: 5;
+  pointer-events: none;
+  animation: hint-fade 0.6s ease 2.5s forwards;
+  opacity: 1;
+}
+@keyframes hint-fade { to { opacity: 0; } }
+
+/* ── Fallback panel ── */
+.craft-viewer-fallback {
+  width: 100%; height: 100%;
+  display: flex;
+  align-items: center; justify-content: center;
+  padding: 40px;
+  background: linear-gradient(135deg, rgba(0,8,25,0.95), rgba(12,5,35,0.95));
+  gap: 40px;
+  overflow-y: auto;
+}
+
+.viewer-fallback-img {
+  width: 45%; max-width: 480px; max-height: 70vh;
+  object-fit: contain; border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+  flex-shrink: 0;
+}
+
+.viewer-fallback-card {
+  max-width: 400px; display: flex; flex-direction: column; gap: 18px; text-align: left;
+}
+.viewer-fallback-icon {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: rgba(197,160,72,0.1); border: 1.5px solid rgba(197,160,72,0.3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.2rem; color: var(--gold);
+}
+.viewer-fallback-title {
+  font-family: 'Merriweather', serif; font-size: 1.5rem;
+  font-weight: 900; color: var(--text); line-height: 1.25;
+}
+.viewer-fallback-sub {
+  font-size: 0.93rem; color: var(--text-muted); line-height: 1.8;
+}
+.viewer-fallback-info {
+  display: flex; flex-direction: column; gap: 7px;
+  font-size: 0.85rem; color: var(--text-dim);
+  padding: 14px 18px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08); border-radius: 12px;
+}
+.viewer-fallback-info strong { color: var(--text-muted); }
+.viewer-download-btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 13px 28px; border-radius: 40px;
+  background: linear-gradient(135deg, rgba(197,160,72,0.9), rgba(197,140,40,0.9));
+  color: #000; font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.95rem; font-weight: 700; text-decoration: none;
+  transition: all 0.25s; box-shadow: 0 6px 22px rgba(197,160,72,0.3);
+  align-self: flex-start;
+}
+.viewer-download-btn:hover {
+  transform: translateY(-3px); box-shadow: 0 10px 30px rgba(197,160,72,0.45);
+}
+
+/* ── Info Sidebar ── */
+.craft-viewer-sidebar {
+  width: 360px; flex-shrink: 0;
+  background: rgba(255,255,255,0.025);
+  border-left: 1px solid rgba(255,255,255,0.07);
+  display: flex; flex-direction: column;
+  overflow-y: auto; padding: 28px 26px;
+  gap: 28px;
+}
+/* scrollbar */
+.craft-viewer-sidebar::-webkit-scrollbar { width: 4px; }
+.craft-viewer-sidebar::-webkit-scrollbar-track { background: transparent; }
+.craft-viewer-sidebar::-webkit-scrollbar-thumb { background: rgba(197,160,72,0.3); border-radius: 2px; }
+
+.viewer-sidebar-section { display: flex; flex-direction: column; gap: 10px; }
+.viewer-sidebar-label {
+  font-family: 'Space Mono', monospace; font-size: 0.95rem; font-weight: 700;
+  letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold);
+  padding-bottom: 8px; border-bottom: 1px solid rgba(197,160,72,0.15);
+}
+.craft-viewer-desc {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.1rem; color: var(--text); line-height: 1.8; margin: 0; font-weight: 300;
+}
+
+/* Facts grid */
+.viewer-facts-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+}
+.viewer-fact {
+  display: flex; align-items: flex-start; gap: 10px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.07); border-radius: 12px;
+  padding: 11px 12px;
+}
+.viewer-fact i { color: var(--gold); font-size: 0.85rem; margin-top: 2px; flex-shrink: 0; }
+.viewer-fact-label {
+  font-family: 'Space Mono', monospace; font-size: 0.65rem;
+  letter-spacing: 0.1em; color: var(--text-dim); text-transform: uppercase; margin-bottom: 4px;
+}
+.viewer-fact-value {
+  font-family: 'Space Grotesk', sans-serif; font-size: 1rem;
+  font-weight: 500; color: var(--text); line-height: 1.3;
+}
+
+
+
+/* ── Animations ──────────────────────────────────────────── */
+@keyframes glow-pulse {
+  0%,100% { opacity:0.7; box-shadow:0 0 20px rgba(197,160,72,0.2); }
+  50%      { opacity:1;   box-shadow:0 0 35px rgba(197,160,72,0.4); }
+}
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .craft-hero { padding: 68px 0 36px; }
+  .craft-hero-content .hero-title { font-size: 2.1rem; }
+  .featured-grid { grid-template-columns: 1fr; }
+  .craft-grid { grid-template-columns: 1fr; }
+
+  .craft-viewer-header { padding: 0 16px; height: 58px; }
+  .craft-viewer-title { font-size: 0.97rem; }
+  .craft-viewer-header-btn { display: none; }
+
+  .craft-viewer-fallback { flex-direction: column; padding: 28px 20px; }
+  .viewer-fallback-img { width: 100%; max-height: 220px; }
+  .viewer-facts-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 480px) {
+  .craft-viewer-hint { display: none; }
+}

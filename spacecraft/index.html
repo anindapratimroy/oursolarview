@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=1280" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <title>My Fleet of Titans — 3D Spacecraft Gallery | SolarVerse</title>
+  <meta name="description" content="Experience over 100 NASA spacecraft, rovers, satellites, and telescopes in full interactive 3D — directly inside the website. Rotate, zoom, explore." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Merriweather:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" />
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+  <link rel="manifest" href="../manifest.json" />
+  <!-- Shared design system -->
+  <link rel="stylesheet" href="../css/design-tokens.css" />
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/layout.css" />
+  <link rel="stylesheet" href="../css/animations.css" />
+  <!-- Page styles -->
+  <link rel="stylesheet" href="./spacecraft.css" />
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<canvas id="space-canvas"></canvas>
+
+<!-- ══════════════════════════════════════════════════════════
+     NAVIGATION
+     ══════════════════════════════════════════════════════════ -->
+<nav class="nav" role="navigation" aria-label="Main Navigation">
+  <div class="nav-inner">
+    <a href="../index.html" class="nav-brand" aria-label="Home">
+      <span class="brand-dot"></span>
+      Behold My <em>Masterpiece</em>
+    </a>
+    <button class="mobile-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="nav-links">
+      <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+    </button>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="../solarsystem/index.html">Witness My Clockwork</a></li>
+      <li><a href="../trajectory/index.html">Toy With My Physics</a></li>
+      <li><a href="../compare/index.html">Measure My Titans</a></li>
+      <li><a href="index.html" aria-current="page">Witness My Machines</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════════════════════════
+     MAIN CONTENT
+     ══════════════════════════════════════════════════════════ -->
+<main id="main-content" class="spacecraft-main">
+
+  <!-- HERO -->
+  <section class="craft-hero">
+    <div class="craft-hero-inner">
+      <div class="craft-hero-content">
+        <div class="hero-eyebrow fade-up d1">THE ARCHITECT'S FLEET</div>
+        <h1 class="hero-title fade-up d2">My Fleet of Titans</h1>
+        <div class="hero-title-bar fade-up d2"></div>
+        <p class="hero-desc fade-up d3">
+          Every vessel I dispatched into the void. Click any spacecraft below to experience it in full interactive 3D — rotate it, zoom in, and inspect every detail from the comfort of my universe.
+        </p>
+
+      </div>
+
+      <!-- Animated orbit visual (desktop) -->
+      <div class="craft-hero-visual fade-up d3" aria-hidden="true">
+        <div class="orbit-ring orbit-1"></div>
+        <div class="orbit-ring orbit-2"></div>
+        <div class="orbit-ring orbit-3"></div>
+        <div class="orbit-center-glow"></div>
+        <div class="craft-icon-orb" style="--angle:0deg;   --r:115px"><i class="fa-solid fa-satellite"></i></div>
+        <div class="craft-icon-orb" style="--angle:120deg; --r:115px"><i class="fa-solid fa-rocket"></i></div>
+        <div class="craft-icon-orb" style="--angle:240deg; --r:115px"><i class="fa-solid fa-car-side"></i></div>
+        <div class="craft-icon-orb" style="--angle:60deg;  --r:70px"><i class="fa-solid fa-eye"></i></div>
+        <div class="craft-icon-orb" style="--angle:180deg; --r:70px"><i class="fa-solid fa-circle-nodes"></i></div>
+        <div class="craft-icon-orb" style="--angle:300deg; --r:70px"><i class="fa-solid fa-meteor"></i></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTROLS -->
+  <section class="craft-controls-section">
+    <div class="craft-controls-inner">
+      <!-- Search -->
+      <div class="craft-search-wrap">
+        <i class="fa-solid fa-magnifying-glass craft-search-icon"></i>
+        <input type="text" id="craftSearch" placeholder="Search spacecraft, rovers, telescopes..." aria-label="Search spacecraft" autocomplete="off" />
+        <button class="craft-search-clear" id="craftSearchClear" aria-label="Clear search" style="display:none;">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <!-- Filters -->
+      <div class="craft-filters" role="group" aria-label="Filter by category">
+        <button class="filter-chip active" data-filter="all"><i class="fa-solid fa-border-all"></i> All</button>
+        <button class="filter-chip" data-filter="rover"><i class="fa-solid fa-car-side"></i> Rovers</button>
+        <button class="filter-chip" data-filter="satellite"><i class="fa-solid fa-satellite"></i> Satellites</button>
+        <button class="filter-chip" data-filter="telescope"><i class="fa-solid fa-eye"></i> Telescopes</button>
+        <button class="filter-chip" data-filter="rocket"><i class="fa-solid fa-rocket"></i> Rockets</button>
+        <button class="filter-chip" data-filter="lander"><i class="fa-solid fa-parachute-box"></i> Landers</button>
+        <button class="filter-chip" data-filter="station"><i class="fa-solid fa-circle-nodes"></i> Stations</button>
+        <button class="filter-chip" data-filter="spacecraft"><i class="fa-solid fa-meteor"></i> Spacecraft</button>
+      </div>
+      <div class="craft-results-info">
+        <span id="craftResultCount">Loading the fleet...</span>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- DIVIDER -->
+  <div class="craft-section-divider">
+    <div class="craft-section-inner"><hr class="catalog-divider" /></div>
+  </div>
+
+  <!-- ── FEATURED SHOWCASE ── -->
+  <section id="featuredSection" class="craft-featured-section">
+    <div class="craft-section-inner">
+      <div class="section-header">
+        <div class="section-eyebrow">Click to Experience in 3D</div>
+        <h2 class="section-title">The Curated Fleet</h2>
+        <div class="section-title-bar"></div>
+        <p class="section-subtitle">
+          Select any spacecraft below. Those marked <span class="live-badge-inline"><i class="fa-solid fa-rotate-3d"></i> Live 3D</span> open a full interactive 3D viewer right here inside the site — rotate, zoom, and explore every detail.
+        </p>
+      </div>
+      <div class="featured-grid" id="featuredGrid">
+        <!-- populated by spacecraft.js -->
+      </div>
+    </div>
+  </section>
+
+
+
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-team">
+      <span class="footer-label">God of this Universe</span>
+      <a href="https://www.linkedin.com/in/aninda-pratim-roy" target="_blank" rel="noopener" class="footer-name-link">Aninda Pratim Roy <span class="footer-deg">(M.Tech AASE)</span></a>
+      <span class="footer-divider">|</span>
+      <a href="https://www.linkedin.com/in/manish-kumawat-iiti" target="_blank" rel="noopener" class="footer-name-link">Manish Kumawat <span class="footer-deg">(B.Tech AASE)</span></a>
+    </div>
+    <div class="footer-inst">
+      <a href="https://daase.iiti.ac.in" target="_blank" rel="noopener" class="footer-inst-link">
+        <i class="fa-solid fa-building-columns"></i> AASE, IIT Indore
+      </a>
+    </div>
+  </div>
+</footer>
+
+<!-- ══════════════════════════════════════════════════════════
+     FULL-SCREEN IMMERSIVE VIEWER OVERLAY
+     ══════════════════════════════════════════════════════════ -->
+<div id="craftViewer" class="craft-viewer" role="dialog" aria-modal="true" aria-labelledby="craftViewerName">
+
+  <!-- Viewer Header Bar -->
+  <div class="craft-viewer-header">
+    <div class="craft-viewer-header-left">
+      <div class="craft-viewer-breadcrumb">
+        <span>My Fleet of Titans</span>
+        <i class="fa-solid fa-chevron-right"></i>
+        <span id="craftViewerCat" class="viewer-cat-label">Spacecraft</span>
+      </div>
+      <h2 class="craft-viewer-title" id="craftViewerName">—</h2>
+    </div>
+    <div class="craft-viewer-header-right">
+      <button class="craft-viewer-close-btn" id="craftViewerClose" aria-label="Go Back">
+        <i class="fa-solid fa-arrow-left"></i> Back
+      </button>
+    </div>
+  </div>
+
+  <!-- Viewer Body: 3D Panel + Info Sidebar -->
+  <div class="craft-viewer-body">
+
+    <!-- 3D Panel -->
+    <div class="craft-viewer-3d-panel">
+      <!-- Loading indicator over iframe -->
+      <div class="craft-viewer-loading" id="craftViewerLoading">
+        <div class="craft-viewer-spinner"></div>
+        <span>Loading 3D Model...</span>
+      </div>
+
+      <!-- Sketchfab iframe -->
+      <iframe
+        id="craftViewerIframe"
+        class="craft-viewer-iframe"
+        title="3D Spacecraft Viewer"
+        allow="autoplay; fullscreen; xr-spatial-tracking"
+        allowfullscreen
+        mozallowfullscreen="true"
+        webkitallowfullscreen="true"
+        src=""
+      ></iframe>
+
+
+
+      <!-- Viewer controls hint -->
+      <div class="craft-viewer-hint" id="craftViewerHint">
+        <i class="fa-solid fa-rotate-3d"></i> Drag to rotate &nbsp;·&nbsp;
+        <i class="fa-solid fa-magnifying-glass-plus"></i> Scroll to zoom &nbsp;·&nbsp;
+        <i class="fa-solid fa-arrows-up-down-left-right"></i> Right-drag to pan
+      </div>
+    </div>
+
+    <!-- Info Sidebar -->
+    <aside class="craft-viewer-sidebar">
+      <!-- Description -->
+      <div class="viewer-sidebar-section">
+        <div class="viewer-sidebar-label">About This Machine</div>
+        <p class="craft-viewer-desc" id="craftViewerDesc">—</p>
+      </div>
+
+      <!-- Specs grid -->
+      <div class="viewer-sidebar-section" id="craftViewerFactsWrap">
+        <div class="viewer-sidebar-label">Specifications</div>
+        <div class="viewer-facts-grid" id="craftViewerFacts"></div>
+      </div>
+
+    </aside>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     STARFIELD CANVAS + MOBILE NAV
+     ══════════════════════════════════════════════════════════ -->
+<script>
+/* Starfield */
+(function(){
+  const c = document.getElementById('space-canvas');
+  if(!c) return;
+  const ctx = c.getContext('2d');
+  let W,H,stars=[],shots=[];
+  function resize(){ W=c.width=innerWidth; H=c.height=innerHeight; }
+  function mkStar(){ return {x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.4+0.2,a:Math.random(),da:(Math.random()*0.003+0.0005)*(Math.random()<0.5?1:-1)}; }
+  function mkShot(){ return {x:Math.random()*W*.7,y:Math.random()*H*.4,vx:6+Math.random()*6,vy:2+Math.random()*3,len:90+Math.random()*60,a:1,da:0.018+Math.random()*.01}; }
+  resize(); for(let i=0;i<260;i++) stars.push(mkStar());
+  addEventListener('resize',resize);
+  let f=0;
+  (function draw(){
+    ctx.clearRect(0,0,W,H);
+    stars.forEach(s=>{
+      s.a=Math.max(0.08,Math.min(1,s.a+s.da));
+      if(s.a>=1||s.a<=0.08) s.da*=-1;
+      ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(200,220,255,${s.a})`; ctx.fill();
+    });
+    if(f%220===0&&shots.length<3) shots.push(mkShot());
+    shots=shots.filter(s=>s.a>0);
+    shots.forEach(s=>{
+      ctx.beginPath(); ctx.moveTo(s.x,s.y); ctx.lineTo(s.x-s.len*(s.vx/10),s.y-s.len*(s.vy/10));
+      const g=ctx.createLinearGradient(s.x,s.y,s.x-s.len,s.y-s.len*.4);
+      g.addColorStop(0,`rgba(255,255,230,${s.a})`); g.addColorStop(1,'transparent');
+      ctx.strokeStyle=g; ctx.lineWidth=1.5; ctx.stroke();
+      s.x+=s.vx; s.y+=s.vy; s.a-=s.da;
+    });
+    f++; requestAnimationFrame(draw);
+  })();
+})();
+
+/* Mobile Nav */
+(function(){
+  const btn=document.querySelector('.mobile-toggle'), links=document.getElementById('nav-links');
+  if(!btn||!links) return;
+  btn.addEventListener('click',()=>{ const o=links.classList.toggle('open'); btn.setAttribute('aria-expanded',o); });
+})();
+</script>
+
+<script src="./spacecraft.js"></script>
+</body>
+</html>

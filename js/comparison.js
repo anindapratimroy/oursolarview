@@ -2,6 +2,18 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 const PLANET_DATA = {
+  sun: {
+    name: 'Sun', radiusKm: 696340,
+    texture: '../planets/img_others/2k_sun.jpg', color: 0xffdd44,
+    data: {
+      'Diameter': '1,392,700 km', 'Mass': '1.989 × 10³⁰ kg', 'Gravity': '274 m/s²',
+      'Day Length': '25-35 Earth days', 'Year Length': 'N/A', 'Avg Temp': '5,500 °C',
+      'Moons': '0', 'Axial Tilt': '7.25°', 'Orbital Speed': '220 km/s',
+      'Distance from Sun': '0 km', 'Atmosphere': 'Hydrogen, Helium',
+      'Magnetic Field': 'Extremely strong (Solar dynamo)'
+    },
+    emissive: true
+  },
   mercury: {
     name: 'Mercury', radiusKm: 2439.7,
     texture: '../planets/img_others/2k_mercury.jpg', color: 0xaaaaaa,
@@ -150,6 +162,12 @@ function buildViewer(canvasId, wrapperId, loaderId) {
           shininess: pd.name === 'Earth' ? 25 : 5,
           color: tex ? 0xffffff : pd.color 
         };
+        
+        if (pd.emissive) {
+          matParams.emissive = new THREE.Color(0xffffff);
+          matParams.emissiveMap = tex;
+          matParams.emissiveIntensity = 1.0;
+        }
         
         const mat = new THREE.MeshPhongMaterial(matParams);
         

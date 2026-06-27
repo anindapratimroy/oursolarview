@@ -28,72 +28,123 @@ export function initEarth() {
   directionalLight.position.copy(lightDir.clone().multiplyScalar(10));
   scene.add(directionalLight);
 
-  // Loading Manager
-  const manager = new THREE.LoadingManager();
-  const preloader = document.getElementById('preloader');
-  const spinner = document.querySelector('.pre-spinner');
-  const preLabel = document.querySelector('.pre-label');
-  
-  if (preloader) {
-    const startTime = Date.now();
-    const phrases = [
-      "God is sketching the blueprint of the cosmos...",
-      "God is forging the heavy elements...",
-      "God is carefully designing the planetary orbits...",
-      "God is calibrating the laws of physics...",
-      "God is fine-tuning the speed of light...",
-      "God is painting the atmospheric clouds...",
-      "God is scattering cosmic dust..."
-    ];
-    let displayPct = 0;
-    
-    // Make label fadeable
-    if (preLabel) preLabel.style.transition = "opacity 0.4s ease-in-out";
+  // ── Cinematic Loader ──────────────────────────────────────────
+  const manager    = new THREE.LoadingManager();
+  const preloader  = document.getElementById('preloader');
+  const $bar       = document.getElementById('preProgressBar');
+  const $glow      = document.getElementById('preProgressGlow');
+  const $label     = document.getElementById('preLabel');
+  const $pct       = document.getElementById('prePct');
+  const $log       = document.getElementById('preLog');
 
-    const phraseInterval = setInterval(() => {
-      if (preLabel) {
-        preLabel.style.opacity = "0"; // Fade out
-        setTimeout(() => {
-          const randPhrase = phrases[Math.floor(Math.random() * phrases.length)];
-          preLabel.innerText = `${randPhrase} (${displayPct}%)`;
-          preLabel.style.opacity = "1"; // Fade in
-        }, 400);
-      }
-    }, 2000);
+  // Stage messages shown at progress milestones
+  const STAGES = [
+    { at:  0, msg: 'Igniting the stars...',              log: '▸ Cosmos engine online' },
+    { at: 10, msg: 'Weaving space-time fabric...',       log: '▸ Rendering three.js scene' },
+    { at: 25, msg: 'Painting the pale blue dot...',      log: '▸ Loading Earth day texture' },
+    { at: 45, msg: 'Stitching the night-side lights...', log: '▸ Loading Earth night texture' },
+    { at: 65, msg: 'Sculpting cloud formations...',      log: '▸ Loading cloud & specular maps' },
+    { at: 80, msg: 'Calibrating orbital mechanics...',   log: '▸ Compiling shaders & geometry' },
+    { at: 92, msg: 'Initialising planetary atlas...',    log: '▸ Finalising scene graph' },
+    { at: 99, msg: 'The universe awaits...',             log: '▸ Handing control to the God' },
+  ];
+  let lastStageIdx = -1;
 
-    const pctInterval = setInterval(() => {
-      if (displayPct < 99) {
-        displayPct += Math.floor(Math.random() * 2) + 1;
-        if (displayPct > 99) displayPct = 99;
-        
-        // Only update if it's currently visible to not break the fade transition
-        if (preLabel && preLabel.style.opacity !== "0") {
-          const currentText = preLabel.innerText.split(' (')[0] || phrases[0];
-          preLabel.innerText = `${currentText} (${displayPct}%)`;
+  function setProgress(pct) {
+    const p = Math.min(100, Math.max(0, Math.round(pct)));
+    if ($bar)  $bar.style.width  = p + '%';
+    if ($glow) $glow.style.width = p + '%';
+    if ($pct)  $pct.textContent  = p + '%';
+
+    // Check for stage transitions
+    for (let i = STAGES.length - 1; i >= 0; i--) {
+      if (p >= STAGES[i].at && i > lastStageIdx) {
+        lastStageIdx = i;
+        // Update label with fade
+        if ($label) {
+          $label.style.opacity = '0';
+          setTimeout(() => {
+            $label.textContent    = STAGES[i].msg;
+            $label.style.opacity  = '1';
+          }, 200);
         }
+        // Add log entry
+        if ($log) {
+          const prev = $log.querySelector('.pre-log-item.active');
+          if (prev) { prev.classList.remove('active'); prev.classList.add('done'); }
+          const li = document.createElement('div');
+          li.className = 'pre-log-item active';
+          li.textContent = STAGES[i].log;
+          $log.appendChild(li);
+          // Keep only last 3 lines visible
+          const items = $log.querySelectorAll('.pre-log-item');
+          if (items.length > 3) items[0].remove();
+        }
+        break;
       }
-    }, 45); // Reaches ~99% over ~4.5 seconds
+    }
+  }
 
-    manager.onProgress = function () {
-      // Ignored for smoother simulated loader
+  // Dismiss the loader
+  function dismissLoader() {
+    setProgress(100);
+    if ($label) { $label.style.opacity='0'; setTimeout(()=>{ $label.textContent='The universe is yours.'; $label.style.opacity='1'; }, 200); }
+    setTimeout(() => {
+      if (preloader) {
+        preloader.classList.add('out');
+        setTimeout(() => { preloader.remove(); startPrefetch(); }, 850);
+      }
+    }, 320);
+  }
+
+  if (preloader) {
+    // Start at 5% immediately so the bar isn't dead on load
+    setTimeout(() => setProgress(5), 50);
+
+    manager.onProgress = function(_url, loaded, total) {
+      if (total > 0) {
+        // Map actual loaded/total to 10–95 range (first 10 and last 5 are bookend stages)
+        const real = 10 + (loaded / total) * 85;
+        setProgress(real);
+      }
     };
 
-    manager.onLoad = function () {
-      const elapsed = Date.now() - startTime;
-      const delay = Math.max(0, 5000 - elapsed);
-      setTimeout(() => {
-        displayPct = 100;
-        if (preLabel) {
-          const currentText = preLabel.innerText.split(' (')[0] || phrases[0];
-          preLabel.innerText = `${currentText} (100%)`;
-        }
-        clearInterval(phraseInterval);
-        clearInterval(pctInterval);
-        preloader.classList.add('out');
-        setTimeout(() => preloader.remove(), 700);
-      }, delay);
+    manager.onLoad = function() {
+      dismissLoader();
+    };
+
+    // Safety: if THREE textures somehow all load before manager fires, dismiss after 800ms
+    manager.onError = function() {
+      dismissLoader();
     };
   }
+
+  /* ─── Background Prefetch ────────────────────────────────────
+     After the homepage finishes, tell the browser to fetch the
+     HTML and key JS of all other sections so clicking a nav
+     link feels instant.
+  ─────────────────────────────────────────────────────────────── */
+  function startPrefetch() {
+    const PAGES = [
+      { href: './solarsystem/index.html',     as: 'document' },
+      { href: './trajectory/index.html',      as: 'document' },
+      { href: './compare/index.html',         as: 'document' },
+      { href: './spacecraft/index.html',      as: 'document' },
+      { href: './solarsystem/solarsystem.js', as: 'script' },
+      { href: './trajectory/trajectory.js',   as: 'script' },
+      { href: './compare/comparison.js',      as: 'script' },
+      { href: './spacecraft/spacecraft.js',   as: 'script' },
+    ];
+    PAGES.forEach(({ href, as: asAttr }) => {
+      const link = document.createElement('link');
+      link.rel  = 'prefetch';
+      link.href = href;
+      link.as   = asAttr;
+      document.head.appendChild(link);
+    });
+    console.log('[SolarVerse] Background prefetch started for all sections.');
+  }
+
 
   const loader = new THREE.TextureLoader(manager);
   const texDay    = loader.load('./planets/img_earth/earth_day_4096.jpg');
@@ -193,6 +244,9 @@ export function initEarth() {
   }, { passive: true });
   window.addEventListener('touchend', () => { isDragging = false; });
 
+  // Initial rotation to show a bright, sunlit side (e.g. the Americas/Atlantic) on load
+  rotY = 1.8;
+
   let animId;
   function animate() {
     animId = requestAnimationFrame(animate);
@@ -220,11 +274,13 @@ export function initEarth() {
     clouds.rotation.x = rotX;
     clouds.rotation.y = rotY + 0.0005; // cloud net rotation 0.0015
 
-    // Dynamic light
-    const rotationMatrix  = new THREE.Matrix4().makeRotationY(earth.rotation.y);
-    const dynamicLightDir = new THREE.Vector3(5, 3, 5).applyMatrix4(rotationMatrix).normalize();
-    earthMaterial.uniforms.lightDirection.value = dynamicLightDir;
-    directionalLight.position.copy(dynamicLightDir.clone().multiplyScalar(10));
+    // Static light: The sun stays fixed in space while the Earth rotates underneath it.
+    // This allows the day/night terminator to sweep across the continents naturally.
+    const staticLightDir = new THREE.Vector3(5, 3, 5).normalize();
+    earthMaterial.uniforms.lightDirection.value = staticLightDir;
+    
+    // Position the actual DirectionalLight (used for scene illumination if any other objects exist)
+    directionalLight.position.copy(staticLightDir.clone().multiplyScalar(10));
 
     renderer.render(scene, camera);
   }

@@ -6,18 +6,31 @@ import { initPlanets } from './planets.js';
 // Preloader fallback (managed by LoadingManager in earth.js if active)
 window.addEventListener('load', () => {
   const pre = document.getElementById('preloader');
-  if (pre && window.innerWidth < 1100) {
-    // If mobile, earth viewer isn't loading textures, so clear immediately
-    pre.classList.add('out');
-    setTimeout(() => pre.remove(), 700);
-  } else if (pre) {
-    // Fallback if LoadingManager fails
+  if (!pre) return;
+
+  function quickDismiss() {
+    const $bar  = document.getElementById('preProgressBar');
+    const $glow = document.getElementById('preProgressGlow');
+    const $pct  = document.getElementById('prePct');
+    const $lbl  = document.getElementById('preLabel');
+    if ($bar)  $bar.style.width  = '100%';
+    if ($glow) $glow.style.width = '100%';
+    if ($pct)  $pct.textContent  = '100%';
+    if ($lbl)  { $lbl.style.opacity='0'; setTimeout(()=>{ $lbl.textContent='The universe is yours.'; $lbl.style.opacity='1'; },200); }
     setTimeout(() => {
-        if(document.getElementById('preloader')) {
-           pre.classList.add('out');
-           setTimeout(() => pre.remove(), 700);
-        }
-    }, 5000);
+      pre.classList.add('out');
+      setTimeout(() => pre.remove(), 850);
+    }, 300);
+  }
+
+  if (window.innerWidth < 1100) {
+    // Mobile: no Earth texture loading, dismiss quickly
+    quickDismiss();
+  } else {
+    // Desktop fallback: if LoadingManager in earth.js fails to dismiss within 12s, force it
+    setTimeout(() => {
+      if (document.getElementById('preloader')) quickDismiss();
+    }, 12000);
   }
 });
 
