@@ -765,6 +765,10 @@ function openViewer(model) {
       $viewerIframe.src = '';
       const client = new Sketchfab('1.12.1', $viewerIframe);
       client.init(model.sketchfabId, {
+        ui_infos: 0,
+        ui_watermark: 0,
+        preload: 0,
+        max_texture_size: 2048,
         success: function onSuccess(api) {
           api.start();
           api.addEventListener('viewerready', function() {
