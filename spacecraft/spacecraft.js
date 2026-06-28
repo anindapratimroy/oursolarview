@@ -12,30 +12,6 @@
    ───────────────────────────────────────────────────────────── */
 const SPACECRAFT_DB = [
   {
-    name: "Perseverance Rover",
-    category: "rover",
-    sketchfabId: "c1c94e1f69df45eeae4a0a1d0d27e85b",
-    nasaUrl: "https://mars.nasa.gov/mars2020/",
-    thumbnail: "https://media.sketchfab.com/models/c1c94e1f69df45eeae4a0a1d0d27e85b/thumbnails/88365fe977914d3a900c54de88a9eb95/58627236ace44b7384257c2da4b6d213.jpeg",
-    desc: "Perseverance is a car-sized Mars rover designed to explore the crater Jezero on Mars as part of NASA's Mars 2020 mission. It carries seven payload instruments, 19 cameras, and two microphones, and was accompanied by the Ingenuity helicopter.",
-    launch: "July 30, 2020",
-    location: "Jezero Crater, Mars",
-    agency: "NASA / JPL-Caltech",
-    facts: [{"icon":"fa-solid fa-calendar","label":"Launch","value":"July 30, 2020"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"1,025 kg"},{"icon":"fa-solid fa-rocket","label":"Vehicle","value":"Atlas V 541"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"NASA"}]
-  },
-  {
-    name: "Curiosity Rover",
-    category: "rover",
-    sketchfabId: "0696a383f3e841d2b5c7636ee8a58aba",
-    nasaUrl: "https://mars.nasa.gov/msl/",
-    thumbnail: "https://media.sketchfab.com/models/0696a383f3e841d2b5c7636ee8a58aba/thumbnails/d677b4d6542a4e9998e41c91eab7b93e/464372d9b833402097de4721f4766b3d.jpeg",
-    desc: "Curiosity is a car-sized Mars rover designed to explore the Gale crater on Mars as part of NASA's Mars Science Laboratory (MSL) mission. It established that Mars once had the environmental conditions to support microbial life.",
-    launch: "November 26, 2011",
-    location: "Gale Crater, Mars",
-    agency: "NASA / JPL-Caltech",
-    facts: [{"icon":"fa-solid fa-calendar","label":"Launch","value":"Nov 26, 2011"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"899 kg"},{"icon":"fa-solid fa-rocket","label":"Vehicle","value":"Atlas V 541"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"NASA"}]
-  },
-  {
     name: "Mars Sojourner",
     category: "rover",
     sketchfabId: "8b3810e7cd804bd6b0009520c67984c6",
@@ -96,54 +72,6 @@ const SPACECRAFT_DB = [
     facts: [{"icon":"fa-solid fa-calendar","label":"Launch","value":"July 16, 1969"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"15,103 kg"},{"icon":"fa-solid fa-rocket","label":"Vehicle","value":"Saturn V"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"NASA"}]
   },
   {
-    name: "Chandrayaan-3 Vikram Lander",
-    category: "lander",
-    sketchfabId: "8f684cbf6b3f4cdaad72d3f1ebb5bde4",
-    nasaUrl: "https://www.isro.gov.in/Chandrayaan3.html",
-    thumbnail: "https://media.sketchfab.com/models/8f684cbf6b3f4cdaad72d3f1ebb5bde4/thumbnails/8fbb0b48dd974eeca8e908033ceadd66/a57c7b7e91d24836b0270ba2d01a355e.jpeg",
-    desc: "The Vikram lander was the crucial component of ISRO's Chandrayaan-3 mission. On August 23, 2023, it successfully made a historic soft landing near the lunar south pole, making India the first nation to do so.",
-    launch: "July 14, 2023",
-    location: "Shiv Shakti Point, Moon",
-    agency: "ISRO",
-    facts: [{"icon":"fa-solid fa-calendar","label":"Landing","value":"Aug 23, 2023"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"1,752 kg"},{"icon":"fa-solid fa-rocket","label":"Vehicle","value":"LVM3 M4"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"ISRO"}]
-  },
-  {
-    name: "Chandrayaan-3 Vikram",
-    category: "lander",
-    sketchfabId: "96dbe26896d541c297e53120a3f6eb16",
-    nasaUrl: "https://www.isro.gov.in/Chandrayaan3.html",
-    thumbnail: "https://media.sketchfab.com/models/96dbe26896d541c297e53120a3f6eb16/thumbnails/64c7d8b1e79847159ff479dd789b6a1f/604ce0da5c434df8b03ea7cafba42112.jpeg",
-    desc: "The Vikram lander was the crucial component of ISRO's Chandrayaan-3 mission. On August 23, 2023, it successfully made a historic soft landing near the lunar south pole, making India the first nation to do so.",
-    launch: "July 14, 2023",
-    location: "Shiv Shakti Point, Moon",
-    agency: "ISRO",
-    facts: [{"icon":"fa-solid fa-calendar","label":"Landing","value":"Aug 23, 2023"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"1,752 kg"},{"icon":"fa-solid fa-rocket","label":"Vehicle","value":"LVM3 M4"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"ISRO"}]
-  },
-  {
-    name: "International Space Station",
-    category: "station",
-    sketchfabId: "b7d40d89fcbd4c998462380545f391b6",
-    nasaUrl: "https://www.nasa.gov/international-space-station/",
-    thumbnail: "https://media.sketchfab.com/models/b7d40d89fcbd4c998462380545f391b6/thumbnails/a2e735db671c4e9eb53e66e653ea2be1/d16f88becbe749c4a1a37f8cafaf38c2.jpeg",
-    desc: "The International Space Station is the largest modular space station in low Earth orbit. It serves as a microgravity and space environment research laboratory where scientific research is conducted.",
-    launch: "November 20, 1998",
-    location: "Low Earth Orbit (408 km)",
-    agency: "NASA / Roscosmos / ESA / JAXA / CSA",
-    facts: [{"icon":"fa-solid fa-calendar","label":"Launch","value":"1998"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"450,000 kg"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"NASA, Roscosmos, JAXA, ESA, CSA"}]
-  },
-  {
-    name: "International Space Station",
-    category: "station",
-    sketchfabId: "7753b422ca8046b4ae783d44b2bd6cfc",
-    nasaUrl: "https://www.nasa.gov/international-space-station/",
-    thumbnail: "https://media.sketchfab.com/models/7753b422ca8046b4ae783d44b2bd6cfc/thumbnails/b586a85afd61433095d629a14ea7169d/85f26e7164de48409130edea1ff89839.jpeg",
-    desc: "Inside the International Space Station, astronauts from around the world live and conduct experiments in microgravity. The station is divided into multiple pressurized modules.",
-    launch: "November 20, 1998",
-    location: "Low Earth Orbit",
-    agency: "Multi-national",
-    facts: [{"icon":"fa-solid fa-calendar","label":"Launch","value":"1998"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"450,000 kg"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"Multinational"}]
-  },
-  {
     name: "Spacex Falcon 9 & Dragon 2",
     category: "rocket",
     sketchfabId: "f709fc945bb2413faf2878aa613cde3d",
@@ -154,30 +82,6 @@ const SPACECRAFT_DB = [
     location: "Earth Orbit / ISS",
     agency: "SpaceX / NASA",
     facts: [{"icon":"fa-solid fa-calendar","label":"Launch","value":"2010 (F9)"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"549,054 kg"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"SpaceX"}]
-  },
-  {
-    name: "ISRO Chandrayaan-3 Vikram Lander",
-    category: "lander",
-    sketchfabId: "27e8d9b94f324e6b9a25b58e64317213",
-    nasaUrl: "https://www.isro.gov.in/",
-    thumbnail: "https://media.sketchfab.com/models/27e8d9b94f324e6b9a25b58e64317213/thumbnails/619d3f07a5a44b92863dc2fed4885db7/4c6201d644bb4bccb3b4375674b9ae39.jpeg",
-    desc: "The Vikram lander was the crucial component of ISRO's Chandrayaan-3 mission. On August 23, 2023, it successfully made a historic soft landing near the lunar south pole, making India the first nation to do so.",
-    launch: "July 14, 2023",
-    location: "Lunar South Pole",
-    agency: "ISRO",
-    facts: [{"icon":"fa-solid fa-calendar","label":"Landing","value":"Aug 23, 2023"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"1,752 kg"},{"icon":"fa-solid fa-rocket","label":"Vehicle","value":"LVM3 M4"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"ISRO"}]
-  },
-  {
-    name: "ISRO Pragyan Rover",
-    category: "rover",
-    sketchfabId: "ecd749574f7343b6a6b39a4a9a02639d",
-    nasaUrl: "https://www.isro.gov.in/",
-    thumbnail: "https://media.sketchfab.com/models/ecd749574f7343b6a6b39a4a9a02639d/thumbnails/165c8ddd7f3847688c944e1406b3f500/ceeeb4470566465ab6c134505a0f4c3a.jpeg",
-    desc: "Pragyan is a six-wheeled robotic rover deployed by the Vikram lander during the Chandrayaan-3 mission. It traversed the lunar surface to conduct in-situ chemical analysis of the lunar soil.",
-    launch: "July 14, 2023",
-    location: "Lunar South Pole",
-    agency: "ISRO",
-    facts: [{"icon":"fa-solid fa-calendar","label":"Deployed","value":"Aug 23, 2023"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"26 kg"},{"icon":"fa-solid fa-battery-full","label":"Power","value":"Solar Array"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"ISRO"}]
   },
   {
     name: "ISRO Mangalyaan",
@@ -224,26 +128,6 @@ const SPACECRAFT_DB = [
     facts: [{"icon":"fa-solid fa-calendar","label":"Status","value":"In Development"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"8,200 kg"},{"icon":"fa-solid fa-users","label":"Crew","value":"3 Astronauts"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"ISRO"}]
   },
   {
-    name: "Vikram Lander ISRO Chandrayaan 3",
-    category: "lander",
-    sketchfabId: "f5d82f150d6640d3a85bf11b158d0a0f",
-    nasaUrl: "https://www.isro.gov.in/",
-    thumbnail: "https://media.sketchfab.com/models/f5d82f150d6640d3a85bf11b158d0a0f/thumbnails/9988b900bfa54e8abad65dd4cd5f6278/aca33ecdfcac47b7b63d5c0bbcfd4437.jpeg",
-    desc: "The Vikram lander was the crucial component of ISRO's Chandrayaan-3 mission. On August 23, 2023, it successfully made a historic soft landing near the lunar south pole, making India the first nation to do so.",
-    agency: "ISRO",
-    facts: [{"icon":"fa-solid fa-calendar","label":"Landing","value":"Aug 23, 2023"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"1,752 kg"},{"icon":"fa-solid fa-rocket","label":"Vehicle","value":"LVM3 M4"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"ISRO"}]
-  },
-  {
-    name: "NISAR Satellite ISRO-NASA Joint Mission",
-    category: "satellite",
-    sketchfabId: "0103309668d243dbbfab3c8fc6b9683c",
-    nasaUrl: "https://www.isro.gov.in/",
-    thumbnail: "https://media.sketchfab.com/models/0103309668d243dbbfab3c8fc6b9683c/thumbnails/724de452c1674c068bc3848b865cb5c2/d584adf2bac74d02b3210ec0e8af1a51.jpeg",
-    desc: "NISAR (NASA-ISRO Synthetic Aperture Radar) is a joint project between NASA and ISRO to co-develop and launch a dual-frequency synthetic aperture radar satellite for Earth observation.",
-    agency: "ISRO / NASA",
-    facts: [{"icon":"fa-solid fa-calendar","label":"Launch","value":"Planned 2025"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"2,800 kg"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"ISRO / NASA"}]
-  },
-  {
     name: "Rocket Model ISRO Rocket",
     category: "rocket",
     sketchfabId: "ab1265ff351c4a0aa382d91c89c30f18",
@@ -274,16 +158,6 @@ const SPACECRAFT_DB = [
     facts: [{"icon":"fa-solid fa-weight-hanging","label":"Payload","value":"3,800 kg (LEO)"},{"icon":"fa-solid fa-ruler-vertical","label":"Height","value":"44 meters"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"ISRO"}]
   },
   {
-    name: "Chandrayaan-3 Vikram Lander",
-    category: "lander",
-    sketchfabId: "b29bee8d7c524c12b6a043cdd1f75979",
-    nasaUrl: "https://www.isro.gov.in/",
-    thumbnail: "https://media.sketchfab.com/models/b29bee8d7c524c12b6a043cdd1f75979/thumbnails/c097f48fba60414e826b15a2e59328d1/00fe4c40ae2a40368c95fb8726fef8c8.jpeg",
-    desc: "The Vikram lander was the crucial component of ISRO's Chandrayaan-3 mission. On August 23, 2023, it successfully made a historic soft landing near the lunar south pole, making India the first nation to do so.",
-    agency: "ISRO",
-    facts: [{"icon":"fa-solid fa-calendar","label":"Landing","value":"Aug 23, 2023"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"1,752 kg"},{"icon":"fa-solid fa-rocket","label":"Vehicle","value":"LVM3 M4"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"ISRO"}]
-  },
-  {
     name: "Crew Dragon Capsule Spacex",
     category: "spacecraft",
     sketchfabId: "f41cbc16988c4c31935e5d063088ca65",
@@ -292,16 +166,6 @@ const SPACECRAFT_DB = [
     desc: "The SpaceX Crew Dragon is a class of reusable spacecraft designed to ferry astronauts to and from the International Space Station under NASA's Commercial Crew Program.",
     agency: "SpaceX",
     facts: [{"icon":"fa-solid fa-calendar","label":"First Flight","value":"March 2, 2019"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"12,055 kg"},{"icon":"fa-solid fa-rocket","label":"Vehicle","value":"Falcon 9"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"SpaceX"}]
-  },
-  {
-    name: "Vikram Lander",
-    category: "lander",
-    sketchfabId: "b7fca089a3874faeba4a59774a3c968d",
-    nasaUrl: "https://www.isro.gov.in/",
-    thumbnail: "https://media.sketchfab.com/models/b7fca089a3874faeba4a59774a3c968d/thumbnails/503c5c4e449247b696e79e480d8b49f1/9e3d2c3ebe0143c3a4cd2a1f87cfac8f.jpeg",
-    desc: "The Vikram lander was the crucial component of ISRO's Chandrayaan-3 mission. On August 23, 2023, it successfully made a historic soft landing near the lunar south pole, making India the first nation to do so.",
-    agency: "ISRO",
-    facts: [{"icon":"fa-solid fa-calendar","label":"Landing","value":"Aug 23, 2023"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"1,752 kg"},{"icon":"fa-solid fa-rocket","label":"Vehicle","value":"LVM3 M4"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"ISRO"}]
   },
   {
     name: "Chandrayaan-3 Pragyan Rover",
@@ -334,16 +198,6 @@ const SPACECRAFT_DB = [
     facts: [{"icon":"fa-solid fa-calendar","label":"Deployed","value":"Aug 23, 2023"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"26 kg"},{"icon":"fa-solid fa-battery-full","label":"Power","value":"Solar Array"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"ISRO"}]
   },
   {
-    name: "Aditya L1 Satellite",
-    category: "satellite",
-    sketchfabId: "89fe9cc3359e410ba285862dec53e5dc",
-    nasaUrl: "https://www.isro.gov.in/",
-    thumbnail: "https://media.sketchfab.com/models/89fe9cc3359e410ba285862dec53e5dc/thumbnails/3f8301f2d53c4f8c8fbfca525620b45b/4c4a68819be94540a485e1c800eaec08.jpeg",
-    desc: "Aditya-L1 is the first Indian dedicated mission to observe the Sun. Positioned at Lagrange point 1 (L1), it provides continuous observations of the solar corona and solar wind without occultation or eclipses.",
-    agency: "ISRO",
-    facts: [{"icon":"fa-solid fa-calendar","label":"Launch","value":"Sep 2, 2023"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"1,475 kg"},{"icon":"fa-solid fa-rocket","label":"Vehicle","value":"PSLV-XL C57"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"ISRO"}]
-  },
-  {
     name: "PSLV C40",
     category: "rocket",
     sketchfabId: "c7066310704040a9bf0c86d7d21ab94f",
@@ -352,26 +206,6 @@ const SPACECRAFT_DB = [
     desc: "The Polar Satellite Launch Vehicle (PSLV) is the workhorse of ISRO. Known for its remarkable reliability, it has launched numerous critical missions including Mangalyaan and Chandrayaan-1.",
     agency: "ISRO",
     facts: [{"icon":"fa-solid fa-weight-hanging","label":"Payload","value":"3,800 kg (LEO)"},{"icon":"fa-solid fa-ruler-vertical","label":"Height","value":"44 meters"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"ISRO"}]
-  },
-  {
-    name: "Vikram Lander Chandrayaan 3 & Pragyan Moon Rover",
-    category: "lander",
-    sketchfabId: "a8067a0e394c4961b5e855a8321adff8",
-    nasaUrl: "https://www.isro.gov.in/",
-    thumbnail: "https://media.sketchfab.com/models/a8067a0e394c4961b5e855a8321adff8/thumbnails/e9f60a90e4e2444e9ec76c00c8196ba6/ed803a96e4b44c6598e93642975c60ac.jpeg",
-    desc: "Chandrayaan-3 consisted of the Vikram Lander and the Pragyan Rover. Together, they executed a flawless soft landing on the Moon's south pole and conducted unprecedented scientific experiments.",
-    agency: "ISRO",
-    facts: [{"icon":"fa-solid fa-calendar","label":"Landing","value":"Aug 23, 2023"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"1,752 kg"},{"icon":"fa-solid fa-rocket","label":"Vehicle","value":"LVM3"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"ISRO"}]
-  },
-  {
-    name: "Chandrayaan-3 Vikram Lander",
-    category: "lander",
-    sketchfabId: "13b82ab71a9f4f098dab6e8697d14216",
-    nasaUrl: "https://www.isro.gov.in/",
-    thumbnail: "https://media.sketchfab.com/models/13b82ab71a9f4f098dab6e8697d14216/thumbnails/46b8208f41a94082a9549c8dabc07043/e8eb898557324ef685fff28b65d6b38b.jpeg",
-    desc: "The Vikram lander was the crucial component of ISRO's Chandrayaan-3 mission. On August 23, 2023, it successfully made a historic soft landing near the lunar south pole, making India the first nation to do so.",
-    agency: "ISRO",
-    facts: [{"icon":"fa-solid fa-calendar","label":"Landing","value":"Aug 23, 2023"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"1,752 kg"},{"icon":"fa-solid fa-rocket","label":"Vehicle","value":"LVM3 M4"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"ISRO"}]
   },
   {
     name: "GSLV Mk3",
@@ -432,8 +266,7 @@ const SPACECRAFT_DB = [
     desc: "The Lunar Polar Exploration Mission (LUPEX) is a planned joint robotic lunar mission by ISRO and JAXA. It aims to send a lander and rover to explore the Moon's south pole for water and resources.",
     agency: "ISRO",
     facts: [{"icon":"fa-solid fa-calendar","label":"Launch","value":"Planned 2026+"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"~350 kg (rover)"},{"icon":"fa-solid fa-rocket","label":"Vehicle","value":"H3 Launch Vehicle"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"ISRO / JAXA"}]
-  }
-,
+  },
   {
     name: "Mantis - NASA Mech 2030",
     category: "rover",
@@ -443,8 +276,7 @@ const SPACECRAFT_DB = [
     desc: "A conceptual mechanical walker (Mech) designed for future NASA planetary exploration missions in the 2030s, featuring articulated limbs for navigating extreme extraterrestrial terrain.",
     agency: "NASA",
     facts: [{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"NASA (Concept)"},{"icon":"fa-solid fa-robot","label":"Type","value":"Planetary Mech"}]
-  }
-,
+  },
   {
     name: "Saturn V",
     category: "rocket",
@@ -454,8 +286,7 @@ const SPACECRAFT_DB = [
     desc: "The Saturn V was a super heavy-lift launch vehicle used by NASA between 1967 and 1973. It remains the tallest, heaviest, and most powerful rocket ever brought to operational status, successfully launching the Apollo missions to the Moon.",
     agency: "NASA",
     facts: [{"icon":"fa-solid fa-calendar","label":"Launch","value":"Nov 9, 1967"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"2,970,000 kg"},{"icon":"fa-solid fa-ruler-vertical","label":"Height","value":"110.6 m"}]
-  }
-,
+  },
   {
     name: "LUCY Space Probe",
     category: "probe",
@@ -465,8 +296,7 @@ const SPACECRAFT_DB = [
     desc: "Lucy is a NASA space probe on a 12-year journey to study Jupiter's Trojan asteroids. By exploring these ancient remnants, Lucy will provide unprecedented insights into the formation of our solar system.",
     agency: "NASA",
     facts: [{"icon":"fa-solid fa-calendar","label":"Launch","value":"Oct 16, 2021"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"1,550 kg"},{"icon":"fa-solid fa-rocket","label":"Vehicle","value":"Atlas V 401"}]
-  }
-,
+  },
   {
     name: "NASA Rover",
     category: "rover",
@@ -476,8 +306,7 @@ const SPACECRAFT_DB = [
     desc: "An advanced NASA rover concept designed to provide pressurized mobility for astronauts on the lunar or Martian surface, equipped with pivoting wheels for omnidirectional movement.",
     agency: "NASA",
     facts: [{"icon":"fa-solid fa-users","label":"Crew","value":"2 Astronauts"},{"icon":"fa-solid fa-truck-monster","label":"Type","value":"Pressurized Rover"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"NASA"}]
-  }
-,
+  },
   {
     name: "Project Eden - Exo-Rover",
     category: "rover",
@@ -487,8 +316,7 @@ const SPACECRAFT_DB = [
     desc: "A conceptual exo-rover designed for deep space exploration and astrobiology missions. It is built to analyze soil samples and search for biosignatures on exoplanets or distant moons.",
     agency: "NASA",
     facts: [{"icon":"fa-solid fa-flask","label":"Mission","value":"Astrobiology"},{"icon":"fa-solid fa-microchip","label":"Status","value":"Conceptual"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"NASA"}]
-  }
-,
+  },
   {
     name: "Perseverance Rover (Mars 2020)",
     category: "rover",
@@ -498,8 +326,7 @@ const SPACECRAFT_DB = [
     desc: "Perseverance is a car-sized Mars rover designed to explore Jezero crater. It carries advanced instruments to search for signs of ancient microbial life and caches rock samples for future return to Earth.",
     agency: "NASA",
     facts: [{"icon":"fa-solid fa-calendar","label":"Launch","value":"July 30, 2020"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"1,025 kg"},{"icon":"fa-solid fa-rocket","label":"Vehicle","value":"Atlas V 541"}]
-  }
-,
+  },
   {
     name: "Spaceship",
     category: "spacecraft",
@@ -509,8 +336,7 @@ const SPACECRAFT_DB = [
     desc: "A futuristic spacecraft concept designed for interstellar travel. It features advanced propulsion systems and aerodynamic geometry for atmospheric entry and deep space cruising.",
     agency: "NASA",
     facts: [{"icon":"fa-solid fa-meteor","label":"Type","value":"Interstellar Craft"},{"icon":"fa-solid fa-fire-flame-curved","label":"Propulsion","value":"Advanced Ion/Warp"},{"icon":"fa-solid fa-microchip","label":"Status","value":"Conceptual"}]
-  }
-,
+  },
   {
     name: "International Space Station",
     category: "station",
@@ -520,8 +346,7 @@ const SPACECRAFT_DB = [
     desc: "The International Space Station (ISS) is the largest modular space station currently in low Earth orbit. It serves as a microgravity and space environment research laboratory for scientific experiments.",
     agency: "NASA",
     facts: [{"icon":"fa-solid fa-calendar","label":"Launch","value":"Nov 20, 1998"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"419,725 kg"},{"icon":"fa-solid fa-earth-americas","label":"Orbit","value":"420 km LEO"}]
-  }
-,
+  },
   {
     name: "Curiosity Rover (MSL)",
     category: "rover",
@@ -531,8 +356,7 @@ const SPACECRAFT_DB = [
     desc: "Curiosity is a car-sized Mars rover exploring Gale Crater. Since 2012, it has been analyzing the Martian climate and geology, determining that Mars once had conditions capable of supporting microbial life.",
     agency: "NASA",
     facts: [{"icon":"fa-solid fa-calendar","label":"Launch","value":"Nov 26, 2011"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"899 kg"},{"icon":"fa-solid fa-rocket","label":"Vehicle","value":"Atlas V 541"}]
-  }
-,
+  },
   {
     name: "Exploration Support Rover",
     category: "rover",
@@ -542,8 +366,7 @@ const SPACECRAFT_DB = [
     desc: "A specialized support rover concept designed to assist human and robotic missions on extraterrestrial surfaces. It focuses on logistics, payload transportation, and habitat construction support.",
     agency: "NASA",
     facts: [{"icon":"fa-solid fa-truck","label":"Type","value":"Logistics Support"},{"icon":"fa-solid fa-mountain-sun","label":"Environment","value":"Lunar/Martian"},{"icon":"fa-solid fa-microchip","label":"Status","value":"Conceptual"}]
-  }
-,
+  },
   {
     name: "Lunar Rover",
     category: "rover",
@@ -553,8 +376,7 @@ const SPACECRAFT_DB = [
     desc: "The Lunar Roving Vehicle (LRV) was a battery-powered four-wheeled rover used on the Moon during the Apollo missions to greatly expand the astronauts' exploration range.",
     agency: "NASA",
     facts: [{"icon":"fa-solid fa-calendar","label":"First Use","value":"July 31, 1971"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"210 kg"},{"icon":"fa-solid fa-gauge-high","label":"Top Speed","value":"18 km/h"}]
-  }
-,
+  },
   {
     name: "NASA Assault Rifle",
     category: "concept",
@@ -564,8 +386,7 @@ const SPACECRAFT_DB = [
     desc: "A futuristic sci-fi concept of a space-grade assault rifle. Designed for hypothetical defensive scenarios in zero-gravity environments, featuring advanced recoil-mitigation and specialized ammunition.",
     agency: "NASA",
     facts: [{"icon":"fa-solid fa-crosshairs","label":"Type","value":"Sci-Fi Weaponry"},{"icon":"fa-solid fa-meteor","label":"Environment","value":"Zero-G"},{"icon":"fa-solid fa-microchip","label":"Status","value":"Conceptual"}]
-  }
-,
+  },
   {
     name: "Artemis II Spacecraft",
     category: "spacecraft",
@@ -575,8 +396,7 @@ const SPACECRAFT_DB = [
     desc: "The Orion spacecraft is designed for the Artemis II mission, which will be the first crewed mission to the Moon since Apollo 17. It will carry four astronauts on a lunar flyby trajectory.",
     agency: "NASA",
     facts: [{"icon":"fa-solid fa-calendar","label":"Launch","value":"Planned 2025"},{"icon":"fa-solid fa-users","label":"Crew","value":"4 Astronauts"},{"icon":"fa-solid fa-rocket","label":"Vehicle","value":"SLS Block 1"}]
-  }
-,
+  },
   {
     name: "Apollo 11 Command Module",
     category: "spacecraft",
@@ -586,8 +406,7 @@ const SPACECRAFT_DB = [
     desc: "The Apollo 11 Command Module, named 'Columbia', was the living quarters for the three-person crew during most of the first crewed lunar landing mission. It is the only part of the spacecraft to return to Earth.",
     agency: "NASA",
     facts: [{"icon":"fa-solid fa-calendar","label":"Launch","value":"July 16, 1969"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"5,557 kg"},{"icon":"fa-solid fa-users","label":"Crew","value":"3 Astronauts"}]
-  }
-,
+  },
   {
     name: "Locator, Satellite dish",
     category: "satellite",
@@ -597,8 +416,7 @@ const SPACECRAFT_DB = [
     desc: "A conceptual deep-space tracking satellite dish designed to maintain high-bandwidth communications with interplanetary probes and distant outposts across the solar system.",
     agency: "NASA",
     facts: [{"icon":"fa-solid fa-satellite-dish","label":"Type","value":"Communications"},{"icon":"fa-solid fa-wifi","label":"Band","value":"X/Ka-band"},{"icon":"fa-solid fa-microchip","label":"Status","value":"Conceptual"}]
-  }
-,
+  },
   {
     name: "Moon Satellite Dish",
     category: "satellite",
@@ -610,6 +428,7 @@ const SPACECRAFT_DB = [
     facts: [{"icon":"fa-solid fa-satellite-dish","label":"Type","value":"Lunar Relay"},{"icon":"fa-solid fa-moon","label":"Location","value":"Lunar Surface"},{"icon":"fa-solid fa-microchip","label":"Status","value":"Conceptual"}]
   }
 ];
+
 
 
 
