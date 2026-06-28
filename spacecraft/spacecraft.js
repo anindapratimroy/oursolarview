@@ -428,6 +428,8 @@ function openViewer(model) {
     if ($viewerLoading) {
       $viewerLoading.classList.remove('hidden');
       $viewerLoading.style.display = 'flex';
+      const textEl = document.getElementById('craftLoaderText');
+      if (textEl) textEl.textContent = 'God is building the machines... (0%)';
     }
 
     const hideLoader = () => {
@@ -442,6 +444,11 @@ function openViewer(model) {
           api.start();
           api.addEventListener('viewerready', function() {
             hideLoader();
+          });
+          api.addEventListener('modelLoadProgress', function(factor) {
+            const pct = Math.floor(factor.progress * 100);
+            const textEl = document.getElementById('craftLoaderText');
+            if (textEl) textEl.textContent = `God is building the machines... (${pct}%)`;
           });
         },
         error: function onError() {
