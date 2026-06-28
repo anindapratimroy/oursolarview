@@ -621,9 +621,19 @@
   flex: 1;
 }
 
+/* Blocker for Sketchfab footer UI */
+.craft-viewer-footer-blocker {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 60px;
+  background: #000812;
+  z-index: 5;
+  pointer-events: auto; /* Block all clicks underneath */
+}
+
 /* Controls hint */
 .craft-viewer-hint {
-  position: absolute; bottom: 18px; left: 50%; transform: translateX(-50%);
+  position: absolute; bottom: 75px; left: 50%; transform: translateX(-50%);
   background: rgba(0,0,0,0.65); backdrop-filter: blur(8px);
   border: 1px solid rgba(255,255,255,0.1); border-radius: 30px;
   padding: 7px 22px;
