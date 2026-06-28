@@ -318,7 +318,7 @@ const SPACECRAFT_DB = [
     facts: [{"icon":"fa-solid fa-flask","label":"Mission","value":"Astrobiology"},{"icon":"fa-solid fa-microchip","label":"Status","value":"Conceptual"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"NASA"}]
   },
   {
-    name: "Perseverance Rover (Mars 2020)",
+    name: "Perseverance Rover",
     category: "rover",
     sketchfabId: "5f59240fb0bb4d19aadf1a4cda503add",
     nasaUrl: "#",
@@ -348,7 +348,7 @@ const SPACECRAFT_DB = [
     facts: [{"icon":"fa-solid fa-calendar","label":"Launch","value":"Nov 20, 1998"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"419,725 kg"},{"icon":"fa-solid fa-earth-americas","label":"Orbit","value":"420 km LEO"}]
   },
   {
-    name: "Curiosity Rover (MSL)",
+    name: "Curiosity Rover",
     category: "rover",
     sketchfabId: "bd1379cd718e43f78bb96f229456a451",
     nasaUrl: "#",
