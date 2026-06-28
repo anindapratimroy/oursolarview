@@ -925,14 +925,14 @@ scaleSlider.addEventListener("input", e => {
 // --- Dynamic UI Logic ---
 const toggleOrbits = document.getElementById("toggleOrbits");
 const statusText = document.getElementById("statusText");
-const planetView = document.getElementById("planetView");
+const planetViewSelector = document.getElementById("planetView");
 
 function updateDynamicStatus() {
   if (!statusText) return;
   
   let targetName = "the entire Solar System";
-  if (planetView && planetView.value !== "none") {
-     targetName = planetView.value.charAt(0).toUpperCase() + planetView.value.slice(1);
+  if (planetViewSelector && planetViewSelector.value !== "none") {
+     targetName = planetViewSelector.value.charAt(0).toUpperCase() + planetViewSelector.value.slice(1);
   }
   
   if (simScale === 0) {
