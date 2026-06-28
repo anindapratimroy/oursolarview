@@ -24,7 +24,7 @@ const SPACECRAFT_DB = [
     facts: [{"icon":"fa-solid fa-calendar","label":"Launch","value":"July 30, 2020"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"1,025 kg"},{"icon":"fa-solid fa-rocket","label":"Vehicle","value":"Atlas V 541"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"NASA"}]
   },
   {
-    name: "Curiosity Rover (MSL)",
+    name: "Curiosity Rover",
     category: "rover",
     sketchfabId: "0696a383f3e841d2b5c7636ee8a58aba",
     nasaUrl: "https://mars.nasa.gov/msl/",
@@ -84,7 +84,7 @@ const SPACECRAFT_DB = [
     facts: [{"icon":"fa-solid fa-calendar","label":"Launch","value":"July 22, 2019"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"3,850 kg"},{"icon":"fa-solid fa-rocket","label":"Vehicle","value":"GSLV Mk III"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"ISRO"}]
   },
   {
-    name: "Apollo 11 - Lunar Module 1969",
+    name: "Apollo 11-Lunar Module 1969",
     category: "lander",
     sketchfabId: "14c9489460894e2799f3364bdacdd74f",
     nasaUrl: "https://www.nasa.gov/mission_pages/apollo/apollo-11.html",
@@ -108,7 +108,7 @@ const SPACECRAFT_DB = [
     facts: [{"icon":"fa-solid fa-calendar","label":"Landing","value":"Aug 23, 2023"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"1,752 kg"},{"icon":"fa-solid fa-rocket","label":"Vehicle","value":"LVM3 M4"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"ISRO"}]
   },
   {
-    name: "Chandrayaan-3 Vikram (Alt View)",
+    name: "Chandrayaan-3 Vikram",
     category: "lander",
     sketchfabId: "96dbe26896d541c297e53120a3f6eb16",
     nasaUrl: "https://www.isro.gov.in/Chandrayaan3.html",
@@ -120,7 +120,7 @@ const SPACECRAFT_DB = [
     facts: [{"icon":"fa-solid fa-calendar","label":"Landing","value":"Aug 23, 2023"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"1,752 kg"},{"icon":"fa-solid fa-rocket","label":"Vehicle","value":"LVM3 M4"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"ISRO"}]
   },
   {
-    name: "International Space Station (Exterior)",
+    name: "International Space Station",
     category: "station",
     sketchfabId: "b7d40d89fcbd4c998462380545f391b6",
     nasaUrl: "https://www.nasa.gov/international-space-station/",
@@ -132,7 +132,7 @@ const SPACECRAFT_DB = [
     facts: [{"icon":"fa-solid fa-calendar","label":"Launch","value":"1998"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"450,000 kg"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"NASA, Roscosmos, JAXA, ESA, CSA"}]
   },
   {
-    name: "International Space Station (Interior)",
+    name: "International Space Station",
     category: "station",
     sketchfabId: "7753b422ca8046b4ae783d44b2bd6cfc",
     nasaUrl: "https://www.nasa.gov/international-space-station/",
@@ -144,7 +144,7 @@ const SPACECRAFT_DB = [
     facts: [{"icon":"fa-solid fa-calendar","label":"Launch","value":"1998"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"450,000 kg"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"Multinational"}]
   },
   {
-    name: "SpaceX Falcon 9 & Dragon 2",
+    name: "Spacex Falcon 9 & Dragon 2",
     category: "rocket",
     sketchfabId: "f709fc945bb2413faf2878aa613cde3d",
     nasaUrl: "https://www.spacex.com/vehicles/falcon-9/",
@@ -180,7 +180,7 @@ const SPACECRAFT_DB = [
     facts: [{"icon":"fa-solid fa-calendar","label":"Deployed","value":"Aug 23, 2023"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"26 kg"},{"icon":"fa-solid fa-battery-full","label":"Power","value":"Solar Array"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"ISRO"}]
   },
   {
-    name: "ISRO Mangalyaan (Mars Orbiter)",
+    name: "ISRO Mangalyaan",
     category: "satellite",
     sketchfabId: "8719b7a3077643a798c95aec4dbced13",
     nasaUrl: "https://www.isro.gov.in/",
@@ -214,7 +214,7 @@ const SPACECRAFT_DB = [
     facts: [{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"ISRO"},{"icon":"fa-solid fa-star","label":"Role","value":"Launch Vehicle"}]
   },
   {
-    name: "ISRO Gaganyaan - Animated Solar Panel",
+    name: "ISRO Gaganyaan-Animated Solar Panel",
     category: "spacecraft",
     sketchfabId: "962a218eb4394890bfa55ab1e6b233e7",
     nasaUrl: "https://www.isro.gov.in/",
@@ -224,7 +224,7 @@ const SPACECRAFT_DB = [
     facts: [{"icon":"fa-solid fa-calendar","label":"Status","value":"In Development"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"8,200 kg"},{"icon":"fa-solid fa-users","label":"Crew","value":"3 Astronauts"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"ISRO"}]
   },
   {
-    name: "Vikram Lander ISRO Chandrayan 3 (MechLab3D)",
+    name: "Vikram Lander ISRO Chandrayaan 3",
     category: "lander",
     sketchfabId: "f5d82f150d6640d3a85bf11b158d0a0f",
     nasaUrl: "https://www.isro.gov.in/",
@@ -234,7 +234,7 @@ const SPACECRAFT_DB = [
     facts: [{"icon":"fa-solid fa-calendar","label":"Landing","value":"Aug 23, 2023"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"1,752 kg"},{"icon":"fa-solid fa-rocket","label":"Vehicle","value":"LVM3 M4"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"ISRO"}]
   },
   {
-    name: "NISAR Satellite ISRO - NASA Joint Mission",
+    name: "NISAR Satellite ISRO-NASA Joint Mission",
     category: "satellite",
     sketchfabId: "0103309668d243dbbfab3c8fc6b9683c",
     nasaUrl: "https://www.isro.gov.in/",
@@ -244,7 +244,7 @@ const SPACECRAFT_DB = [
     facts: [{"icon":"fa-solid fa-calendar","label":"Launch","value":"Planned 2025"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"2,800 kg"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"ISRO / NASA"}]
   },
   {
-    name: "Rocket Model ISRO (GSLV) rocket",
+    name: "Rocket Model ISRO Rocket",
     category: "rocket",
     sketchfabId: "ab1265ff351c4a0aa382d91c89c30f18",
     nasaUrl: "https://www.isro.gov.in/",
@@ -264,7 +264,7 @@ const SPACECRAFT_DB = [
     facts: [{"icon":"fa-solid fa-calendar","label":"Status","value":"In Development"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"8,200 kg"},{"icon":"fa-solid fa-users","label":"Crew","value":"3 Astronauts"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"ISRO"}]
   },
   {
-    name: "PSLV C2 model",
+    name: "PSLV C2 Model",
     category: "rocket",
     sketchfabId: "93081942b54a4612bebade20fea22e33",
     nasaUrl: "https://www.isro.gov.in/",
@@ -274,7 +274,7 @@ const SPACECRAFT_DB = [
     facts: [{"icon":"fa-solid fa-weight-hanging","label":"Payload","value":"3,800 kg (LEO)"},{"icon":"fa-solid fa-ruler-vertical","label":"Height","value":"44 meters"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"ISRO"}]
   },
   {
-    name: "Chandrayaan-3 Vikram Lander (AnishRoyalinc)",
+    name: "Chandrayaan-3 Vikram Lander",
     category: "lander",
     sketchfabId: "b29bee8d7c524c12b6a043cdd1f75979",
     nasaUrl: "https://www.isro.gov.in/",
@@ -284,7 +284,7 @@ const SPACECRAFT_DB = [
     facts: [{"icon":"fa-solid fa-calendar","label":"Landing","value":"Aug 23, 2023"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"1,752 kg"},{"icon":"fa-solid fa-rocket","label":"Vehicle","value":"LVM3 M4"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"ISRO"}]
   },
   {
-    name: "Crew Dragon Capsule SpaceX",
+    name: "Crew Dragon Capsule Spacex",
     category: "spacecraft",
     sketchfabId: "f41cbc16988c4c31935e5d063088ca65",
     nasaUrl: "https://www.spacex.com/",
@@ -294,7 +294,7 @@ const SPACECRAFT_DB = [
     facts: [{"icon":"fa-solid fa-calendar","label":"First Flight","value":"March 2, 2019"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"12,055 kg"},{"icon":"fa-solid fa-rocket","label":"Vehicle","value":"Falcon 9"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"SpaceX"}]
   },
   {
-    name: "Vikram Lander (innovaworldfoundation)",
+    name: "Vikram Lander",
     category: "lander",
     sketchfabId: "b7fca089a3874faeba4a59774a3c968d",
     nasaUrl: "https://www.isro.gov.in/",
@@ -304,7 +304,7 @@ const SPACECRAFT_DB = [
     facts: [{"icon":"fa-solid fa-calendar","label":"Landing","value":"Aug 23, 2023"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"1,752 kg"},{"icon":"fa-solid fa-rocket","label":"Vehicle","value":"LVM3 M4"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"ISRO"}]
   },
   {
-    name: "Chandrayaan-3 Pragyan Rover (AnishRoyalinc)",
+    name: "Chandrayaan-3 Pragyan Rover",
     category: "rover",
     sketchfabId: "33b2fe88693d40e995ba7008981f5954",
     nasaUrl: "https://www.isro.gov.in/",
@@ -314,7 +314,7 @@ const SPACECRAFT_DB = [
     facts: [{"icon":"fa-solid fa-calendar","label":"Deployed","value":"Aug 23, 2023"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"26 kg"},{"icon":"fa-solid fa-battery-full","label":"Power","value":"Solar Array"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"ISRO"}]
   },
   {
-    name: "Mars Orbiter Mission (Mangalyana) (dubey)",
+    name: "Mars Orbiter Mission",
     category: "satellite",
     sketchfabId: "72a4112ce14d4ce3887a8a149f5589b7",
     nasaUrl: "https://www.isro.gov.in/",
@@ -354,7 +354,7 @@ const SPACECRAFT_DB = [
     facts: [{"icon":"fa-solid fa-weight-hanging","label":"Payload","value":"3,800 kg (LEO)"},{"icon":"fa-solid fa-ruler-vertical","label":"Height","value":"44 meters"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"ISRO"}]
   },
   {
-    name: "Vikram Lander Chandrayan 3 & Pragyan Moon Rover",
+    name: "Vikram Lander Chandrayaan 3 & Pragyan Moon Rover",
     category: "lander",
     sketchfabId: "a8067a0e394c4961b5e855a8321adff8",
     nasaUrl: "https://www.isro.gov.in/",
@@ -364,7 +364,7 @@ const SPACECRAFT_DB = [
     facts: [{"icon":"fa-solid fa-calendar","label":"Landing","value":"Aug 23, 2023"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"1,752 kg"},{"icon":"fa-solid fa-rocket","label":"Vehicle","value":"LVM3"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"ISRO"}]
   },
   {
-    name: "Chandrayaan-3 Vikram Lander (NishantCreatives)",
+    name: "Chandrayaan-3 Vikram Lander",
     category: "lander",
     sketchfabId: "13b82ab71a9f4f098dab6e8697d14216",
     nasaUrl: "https://www.isro.gov.in/",
@@ -384,7 +384,7 @@ const SPACECRAFT_DB = [
     facts: [{"icon":"fa-solid fa-weight-hanging","label":"Payload","value":"10,000 kg (LEO)"},{"icon":"fa-solid fa-ruler-vertical","label":"Height","value":"43.5 meters"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"ISRO"}]
   },
   {
-    name: "NISAR (Aniketfab.com)",
+    name: "NISAR",
     category: "satellite",
     sketchfabId: "18f8ec6b19db49d29d9c986842d79850",
     nasaUrl: "https://www.isro.gov.in/",
@@ -404,7 +404,7 @@ const SPACECRAFT_DB = [
     facts: [{"icon":"fa-solid fa-calendar","label":"Launch","value":"Oct 22, 2008"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"1,380 kg"},{"icon":"fa-solid fa-rocket","label":"Vehicle","value":"PSLV-XL C11"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"ISRO"}]
   },
   {
-    name: "ADITYA L1 (MechLab3D)",
+    name: "Aditya L1",
     category: "satellite",
     sketchfabId: "6658e75eb32240d6a485227564ad2938",
     nasaUrl: "https://www.isro.gov.in/",
@@ -414,7 +414,7 @@ const SPACECRAFT_DB = [
     facts: [{"icon":"fa-solid fa-calendar","label":"Launch","value":"Sep 2, 2023"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"1,475 kg"},{"icon":"fa-solid fa-rocket","label":"Vehicle","value":"PSLV-XL C57"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"ISRO"}]
   },
   {
-    name: "isro_chandrayyan-3_mission_lander_module_vikram",
+    name: "ISRO Chandrayaan-3 Mission Lander Module Vikram",
     category: "lander",
     sketchfabId: "9e34b033379243d5a8702a04b35770e5",
     nasaUrl: "https://www.isro.gov.in/",
@@ -424,7 +424,7 @@ const SPACECRAFT_DB = [
     facts: [{"icon":"fa-solid fa-calendar","label":"Landing","value":"Aug 23, 2023"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"1,752 kg"},{"icon":"fa-solid fa-rocket","label":"Vehicle","value":"LVM3 M4"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"ISRO"}]
   },
   {
-    name: "LUPEX Rover (chandrayaan4)",
+    name: "LUPEX Rover",
     category: "rover",
     sketchfabId: "6e3dc5e5772e449e91dc34a47cd4a69b",
     nasaUrl: "https://www.isro.gov.in/",
