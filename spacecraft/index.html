@@ -161,6 +161,8 @@
       <a href="https://www.linkedin.com/in/aninda-pratim-roy" target="_blank" rel="noopener" class="footer-name-link">Aninda Pratim Roy <span class="footer-deg">(M.Tech AASE)</span></a>
       <span class="footer-divider">|</span>
       <a href="https://www.linkedin.com/in/manish-kumawat-iiti" target="_blank" rel="noopener" class="footer-name-link">Manish Kumawat <span class="footer-deg">(B.Tech AASE)</span></a>
+      <span class="footer-divider">|</span>
+      <span class="footer-credits-link">Credits</span>
     </div>
     <div class="footer-inst">
       <a href="http://aase.iiti.ac.in" target="_blank" rel="noopener" class="footer-inst-link">
@@ -324,4 +326,30 @@
 <script type="text/javascript" src="https://static.sketchfab.com/api/sketchfab-viewer-1.12.1.js"></script>
 <script src="./spacecraft.js?v=4"></script>
 </body>
+<!-- Credits Modal -->
+<div id="creditsModal" class="credits-modal">
+  <div class="credits-modal-backdrop" id="creditsModalBackdrop"></div>
+  <div class="credits-modal-content">
+    <h3 class="credits-title">Special Thanks</h3>
+    <a href="https://www.linkedin.com/in/arpan-dawn-373613177?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" rel="noopener" class="credits-name">Arpan Dawn</a>
+  </div>
+</div>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const creditsBtns = document.querySelectorAll('.footer-credits-link');
+    const creditsModal = document.getElementById('creditsModal');
+    const creditsBackdrop = document.getElementById('creditsModalBackdrop');
+    if (creditsBtns.length > 0 && creditsModal && creditsBackdrop) {
+      creditsBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          creditsModal.classList.add('open');
+        });
+      });
+      creditsBackdrop.addEventListener('click', () => {
+        creditsModal.classList.remove('open');
+      });
+    }
+  });
+</script>
 </html>
