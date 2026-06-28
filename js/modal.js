@@ -12,7 +12,8 @@ export function initModal() {
 
   window.openPlanetModal = function(p, pushState = true) {
     modalTitle.innerHTML = `<span>${p.name}</span> — Divine Blueprint`;
-    modalIframe.src = `./planets/planet_viewer.html?planet=${p.name.toLowerCase()}`;
+    // Ensure we bust cache so recent fixes load properly
+    modalIframe.src = `./planets/planet_viewer.html?planet=${p.name.toLowerCase()}&v=2`;
     modal.classList.add('open');
     document.body.style.overflow = 'hidden';
 
