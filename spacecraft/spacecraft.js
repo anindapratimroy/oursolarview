@@ -289,6 +289,267 @@ const SPACECRAFT_DB = [
       { icon: 'fa-weight-hanging', label: 'Mass',    value: '3,735 kg' },
       { icon: 'fa-rocket',         label: 'Vehicle', value: 'LVM3' }
     ]
+  },
+
+  {
+    name: "Rocket ISRO",
+    category: "rocket",
+    sketchfabId: "a0cb59271cf540bfba324d7c3034d3d3",
+    nasaUrl: "https://www.isro.gov.in/",
+    thumbnail: "https://images-assets.nasa.gov/image/NHQ202005300057/NHQ202005300057~thumb.jpg",
+    desc: "Rocket ISRO model by selvinraj.",
+    agency: "ISRO",
+    facts: []
+  }  ,
+  {
+    name: "ISRO Gaganyaan - Animated Solar Panel",
+    category: "spacecraft",
+    sketchfabId: "962a218eb4394890bfa55ab1e6b233e7",
+    nasaUrl: "https://www.isro.gov.in/",
+    thumbnail: "https://images-assets.nasa.gov/image/NHQ202005300057/NHQ202005300057~thumb.jpg",
+    desc: "ISRO Gaganyaan - Animated Solar Panel by the3dCartel.",
+    agency: "ISRO",
+    facts: []
+  }  ,
+  {
+    name: "Vikram Lander ISRO Chandrayan 3 (MechLab3D)",
+    category: "lander",
+    sketchfabId: "f5d82f150d6640d3a85bf11b158d0a0f",
+    nasaUrl: "https://www.isro.gov.in/",
+    thumbnail: "https://images-assets.nasa.gov/image/PIA23764/PIA23764~thumb.jpg",
+    desc: "Vikram Lander ISRO Chandrayan 3 by MechLab3D.",
+    agency: "ISRO",
+    facts: []
+  }  ,
+  {
+    name: "NISAR Satellite ISRO - NASA Joint Mission",
+    category: "satellite",
+    sketchfabId: "0103309668d243dbbfab3c8fc6b9683c",
+    nasaUrl: "https://www.isro.gov.in/",
+    thumbnail: "https://images-assets.nasa.gov/image/PIA17461/PIA17461~thumb.jpg",
+    desc: "NISAR Satellite ISRO - NASA Joint Mission by MechLab3D.",
+    agency: "ISRO / NASA",
+    facts: []
+  }  ,
+  {
+    name: "Rocket Model ISRO (GSLV) rocket",
+    category: "rocket",
+    sketchfabId: "ab1265ff351c4a0aa382d91c89c30f18",
+    nasaUrl: "https://www.isro.gov.in/",
+    thumbnail: "https://images-assets.nasa.gov/image/NHQ202005300057/NHQ202005300057~thumb.jpg",
+    desc: "Rocket Model ISRO (GSLV) rocket by mahadevanshenil.",
+    agency: "ISRO",
+    facts: []
+  }  ,
+  {
+    name: "Gaganyaan Indian Spacecraft ISRO",
+    category: "spacecraft",
+    sketchfabId: "8806539ac75b4906a7bf1ca9bd0a9657",
+    nasaUrl: "https://www.isro.gov.in/",
+    thumbnail: "https://images-assets.nasa.gov/image/NHQ202005300057/NHQ202005300057~thumb.jpg",
+    desc: "Gaganyaan Indian Spacecraft ISRO by MechLab3D.",
+    agency: "ISRO",
+    facts: []
+  }  ,
+  {
+    name: "PSLV C2 model",
+    category: "rocket",
+    sketchfabId: "93081942b54a4612bebade20fea22e33",
+    nasaUrl: "https://www.isro.gov.in/",
+    thumbnail: "https://images-assets.nasa.gov/image/NHQ202005300057/NHQ202005300057~thumb.jpg",
+    desc: "PSLV C2 model by satyajit26patil.",
+    agency: "ISRO",
+    facts: []
+  }  ,
+  {
+    name: "Chandrayaan-3 Vikram Lander (AnishRoyalinc)",
+    category: "lander",
+    sketchfabId: "b29bee8d7c524c12b6a043cdd1f75979",
+    nasaUrl: "https://www.isro.gov.in/",
+    thumbnail: "https://images-assets.nasa.gov/image/PIA23764/PIA23764~thumb.jpg",
+    desc: "Chandrayaan 3 vikram lander by AnishRoyalinc.",
+    agency: "ISRO",
+    facts: []
+  }  ,
+  {
+    name: "Crew Dragon Capsule SpaceX",
+    category: "spacecraft",
+    sketchfabId: "f41cbc16988c4c31935e5d063088ca65",
+    nasaUrl: "https://www.spacex.com/",
+    thumbnail: "https://images-assets.nasa.gov/image/NHQ202005300057/NHQ202005300057~thumb.jpg",
+    desc: "Crew Dragon Capsule SpaceX by academyinnovaworld.",
+    agency: "SpaceX",
+    facts: []
+  }  ,
+  {
+    name: "Vikram Lander (innovaworldfoundation)",
+    category: "lander",
+    sketchfabId: "b7fca089a3874faeba4a59774a3c968d",
+    nasaUrl: "https://www.isro.gov.in/",
+    thumbnail: "https://images-assets.nasa.gov/image/PIA23764/PIA23764~thumb.jpg",
+    desc: "Vikram Lander by innovaworldfoundation.",
+    agency: "ISRO",
+    facts: []
+  }  ,
+  {
+    name: "Chandrayaan-3 Pragyan Rover (AnishRoyalinc)",
+    category: "rover",
+    sketchfabId: "33b2fe88693d40e995ba7008981f5954",
+    nasaUrl: "https://www.isro.gov.in/",
+    thumbnail: "https://images-assets.nasa.gov/image/PIA16239/PIA16239~thumb.jpg",
+    desc: "Chandrayaan 3 pragyan rover by AnishRoyalinc.",
+    agency: "ISRO",
+    facts: []
+  }  ,
+  {
+    name: "Mars Orbiter Mission (Mangalyana) (dubey)",
+    category: "satellite",
+    sketchfabId: "72a4112ce14d4ce3887a8a149f5589b7",
+    nasaUrl: "https://www.isro.gov.in/",
+    thumbnail: "https://images-assets.nasa.gov/image/PIA17461/PIA17461~thumb.jpg",
+    desc: "Mars Orbiter Mission (Mangalyana) by ISRO by dubey.ujjwal1994.",
+    agency: "ISRO",
+    facts: []
+  }  ,
+  {
+    name: "Chandrayaan-2 in flight configuration",
+    category: "satellite",
+    sketchfabId: "4d0017f2c5fb49bb9817601858106ddb",
+    nasaUrl: "https://www.isro.gov.in/",
+    thumbnail: "https://images-assets.nasa.gov/image/PIA17461/PIA17461~thumb.jpg",
+    desc: "Chandrayaan-2 in flight configuration by tashtego.",
+    agency: "ISRO",
+    facts: []
+  }  ,
+  {
+    name: "ISRO Rover",
+    category: "rover",
+    sketchfabId: "229bb6eb9b614a18bf3e4fe536dc707d",
+    nasaUrl: "https://www.isro.gov.in/",
+    thumbnail: "https://images-assets.nasa.gov/image/PIA16239/PIA16239~thumb.jpg",
+    desc: "ISRO Rover by Yagnik Kavathiya.",
+    agency: "ISRO",
+    facts: []
+  }  ,
+  {
+    name: "Aditya L1 Satellite",
+    category: "satellite",
+    sketchfabId: "89fe9cc3359e410ba285862dec53e5dc",
+    nasaUrl: "https://www.isro.gov.in/",
+    thumbnail: "https://images-assets.nasa.gov/image/PIA17461/PIA17461~thumb.jpg",
+    desc: "Aditya L1 Satellite by AnishRoyalinc.",
+    agency: "ISRO",
+    facts: []
+  }  ,
+  {
+    name: "PSLV C40",
+    category: "rocket",
+    sketchfabId: "c7066310704040a9bf0c86d7d21ab94f",
+    nasaUrl: "https://www.isro.gov.in/",
+    thumbnail: "https://images-assets.nasa.gov/image/NHQ202005300057/NHQ202005300057~thumb.jpg",
+    desc: "PSLV C40 by Neel3Dartist.",
+    agency: "ISRO",
+    facts: []
+  }  ,
+  {
+    name: "Vikram Lander Chandrayan 3 & Pragyan Moon Rover",
+    category: "lander",
+    sketchfabId: "a8067a0e394c4961b5e855a8321adff8",
+    nasaUrl: "https://www.isro.gov.in/",
+    thumbnail: "https://images-assets.nasa.gov/image/PIA23764/PIA23764~thumb.jpg",
+    desc: "Vikram Lander Chandrayan 3 & Pragyan Moon Rover by Abdurhman Aljagthami.",
+    agency: "ISRO",
+    facts: []
+  }  ,
+  {
+    name: "Chandrayaan-3 Vikram Lander (NishantCreatives)",
+    category: "lander",
+    sketchfabId: "13b82ab71a9f4f098dab6e8697d14216",
+    nasaUrl: "https://www.isro.gov.in/",
+    thumbnail: "https://images-assets.nasa.gov/image/PIA23764/PIA23764~thumb.jpg",
+    desc: "Chandrayaan-3 Vikram Lander by NishantCreatives.",
+    agency: "ISRO",
+    facts: []
+  }  ,
+  {
+    name: "GSLV Mk3",
+    category: "rocket",
+    sketchfabId: "0426922358b4444f9887bcd551d3a5cb",
+    nasaUrl: "https://www.isro.gov.in/",
+    thumbnail: "https://images-assets.nasa.gov/image/NHQ202005300057/NHQ202005300057~thumb.jpg",
+    desc: "GSLV Mk3 by Jainesh Pathak.",
+    agency: "ISRO",
+    facts: []
+  }  ,
+  {
+    name: "NISAR (Aniketfab.com)",
+    category: "satellite",
+    sketchfabId: "18f8ec6b19db49d29d9c986842d79850",
+    nasaUrl: "https://www.isro.gov.in/",
+    thumbnail: "https://images-assets.nasa.gov/image/PIA17461/PIA17461~thumb.jpg",
+    desc: "NISAR by Aniketfab.com.",
+    agency: "ISRO",
+    facts: []
+  }  ,
+  {
+    name: "Chandrayaan-3 Vikram Lander High Detailed",
+    category: "lander",
+    sketchfabId: "8f684cbf6b3f4cdaad72d3f1ebb5bde4",
+    nasaUrl: "https://www.isro.gov.in/",
+    thumbnail: "https://images-assets.nasa.gov/image/PIA23764/PIA23764~thumb.jpg",
+    desc: "Chandrayaan-3 Vikram Lander High Detailed by vfxcook.",
+    agency: "ISRO",
+    facts: []
+  }  ,
+  {
+    name: "Chandrayaan-3: vikram_lander (AnishRoyalinc 2)",
+    category: "lander",
+    sketchfabId: "96dbe26896d541c297e53120a3f6eb16",
+    nasaUrl: "https://www.isro.gov.in/",
+    thumbnail: "https://images-assets.nasa.gov/image/PIA23764/PIA23764~thumb.jpg",
+    desc: "chandrayaan_3 : vikram_lander by AnishRoyalinc.",
+    agency: "ISRO",
+    facts: []
+  }  ,
+  {
+    name: "Chandrayaan-1 Moon Impact Probe",
+    category: "satellite",
+    sketchfabId: "da611fcaf77b4cd183358dcee6c4513e",
+    nasaUrl: "https://www.isro.gov.in/",
+    thumbnail: "https://images-assets.nasa.gov/image/PIA17461/PIA17461~thumb.jpg",
+    desc: "Chandrayaan-1 Moon Impact Probe by vedarthstudio.",
+    agency: "ISRO",
+    facts: []
+  }  ,
+  {
+    name: "ADITYA L1 (MechLab3D)",
+    category: "satellite",
+    sketchfabId: "6658e75eb32240d6a485227564ad2938",
+    nasaUrl: "https://www.isro.gov.in/",
+    thumbnail: "https://images-assets.nasa.gov/image/PIA17461/PIA17461~thumb.jpg",
+    desc: "ADITYA L1 by MechLab3D.",
+    agency: "ISRO",
+    facts: []
+  }  ,
+  {
+    name: "isro_chandrayyan-3_mission_lander_module_vikram",
+    category: "lander",
+    sketchfabId: "9e34b033379243d5a8702a04b35770e5",
+    nasaUrl: "https://www.isro.gov.in/",
+    thumbnail: "https://images-assets.nasa.gov/image/PIA23764/PIA23764~thumb.jpg",
+    desc: "isro_chandrayyan-3_mission_lander_module_vikram by meghraj.",
+    agency: "ISRO",
+    facts: []
+  }  ,
+  {
+    name: "LUPEX Rover (chandrayaan4)",
+    category: "rover",
+    sketchfabId: "6e3dc5e5772e449e91dc34a47cd4a69b",
+    nasaUrl: "https://www.isro.gov.in/",
+    thumbnail: "https://images-assets.nasa.gov/image/PIA16239/PIA16239~thumb.jpg",
+    desc: "LUPEX Rover (chandrayaan4) by AnishRoyalinc.",
+    agency: "ISRO",
+    facts: []
   }
 ];
 
