@@ -452,6 +452,8 @@
       background: rgba(0,7,15,0.65);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
+      margin-top: auto;
+      width: 100%;
     }
     
     .footer-inner {
