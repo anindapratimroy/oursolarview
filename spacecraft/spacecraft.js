@@ -625,12 +625,15 @@ function openViewer(model) {
         camera: 0,
         transparent: 0,
         ui_watermark: 0,
-        ui_infos: 0
+        ui_infos: 0,
+        animation_autoplay: 0,
+        autospin: 0,
+        ui_animations: 0
       });
     } else {
       // Fallback if API script failed to load
       const embedUrl = `https://sketchfab.com/models/${model.sketchfabId}/embed?` + [
-        'autostart=1', 'preload=1', 'ui_theme=dark', 'ui_hint=0', 'camera=0', 'transparent=0', 'ui_watermark=0', 'ui_infos=0'
+        'autostart=1', 'preload=1', 'ui_theme=dark', 'ui_hint=0', 'camera=0', 'transparent=0', 'ui_watermark=0', 'ui_infos=0', 'animation_autoplay=0', 'autospin=0', 'ui_animations=0'
       ].join('&');
       
       let loadTimeout;
