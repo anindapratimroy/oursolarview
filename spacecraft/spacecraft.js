@@ -433,6 +433,182 @@ const SPACECRAFT_DB = [
     agency: "ISRO",
     facts: [{"icon":"fa-solid fa-calendar","label":"Launch","value":"Planned 2026+"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"~350 kg (rover)"},{"icon":"fa-solid fa-rocket","label":"Vehicle","value":"H3 Launch Vehicle"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"ISRO / JAXA"}]
   }
+,
+  {
+    name: "Mantis - NASA Mech 2030",
+    category: "rover",
+    sketchfabId: "108773e6b4674e69a5922dd5f59f1a6e",
+    nasaUrl: "#",
+    thumbnail: "",
+    desc: "Mantis - NASA Mech 2030 Space Program by Vladyslav Nazymok.",
+    agency: "NASA",
+    facts: []
+  }
+,
+  {
+    name: "Saturn V",
+    category: "rocket",
+    sketchfabId: "7a2c9709ff8144c8b3b18ec84b5e112e",
+    nasaUrl: "#",
+    thumbnail: "",
+    desc: "Saturn V - NASA by Stanley Creative.",
+    agency: "NASA",
+    facts: []
+  }
+,
+  {
+    name: "LUCY Space Probe",
+    category: "probe",
+    sketchfabId: "bc3dc59eceb74b43a02cc2d51b5a0be5",
+    nasaUrl: "#",
+    thumbnail: "",
+    desc: "LUCY | NASA Space Probe | Free Download by murilo.kleine.",
+    agency: "NASA",
+    facts: []
+  }
+,
+  {
+    name: "NASA Rover",
+    category: "rover",
+    sketchfabId: "440f5c9f53f64b69865484f938eb4b0a",
+    nasaUrl: "#",
+    thumbnail: "",
+    desc: "NASA_Rover by William J. Haney.",
+    agency: "NASA",
+    facts: []
+  }
+,
+  {
+    name: "Project Eden - Exo-Rover",
+    category: "rover",
+    sketchfabId: "2d936204fedb42569ae9b75c9a808c1c",
+    nasaUrl: "#",
+    thumbnail: "",
+    desc: "Project Eden - Exo-Rover by William Domeyer.",
+    agency: "NASA",
+    facts: []
+  }
+,
+  {
+    name: "Perseverance Rover (Mars 2020)",
+    category: "rover",
+    sketchfabId: "5f59240fb0bb4d19aadf1a4cda503add",
+    nasaUrl: "#",
+    thumbnail: "",
+    desc: "Perseverance Rover - NASA Mars 2020 Mission by zaddazed.",
+    agency: "NASA",
+    facts: []
+  }
+,
+  {
+    name: "Spaceship",
+    category: "spacecraft",
+    sketchfabId: "6f677587d795473fbacec34fdf681405",
+    nasaUrl: "#",
+    thumbnail: "",
+    desc: "spaceship by okotaru.",
+    agency: "N/A",
+    facts: []
+  }
+,
+  {
+    name: "International Space Station",
+    category: "station",
+    sketchfabId: "31cad35dc37b4511ae920255aef62922",
+    nasaUrl: "#",
+    thumbnail: "",
+    desc: "NASA International Space Station by SQUIR3D.",
+    agency: "NASA",
+    facts: []
+  }
+,
+  {
+    name: "Curiosity Rover (MSL)",
+    category: "rover",
+    sketchfabId: "bd1379cd718e43f78bb96f229456a451",
+    nasaUrl: "#",
+    thumbnail: "",
+    desc: "NASA Curiosity Rover MSL by John Niehuss.",
+    agency: "NASA",
+    facts: []
+  }
+,
+  {
+    name: "Exploration Support Rover",
+    category: "rover",
+    sketchfabId: "e1de8d0a96f14b479b677ab1b4b0e680",
+    nasaUrl: "#",
+    thumbnail: "",
+    desc: "NASA Extraterrestial Exploration Support Rover by Adrian Bik.",
+    agency: "NASA",
+    facts: []
+  }
+,
+  {
+    name: "Lunar Rover",
+    category: "rover",
+    sketchfabId: "ba733c3fe84e4846b143ba7374c9f847",
+    nasaUrl: "#",
+    thumbnail: "",
+    desc: "Rover Nasa by LM3D.",
+    agency: "NASA",
+    facts: []
+  }
+,
+  {
+    name: "NASA Assault Rifle",
+    category: "concept",
+    sketchfabId: "1aee53865de7419aa637ea4524b0b138",
+    nasaUrl: "#",
+    thumbnail: "",
+    desc: "NASA Assault Rifle by Chawanmushi.",
+    agency: "NASA",
+    facts: []
+  }
+,
+  {
+    name: "Artemis II Spacecraft",
+    category: "spacecraft",
+    sketchfabId: "f025cec8c7fb4eccb83b54df8b9a6ea7",
+    nasaUrl: "#",
+    thumbnail: "",
+    desc: "NASA Artemis ll Spacecraft by Zaineb Aljumayaat.",
+    agency: "NASA",
+    facts: []
+  }
+,
+  {
+    name: "Apollo 11 Command Module",
+    category: "spacecraft",
+    sketchfabId: "372bb6781922471cada4e0a9bd5c61fb",
+    nasaUrl: "#",
+    thumbnail: "",
+    desc: "Apollo 11 Command Module (Combined) by The Smithsonian Institution.",
+    agency: "NASA",
+    facts: []
+  }
+,
+  {
+    name: "Locator, Satellite dish",
+    category: "satellite",
+    sketchfabId: "6d08e8d83a1a432cb560b5c17242dfb5",
+    nasaUrl: "#",
+    thumbnail: "",
+    desc: "Locator, Satellite dish by vanwels.",
+    agency: "N/A",
+    facts: []
+  }
+,
+  {
+    name: "Moon Satellite Dish",
+    category: "satellite",
+    sketchfabId: "0c8c2af008084446bcc7dc6136f16fac",
+    nasaUrl: "#",
+    thumbnail: "",
+    desc: "Moon Satellite Dish by i_r_riley.",
+    agency: "N/A",
+    facts: []
+  }
 ];
 
 
