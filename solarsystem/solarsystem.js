@@ -920,6 +920,49 @@ scaleSlider.addEventListener("input", e => {
   }
 });
 
+
+// --- Play/Pause and Real-Time Logic ---
+const btnPlayPause = document.getElementById("btnPlayPause");
+const btnRealTime = document.getElementById("btnRealTime");
+let isPaused = false;
+let savedScale = simScale;
+
+if (btnPlayPause) {
+  btnPlayPause.addEventListener("click", () => {
+    isPaused = !isPaused;
+    if (isPaused) {
+      savedScale = simScale;
+      simScale = 0;
+      periodScale = 0;
+      btnPlayPause.innerHTML = '<i class="fa-solid fa-play"></i> Play';
+      btnPlayPause.classList.add("active");
+    } else {
+      simScale = savedScale || 100000;
+      periodScale = simScale;
+      btnPlayPause.innerHTML = '<i class="fa-solid fa-pause"></i> Pause';
+      btnPlayPause.classList.remove("active");
+    }
+  });
+}
+
+if (btnRealTime) {
+  btnRealTime.addEventListener("click", () => {
+    simScale = 1;
+    periodScale = 1;
+    scaleSlider.value = 1;
+    scaleValue.innerText = "1";
+    if (timeRefTarget) {
+      timeRefTarget.value = "custom";
+      timeRefUnitGroup.style.display = "none";
+    }
+    if (isPaused) {
+      isPaused = false;
+      btnPlayPause.innerHTML = '<i class="fa-solid fa-pause"></i> Pause';
+      btnPlayPause.classList.remove("active");
+    }
+  });
+}
+
 // --- Info Panel Elements ---
 const infoPanel = document.getElementById("infoPanel");
 const panelPlanetName = document.getElementById("panelPlanetName");

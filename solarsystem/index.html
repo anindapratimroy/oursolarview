@@ -44,6 +44,21 @@
       display: flex; flex-direction: column; gap: 8px;
     }
     .control-group label { font-size: 0.85rem; color: var(--text-dim); font-weight: 600; }
+    /* Improved Controls Styling */
+    .control-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+    .info-tooltip { cursor: help; color: var(--gold); opacity: 0.8; font-size: 0.9rem; transition: 0.3s; }
+    .info-tooltip:hover { opacity: 1; text-shadow: 0 0 8px var(--gold); }
+    
+    .button-row { display: flex; gap: 10px; margin-top: 8px; }
+    .control-btn {
+      flex: 1; background: rgba(197,160,72,0.15); color: var(--gold);
+      border: 1px solid rgba(197,160,72,0.4); padding: 8px; border-radius: 6px;
+      font-family: 'Space Grotesk', sans-serif; font-size: 0.85rem; font-weight: 600;
+      cursor: pointer; transition: 0.2s ease; display: flex; justify-content: center; align-items: center; gap: 6px;
+    }
+    .control-btn:hover { background: rgba(197,160,72,0.3); transform: translateY(-2px); }
+    .control-btn.active { background: var(--gold); color: #000; }
+
     
     input[type=range] { width: 100%; -webkit-appearance: none; height: 4px; background: rgba(255,255,255,0.15); border-radius: 2px; outline: none; }
     input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%; background: var(--gold); cursor: grab; }
@@ -131,7 +146,10 @@
   <!-- Unified Control Panel -->
   <aside class="control-panel">
     <div class="control-group">
-      <label>⏱️ Time Reference:</label>
+      <div class="control-header">
+        <label>⏱️ Time Reference:</label>
+        <i class="fa-solid fa-circle-info info-tooltip" title="Select a planet to synchronize the simulation speed to its real-world day or year."></i>
+      </div>
       <select id="timeRefTarget">
         <option value="custom">Custom Scale</option>
         <option value="sun_eq">The Sun</option>
@@ -147,7 +165,10 @@
     </div>
     
     <div class="control-group" id="timeRefUnitGroup" style="display: none;">
-      <label>⏳ Reference Unit (Per Second):</label>
+      <div class="control-header">
+        <label>⏳ Reference Unit (Per Second):</label>
+        <i class="fa-solid fa-circle-info info-tooltip" title="Choose whether 1 real second equals a full rotation (day) or orbit (year) of the selected planet."></i>
+      </div>
       <select id="timeRefUnit">
         <option value="rotation">1 Day (Rotation)</option>
         <option value="orbit">1 Year (Orbit)</option>
@@ -155,12 +176,22 @@
     </div>
 
     <div class="control-group">
-      <label>🌌 Accelerate Eternity: <span id="scaleValue">100000</span>x</label>
+      <div class="control-header">
+        <label>🌌 Accelerate Eternity: <span id="scaleValue">100000</span>x</label>
+        <i class="fa-solid fa-circle-info info-tooltip" title="Manually drag the slider to speed up or slow down time across the entire solar system."></i>
+      </div>
       <input id="scaleSlider" type="range" min="1" max="6000000000" value="100000" step="100">
+      <div class="button-row">
+        <button class="control-btn" id="btnPlayPause"><i class="fa-solid fa-pause"></i> Pause</button>
+        <button class="control-btn" id="btnRealTime"><i class="fa-solid fa-clock"></i> 1x Real-Time</button>
+      </div>
     </div>
     
     <div class="control-group">
-      <label>🔭 Direct My Gaze:</label>
+      <div class="control-header">
+        <label>🔭 Direct My Gaze:</label>
+        <i class="fa-solid fa-circle-info info-tooltip" title="Select a planet to instantly teleport the camera and lock onto it."></i>
+      </div>
       <select id="planetView">
         <option value="none">The Endless Void</option>
         <option value="mercury">Mercury</option>
