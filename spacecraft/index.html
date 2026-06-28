@@ -224,10 +224,19 @@
         <i class="fa-solid fa-magnifying-glass-plus"></i> Scroll to zoom &nbsp;·&nbsp;
         <i class="fa-solid fa-arrows-up-down-left-right"></i> Right-drag to pan
       </div>
+
+      <!-- Info toggle button (hidden by default until loaded) -->
+      <button id="craftViewerInfoBtn" class="craft-viewer-info-btn hidden" aria-label="About this Machine">
+        <i class="fa-solid fa-circle-info"></i> About
+      </button>
     </div>
 
     <!-- Info Sidebar -->
-    <aside class="craft-viewer-sidebar">
+    <aside class="craft-viewer-sidebar" id="craftViewerSidebar">
+      <!-- Sidebar Close Button -->
+      <button id="craftViewerCloseSidebarBtn" class="craft-viewer-sidebar-close" aria-label="Close Info">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
       <!-- Description -->
       <div class="viewer-sidebar-section">
         <div class="viewer-sidebar-label">About This Machine</div>
