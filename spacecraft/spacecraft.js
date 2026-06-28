@@ -225,6 +225,70 @@ const SPACECRAFT_DB = [
       { icon: 'fa-weight-hanging', label: 'Payload',     value: '22,800 kg to LEO' },
       { icon: 'fa-users',          label: 'Dragon Crew', value: 'Up to 7' }
     ]
+  },
+  {
+    name: 'ISRO Chandrayaan-3 Vikram Lander',
+    category: 'lander',
+    sketchfabId: '27e8d9b94f324e6b9a25b58e64317213',
+    nasaUrl: 'https://www.isro.gov.in/',
+    thumbnail: 'https://images-assets.nasa.gov/image/PIA23764/PIA23764~thumb.jpg',
+    desc: 'The Vikram lander from India\'s Chandrayaan-3 mission, which successfully soft-landed near the lunar south pole on August 23, 2023, making India the fourth country to land on the Moon.',
+    launch: 'July 14, 2023',
+    location: 'Lunar South Pole',
+    agency: 'ISRO',
+    facts: [
+      { icon: 'fa-weight-hanging', label: 'Mass',    value: '1,752 kg' },
+      { icon: 'fa-rocket',         label: 'Vehicle', value: 'LVM3-M4' },
+      { icon: 'fa-flag',           label: 'Nation',  value: 'India' }
+    ]
+  },
+  {
+    name: 'ISRO Pragyan Rover',
+    category: 'rover',
+    sketchfabId: 'ecd749574f7343b6a6b39a4a9a02639d',
+    nasaUrl: 'https://www.isro.gov.in/',
+    thumbnail: 'https://images-assets.nasa.gov/image/PIA16239/PIA16239~thumb.jpg',
+    desc: 'A lunar rover deployed by the Chandrayaan-3 mission. It explored the lunar surface near the south pole, conducting chemical analysis of the lunar regolith.',
+    launch: 'July 14, 2023',
+    location: 'Lunar South Pole',
+    agency: 'ISRO',
+    facts: [
+      { icon: 'fa-weight-hanging', label: 'Mass',    value: '26 kg' },
+      { icon: 'fa-bolt',           label: 'Power',   value: 'Solar Panel (50W)' },
+      { icon: 'fa-car-side',       label: 'Wheels',  value: '6 Wheels' }
+    ]
+  },
+  {
+    name: 'ISRO Mangalyaan (Mars Orbiter)',
+    category: 'satellite',
+    sketchfabId: '8719b7a3077643a798c95aec4dbced13',
+    nasaUrl: 'https://www.isro.gov.in/',
+    thumbnail: 'https://images-assets.nasa.gov/image/PIA17461/PIA17461~thumb.jpg',
+    desc: 'The Mars Orbiter Mission (MOM), also called Mangalyaan, was a space probe orbiting Mars since 2014. It made India the first Asian nation to reach Martian orbit and the first in the world to do so in its maiden attempt.',
+    launch: 'November 5, 2013',
+    location: 'Martian Orbit',
+    agency: 'ISRO',
+    facts: [
+      { icon: 'fa-weight-hanging', label: 'Mass',    value: '1,337 kg' },
+      { icon: 'fa-rocket',         label: 'Vehicle', value: 'PSLV-XL C25' },
+      { icon: 'fa-clock',          label: 'Duration',value: '7.5 Years' }
+    ]
+  },
+  {
+    name: 'ISRO Gaganyaan Crew Module',
+    category: 'spacecraft',
+    sketchfabId: '8f7d6390491c4e308a9cf8b503f9b384',
+    nasaUrl: 'https://www.isro.gov.in/',
+    thumbnail: 'https://images-assets.nasa.gov/image/NHQ202005300057/NHQ202005300057~thumb.jpg',
+    desc: 'The crew module for Gaganyaan, India\'s first human spaceflight programme. It is designed to carry three Indian astronauts (Gaganauts) into Low Earth Orbit for a 3-day mission.',
+    launch: 'Upcoming',
+    location: 'Low Earth Orbit (400 km)',
+    agency: 'ISRO',
+    facts: [
+      { icon: 'fa-users',          label: 'Crew',    value: '3 Members' },
+      { icon: 'fa-weight-hanging', label: 'Mass',    value: '3,735 kg' },
+      { icon: 'fa-rocket',         label: 'Vehicle', value: 'LVM3' }
+    ]
   }
 ];
 

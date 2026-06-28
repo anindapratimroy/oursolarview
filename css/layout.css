@@ -140,6 +140,18 @@
       overflow: hidden;
     }
 
+    @media (max-aspect-ratio: 1/1) {
+      .hero {
+        min-height: 0;
+        display: block;
+        padding-top: 100px;
+        padding-bottom: 20px;
+      }
+      .hero-inner {
+        padding: 40px 40px 40px !important;
+      }
+    }
+
     .hero-inner {
       max-width: 1300px;
       width: 100%;
