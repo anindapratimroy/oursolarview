@@ -58,6 +58,24 @@
     }
     .control-btn:hover { background: rgba(197,160,72,0.3); transform: translateY(-2px); }
     .control-btn.active { background: var(--gold); color: #000; }
+    /* Dynamic Status Box */
+    .status-box {
+      margin-top: 15px; padding: 12px; background: rgba(197,160,72,0.08);
+      border-left: 3px solid var(--gold); border-radius: 4px;
+      font-size: 0.8rem; line-height: 1.4; color: #ddd;
+    }
+    .status-box span.highlight { color: var(--gold); font-weight: bold; }
+    
+    /* Toggle Switch */
+    .toggle-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-top: 1px solid rgba(255,255,255,0.05); }
+    .toggle-label { font-size: 0.85rem; font-weight: 600; color: var(--text-dim); }
+    .switch { position: relative; display: inline-block; width: 34px; height: 18px; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #333; transition: .4s; border-radius: 18px; }
+    .slider:before { position: absolute; content: ""; height: 12px; width: 12px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+    input:checked + .slider { background-color: var(--gold); }
+    input:checked + .slider:before { transform: translateX(16px); background-color: #000; }
+
 
     
     input[type=range] { width: 100%; -webkit-appearance: none; height: 4px; background: rgba(255,255,255,0.15); border-radius: 2px; outline: none; }
@@ -206,6 +224,21 @@
     </div>
 
 
+    
+    <!-- Visual Toggles -->
+    <div class="toggle-row">
+      <span class="toggle-label"><i class="fa-solid fa-ring"></i> Show Orbits</span>
+      <label class="switch">
+        <input type="checkbox" id="toggleOrbits" checked>
+        <span class="slider"></span>
+      </label>
+    </div>
+    
+    <!-- Dynamic Explanation Box -->
+    <div class="status-box" id="dynamicStatus">
+      <i class="fa-solid fa-user-astronaut"></i> 
+      <span id="statusText">Time is flowing at <strong>100,000x</strong> real speed. You are viewing the entire Solar System.</span>
+    </div>
   </aside>
 
   <!-- Info Panel -->

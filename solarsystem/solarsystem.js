@@ -921,6 +921,43 @@ scaleSlider.addEventListener("input", e => {
 });
 
 
+
+// --- Dynamic UI Logic ---
+const toggleOrbits = document.getElementById("toggleOrbits");
+const statusText = document.getElementById("statusText");
+const planetView = document.getElementById("planetView");
+
+function updateDynamicStatus() {
+  if (!statusText) return;
+  
+  let targetName = "the entire Solar System";
+  if (planetView && planetView.value !== "none") {
+     targetName = planetView.value.charAt(0).toUpperCase() + planetView.value.slice(1);
+  }
+  
+  if (simScale === 0) {
+    statusText.innerHTML = `Time is paused. You are currently gazing at <strong>${targetName}</strong>.`;
+  } else if (simScale === 1) {
+    statusText.innerHTML = `Time is flowing at <strong>1x (Real-Time)</strong>. You are currently gazing at <strong>${targetName}</strong>.`;
+  } else {
+    statusText.innerHTML = `Time is flowing at <strong>${simScale.toLocaleString()}x</strong> real speed. You are currently gazing at <strong>${targetName}</strong>.`;
+  }
+}
+
+// Update status every frame or when controls change
+setInterval(updateDynamicStatus, 200);
+
+if (toggleOrbits) {
+  toggleOrbits.addEventListener("change", (e) => {
+    // We traverse the scene to find LineLoops and toggle visibility
+    scene.traverse((child) => {
+      if (child.isLineLoop || child.isLine) {
+        child.visible = e.target.checked;
+      }
+    });
+  });
+}
+
 // --- Play/Pause and Real-Time Logic ---
 const btnPlayPause = document.getElementById("btnPlayPause");
 const btnRealTime = document.getElementById("btnRealTime");
