@@ -195,8 +195,8 @@ orbitsData.forEach(o => scene.add(createEllipseRing(o.a,o.b,o.cx)));
       const randPhrase = phrases[Math.floor(Math.random() * phrases.length)];
       loadingText.innerText = `${randPhrase} (${displayPct}%)`;
       loadingText.style.opacity = "1"; // fade in
-    }, 400);
-  }, 2000);
+    }, 300);
+  }, 800);
 
   const pctInterval = setInterval(() => {
     if (displayPct < 99) {

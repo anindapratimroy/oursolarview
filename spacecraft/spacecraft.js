@@ -424,16 +424,35 @@ function openViewer(model) {
 
   /* ── 3D content loading ── */
   if (model.sketchfabId) {
-    if ($viewerIframe) $viewerIframe.style.display = 'block';
+    let loaderInterval;
+    let currentPct = 0;
+    const phrases = [
+      "God is building the machines...",
+      "God is forging the hull...",
+      "God is igniting the thrusters...",
+      "God is calibrating the instruments...",
+      "God is programming the flight path...",
+      "God is assembling the solar panels...",
+      "God is charging the energy cells...",
+      "God is testing the communications..."
+    ];
+    let currentPhrase = phrases[0];
+
     if ($viewerLoading) {
       $viewerLoading.classList.remove('hidden');
       $viewerLoading.style.display = 'flex';
       const textEl = document.getElementById('craftLoaderText');
-      if (textEl) textEl.textContent = 'God is building the machines... (0%)';
+      if (textEl) textEl.textContent = `${currentPhrase} (0%)`;
+      
+      loaderInterval = setInterval(() => {
+        currentPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+        if (textEl) textEl.textContent = `${currentPhrase} (${currentPct}%)`;
+      }, 700);
     }
 
     const hideLoader = () => {
       if ($viewerLoading) $viewerLoading.classList.add('hidden');
+      if (loaderInterval) clearInterval(loaderInterval);
     };
 
     if (window.Sketchfab) {
@@ -446,9 +465,9 @@ function openViewer(model) {
             hideLoader();
           });
           api.addEventListener('modelLoadProgress', function(factor) {
-            const pct = Math.floor(factor.progress * 100);
+            currentPct = Math.floor(factor.progress * 100);
             const textEl = document.getElementById('craftLoaderText');
-            if (textEl) textEl.textContent = `God is building the machines... (${pct}%)`;
+            if (textEl) textEl.textContent = `${currentPhrase} (${currentPct}%)`;
           });
         },
         error: function onError() {

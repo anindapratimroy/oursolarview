@@ -318,9 +318,9 @@ export function initComparison() {
             const currentText = phrases[Math.floor(Math.random() * phrases.length)];
             globalText.innerText = `${currentText} (${currentPct}%)`;
             globalText.style.opacity = "1";
-          }, 400);
+          }, 300);
         }
-      }, 2000);
+      }, 700);
 
       globalLoader.dataset.pctInterval = setInterval(() => {
         if (currentPct < 99) {
