@@ -12,11 +12,51 @@
    ───────────────────────────────────────────────────────────── */
 const SPACECRAFT_DB = [
   {
-    name: "Mars Sojourner",
+    name: "Perseverance Rover",
     category: "rover",
-    sketchfabId: "8b3810e7cd804bd6b0009520c67984c6",
+    sketchfabId: "c1c94e1f69df45eeae4a0a1d0d27e85b",
+    nasaUrl: "#",
+    thumbnail: "https://media.sketchfab.com/models/c1c94e1f69df45eeae4a0a1d0d27e85b/thumbnails/88365fe977914d3a900c54de88a9eb95/58627236ace44b7384257c2da4b6d213.jpeg",
+    desc: "Perseverance is a car-sized Mars rover designed to explore Jezero crater. It carries advanced instruments to search for signs of ancient microbial life and caches rock samples for future return to Earth.",
+    agency: "NASA",
+    facts: [{"icon":"fa-solid fa-calendar","label":"Launch","value":"July 30, 2020"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"1,025 kg"},{"icon":"fa-solid fa-rocket","label":"Vehicle","value":"Atlas V 541"}]
+  },
+  {
+    name: "Curiosity Rover",
+    category: "rover",
+    sketchfabId: "bd1379cd718e43f78bb96f229456a451",
+    nasaUrl: "#",
+    thumbnail: "https://media.sketchfab.com/models/bd1379cd718e43f78bb96f229456a451/thumbnails/b714cbc7e7aa4e9a8d31e7691a3b9a1e/3260c1d8fa594c319f94074cdacb45b6.jpeg",
+    desc: "Curiosity is a car-sized Mars rover exploring Gale Crater. Since 2012, it has been analyzing the Martian climate and geology, determining that Mars once had conditions capable of supporting microbial life.",
+    agency: "NASA",
+    facts: [{"icon":"fa-solid fa-calendar","label":"Launch","value":"Nov 26, 2011"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"899 kg"},{"icon":"fa-solid fa-rocket","label":"Vehicle","value":"Atlas V 541"}]
+  },
+  {
+    name: "Mars Rover Spirit",
+    category: "rover",
+    sketchfabId: "bfe33ecdbbff471fabb7bf9f0dbef4ac",
+    nasaUrl: "https://mars.nasa.gov/mer/",
+    thumbnail: "https://media.sketchfab.com/models/bfe33ecdbbff471fabb7bf9f0dbef4ac/thumbnails/13db0b7e20c84c94a85993804be6d110/d4e6ba3f85684a8e96e51815cf09828b.jpeg",
+    desc: "Spirit, also known as MER-A, was a robotic rover on Mars, active from 2004 to 2010. It was one of two rovers of NASA's Mars Exploration Rover Mission.",
+    agency: "NASA",
+    facts: [{"icon":"fa-solid fa-calendar","label":"Launch","value":"Jun 10, 2003"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"185 kg"},{"icon":"fa-solid fa-rocket","label":"Vehicle","value":"Delta II 7925"}]
+  },
+  {
+    name: "Mars Explorer Rover: Opportunity",
+    category: "rover",
+    sketchfabId: "7f2ebe3f7f464ea19f87fdf019713ff3",
+    nasaUrl: "https://mars.nasa.gov/mer/",
+    thumbnail: "https://media.sketchfab.com/models/7f2ebe3f7f464ea19f87fdf019713ff3/thumbnails/24b59def1280486b97972e1340f1f818/3e0bdf563c314c5487ec41c9e52a89c6.jpeg",
+    desc: "Opportunity, also known as MER-B, was a robotic rover on Mars, active from 2004 until 2018. It vastly exceeded its planned 90-day mission, discovering strong evidence that water once existed on Mars.",
+    agency: "NASA",
+    facts: [{"icon":"fa-solid fa-calendar","label":"Launch","value":"Jul 7, 2003"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"185 kg"},{"icon":"fa-solid fa-rocket","label":"Vehicle","value":"Delta II 7925"}]
+  },
+  {
+    name: "Sojourner Mars Rover",
+    category: "rover",
+    sketchfabId: "7f135874ddd34f8f98904b53a2c178e1",
     nasaUrl: "https://github.com/nasa/NASA-3D-Resources/tree/master/3D%20Models",
-    thumbnail: "https://media.sketchfab.com/models/8b3810e7cd804bd6b0009520c67984c6/thumbnails/e5bb603ccdcb4b17913c3903be54c203/46ff0e916ff2438ebea3f811c5ceacc0.jpeg",
+    thumbnail: "https://media.sketchfab.com/models/7f135874ddd34f8f98904b53a2c178e1/thumbnails/51502ea625d347508e8b990b623cb172/4f367c1c548848f4b16d45444435b196.jpeg",
     desc: "Sojourner was the first planetary rover. It was part of the Mars Pathfinder mission and spent 83 days exploring the Martian terrain, sending back 550 photographs.",
     launch: "December 4, 1996",
     location: "Ares Vallis, Mars",
@@ -128,16 +168,6 @@ const SPACECRAFT_DB = [
     facts: [{"icon":"fa-solid fa-calendar","label":"Status","value":"In Development"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"8,200 kg"},{"icon":"fa-solid fa-users","label":"Crew","value":"3 Astronauts"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"ISRO"}]
   },
   {
-    name: "Rocket Model ISRO Rocket",
-    category: "rocket",
-    sketchfabId: "ab1265ff351c4a0aa382d91c89c30f18",
-    nasaUrl: "https://www.isro.gov.in/",
-    thumbnail: "https://media.sketchfab.com/models/ab1265ff351c4a0aa382d91c89c30f18/thumbnails/9726a1f70c9d48689f17f953a7956af5/e55c4ec43a5741f89ff64cb8b57b0e41.jpeg",
-    desc: "The Geosynchronous Satellite Launch Vehicle Mark III (LVM3) is a three-stage medium-lift launch vehicle developed by ISRO. It is India's heaviest and most powerful rocket, used for missions like Chandrayaan.",
-    agency: "ISRO",
-    facts: [{"icon":"fa-solid fa-weight-hanging","label":"Payload","value":"10,000 kg (LEO)"},{"icon":"fa-solid fa-ruler-vertical","label":"Height","value":"43.5 meters"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"ISRO"}]
-  },
-  {
     name: "Gaganyaan Indian Spacecraft ISRO",
     category: "spacecraft",
     sketchfabId: "8806539ac75b4906a7bf1ca9bd0a9657",
@@ -188,16 +218,6 @@ const SPACECRAFT_DB = [
     facts: [{"icon":"fa-solid fa-calendar","label":"Launch","value":"Nov 5, 2013"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"1,337 kg"},{"icon":"fa-solid fa-rocket","label":"Vehicle","value":"PSLV-XL C25"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"ISRO"}]
   },
   {
-    name: "ISRO Rover",
-    category: "rover",
-    sketchfabId: "229bb6eb9b614a18bf3e4fe536dc707d",
-    nasaUrl: "https://www.isro.gov.in/",
-    thumbnail: "https://media.sketchfab.com/models/229bb6eb9b614a18bf3e4fe536dc707d/thumbnails/a10dba94dd664e55a6d1fdd09766923b/0c7cd9ca379648b19b95cf9e648b6eea.jpeg",
-    desc: "Pragyan is a six-wheeled robotic rover deployed by the Vikram lander during the Chandrayaan-3 mission. It traversed the lunar surface to conduct in-situ chemical analysis of the lunar soil.",
-    agency: "ISRO",
-    facts: [{"icon":"fa-solid fa-calendar","label":"Deployed","value":"Aug 23, 2023"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"26 kg"},{"icon":"fa-solid fa-battery-full","label":"Power","value":"Solar Array"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"ISRO"}]
-  },
-  {
     name: "PSLV C40",
     category: "rocket",
     sketchfabId: "c7066310704040a9bf0c86d7d21ab94f",
@@ -218,11 +238,11 @@ const SPACECRAFT_DB = [
     facts: [{"icon":"fa-solid fa-weight-hanging","label":"Payload","value":"10,000 kg (LEO)"},{"icon":"fa-solid fa-ruler-vertical","label":"Height","value":"43.5 meters"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"ISRO"}]
   },
   {
-    name: "NISAR",
+    name: "NISAR Satellite ISRO",
     category: "satellite",
-    sketchfabId: "18f8ec6b19db49d29d9c986842d79850",
+    sketchfabId: "0103309668d243dbbfab3c8fc6b9683c",
     nasaUrl: "https://www.isro.gov.in/",
-    thumbnail: "https://media.sketchfab.com/models/18f8ec6b19db49d29d9c986842d79850/thumbnails/742c1a5e29474c0b859c047e27c91eec/264ac7c554e04c15a3acd7cadb272f35.jpeg",
+    thumbnail: "https://media.sketchfab.com/models/0103309668d243dbbfab3c8fc6b9683c/thumbnails/724de452c1674c068bc3848b865cb5c2/d584adf2bac74d02b3210ec0e8af1a51.jpeg",
     desc: "NISAR (NASA-ISRO Synthetic Aperture Radar) is a joint project between NASA and ISRO to co-develop and launch a dual-frequency synthetic aperture radar satellite for Earth observation.",
     agency: "ISRO",
     facts: [{"icon":"fa-solid fa-calendar","label":"Launch","value":"Planned 2025"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"2,800 kg"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"ISRO / NASA"}]
@@ -298,16 +318,6 @@ const SPACECRAFT_DB = [
     facts: [{"icon":"fa-solid fa-calendar","label":"Launch","value":"Oct 16, 2021"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"1,550 kg"},{"icon":"fa-solid fa-rocket","label":"Vehicle","value":"Atlas V 401"}]
   },
   {
-    name: "NASA Rover",
-    category: "rover",
-    sketchfabId: "440f5c9f53f64b69865484f938eb4b0a",
-    nasaUrl: "#",
-    thumbnail: "https://media.sketchfab.com/models/440f5c9f53f64b69865484f938eb4b0a/thumbnails/85f9fa57acce405797ce82dab4015552/2073b7a85f454128930c59b2df367f0e.jpeg",
-    desc: "An advanced NASA rover concept designed to provide pressurized mobility for astronauts on the lunar or Martian surface, equipped with pivoting wheels for omnidirectional movement.",
-    agency: "NASA",
-    facts: [{"icon":"fa-solid fa-users","label":"Crew","value":"2 Astronauts"},{"icon":"fa-solid fa-truck-monster","label":"Type","value":"Pressurized Rover"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"NASA"}]
-  },
-  {
     name: "Project Eden - Exo-Rover",
     category: "rover",
     sketchfabId: "2d936204fedb42569ae9b75c9a808c1c",
@@ -316,16 +326,6 @@ const SPACECRAFT_DB = [
     desc: "A conceptual exo-rover designed for deep space exploration and astrobiology missions. It is built to analyze soil samples and search for biosignatures on exoplanets or distant moons.",
     agency: "NASA",
     facts: [{"icon":"fa-solid fa-flask","label":"Mission","value":"Astrobiology"},{"icon":"fa-solid fa-microchip","label":"Status","value":"Conceptual"},{"icon":"fa-solid fa-satellite-dish","label":"Agency","value":"NASA"}]
-  },
-  {
-    name: "Perseverance Rover",
-    category: "rover",
-    sketchfabId: "5f59240fb0bb4d19aadf1a4cda503add",
-    nasaUrl: "#",
-    thumbnail: "https://media.sketchfab.com/models/5f59240fb0bb4d19aadf1a4cda503add/thumbnails/9260df3ab7c647d2821d6a1905de23bf/4ef7bf4090dd4221bccee7525ad82f75.jpeg",
-    desc: "Perseverance is a car-sized Mars rover designed to explore Jezero crater. It carries advanced instruments to search for signs of ancient microbial life and caches rock samples for future return to Earth.",
-    agency: "NASA",
-    facts: [{"icon":"fa-solid fa-calendar","label":"Launch","value":"July 30, 2020"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"1,025 kg"},{"icon":"fa-solid fa-rocket","label":"Vehicle","value":"Atlas V 541"}]
   },
   {
     name: "Spaceship",
@@ -338,7 +338,7 @@ const SPACECRAFT_DB = [
     facts: [{"icon":"fa-solid fa-meteor","label":"Type","value":"Interstellar Craft"},{"icon":"fa-solid fa-fire-flame-curved","label":"Propulsion","value":"Advanced Ion/Warp"},{"icon":"fa-solid fa-microchip","label":"Status","value":"Conceptual"}]
   },
   {
-    name: "International Space Station",
+    name: "International Space Station Interior",
     category: "station",
     sketchfabId: "31cad35dc37b4511ae920255aef62922",
     nasaUrl: "#",
@@ -346,16 +346,6 @@ const SPACECRAFT_DB = [
     desc: "The International Space Station (ISS) is the largest modular space station currently in low Earth orbit. It serves as a microgravity and space environment research laboratory for scientific experiments.",
     agency: "NASA",
     facts: [{"icon":"fa-solid fa-calendar","label":"Launch","value":"Nov 20, 1998"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"419,725 kg"},{"icon":"fa-solid fa-earth-americas","label":"Orbit","value":"420 km LEO"}]
-  },
-  {
-    name: "Curiosity Rover",
-    category: "rover",
-    sketchfabId: "bd1379cd718e43f78bb96f229456a451",
-    nasaUrl: "#",
-    thumbnail: "https://media.sketchfab.com/models/bd1379cd718e43f78bb96f229456a451/thumbnails/b714cbc7e7aa4e9a8d31e7691a3b9a1e/3260c1d8fa594c319f94074cdacb45b6.jpeg",
-    desc: "Curiosity is a car-sized Mars rover exploring Gale Crater. Since 2012, it has been analyzing the Martian climate and geology, determining that Mars once had conditions capable of supporting microbial life.",
-    agency: "NASA",
-    facts: [{"icon":"fa-solid fa-calendar","label":"Launch","value":"Nov 26, 2011"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"899 kg"},{"icon":"fa-solid fa-rocket","label":"Vehicle","value":"Atlas V 541"}]
   },
   {
     name: "Exploration Support Rover",
@@ -426,6 +416,146 @@ const SPACECRAFT_DB = [
     desc: "A conceptual lunar communications relay dish. Positioned on the lunar surface, it is designed to transmit massive amounts of scientific data from Moon bases back to Earth's Deep Space Network.",
     agency: "NASA",
     facts: [{"icon":"fa-solid fa-satellite-dish","label":"Type","value":"Lunar Relay"},{"icon":"fa-solid fa-moon","label":"Location","value":"Lunar Surface"},{"icon":"fa-solid fa-microchip","label":"Status","value":"Conceptual"}]
+  },
+  {
+    name: "SpaceX Starship Ship S25 & Booster 9",
+    category: "rocket",
+    sketchfabId: "f76be07d358f454b8396d4e8f1cc5329",
+    nasaUrl: "https://www.spacex.com/vehicles/starship/",
+    thumbnail: "https://media.sketchfab.com/models/f76be07d358f454b8396d4e8f1cc5329/thumbnails/f777a3a8769449e5890af35f5b4c00aa/86ccb84b3cbe4920981127e4aa091780.jpeg",
+    desc: "Starship S25 and Super Heavy Booster 9 formed the fully reusable two-stage super heavy-lift launch vehicle built by SpaceX. They performed the second integrated flight test (IFT-2) from Starbase in November 2023.",
+    agency: "SpaceX",
+    facts: [{"icon":"fa-solid fa-calendar","label":"Launch","value":"Nov 18, 2023"},{"icon":"fa-solid fa-ruler-vertical","label":"Height","value":"121 meters"},{"icon":"fa-solid fa-rocket","label":"Vehicle","value":"Starship"}]
+  },
+  {
+    name: "Merlin Engine",
+    category: "rocket",
+    sketchfabId: "b4dab1838c7a417095b21596ebc35c77",
+    nasaUrl: "https://www.spacex.com/vehicles/falcon-9/",
+    thumbnail: "https://media.sketchfab.com/models/b4dab1838c7a417095b21596ebc35c77/thumbnails/9f99e2935f594a159d97d44eb2e2cf04/600852ccdda5495e8ac2f6ddec7170dc.jpeg",
+    desc: "The Merlin engine is a family of rocket engines developed by SpaceX for use on its Falcon 1, Falcon 9 and Falcon Heavy launch vehicles. It uses RP-1 and liquid oxygen as rocket propellants in a gas-generator power cycle.",
+    agency: "SpaceX",
+    facts: [{"icon":"fa-solid fa-fire-flame-curved","label":"Thrust","value":"845 kN (Sea Level)"},{"icon":"fa-solid fa-gas-pump","label":"Propellant","value":"LOX / RP-1"},{"icon":"fa-solid fa-rocket","label":"Vehicle","value":"Falcon 9 / Heavy"}]
+  },
+  {
+    name: "SpaceX Falcon Heavy V4",
+    category: "rocket",
+    sketchfabId: "a91bccdf8e624997892bab2f0fbec28f",
+    nasaUrl: "https://www.spacex.com/vehicles/falcon-heavy/",
+    thumbnail: "https://media.sketchfab.com/models/a91bccdf8e624997892bab2f0fbec28f/thumbnails/d719941ed7c447c7a1e0144c194ed2bb/c747744d5da24798af7ca9868201b583.jpeg",
+    desc: "Falcon Heavy is a partially reusable heavy-lift launch vehicle designed and manufactured by SpaceX. It is composed of three Falcon 9 nine-engine cores whose 27 Merlin engines together generate more than 5 million pounds of thrust at liftoff.",
+    agency: "SpaceX",
+    facts: [{"icon":"fa-solid fa-calendar","label":"First Flight","value":"Feb 6, 2018"},{"icon":"fa-solid fa-weight-hanging","label":"Payload","value":"63,800 kg (LEO)"},{"icon":"fa-solid fa-ruler-vertical","label":"Height","value":"70 meters"}]
+  },
+  {
+    name: "James Webb Space Telescope",
+    category: "telescope",
+    sketchfabId: "6c92c08a672640afb58ee44d248fd0fe",
+    nasaUrl: "https://webb.nasa.gov/",
+    thumbnail: "https://media.sketchfab.com/models/6c92c08a672640afb58ee44d248fd0fe/thumbnails/694c5bb3140e44e28d0e7b2a6a8a2a5b/d45f11d89e084e849f58f2bb678af378.jpeg",
+    desc: "The James Webb Space Telescope (JWST) is the largest, most powerful, and most complex space telescope ever built and launched into space. It conducts infrared astronomy to see deeper into the universe than ever before.",
+    agency: "NASA / ESA / CSA",
+    facts: [{"icon":"fa-solid fa-calendar","label":"Launch","value":"Dec 25, 2021"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"6,161 kg"},{"icon":"fa-solid fa-earth-americas","label":"Orbit","value":"Sun-Earth L2"}]
+  },
+  {
+    name: "Cassini-Huygens",
+    category: "satellite",
+    sketchfabId: "35231f6fec4547e483cadce27460a369",
+    nasaUrl: "https://science.nasa.gov/mission/cassini/",
+    thumbnail: "https://media.sketchfab.com/models/35231f6fec4547e483cadce27460a369/thumbnails/335063bd1b784969af8e917592d94fa8/blob.jpeg",
+    desc: "The Cassini-Huygens mission was a collaboration between NASA, ESA, and ASI to study the planet Saturn and its system, including its rings and natural satellites. It launched in 1997 and spent 13 years orbiting Saturn.",
+    agency: "NASA / ESA / ASI",
+    facts: [{"icon":"fa-solid fa-calendar","label":"Launch","value":"Oct 15, 1997"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"5,712 kg"},{"icon":"fa-solid fa-satellite-dish","label":"Mission","value":"Saturn Orbiter"}]
+  },
+  {
+    name: "Sputnik 1",
+    category: "satellite",
+    sketchfabId: "35f81881ca404ecf98f2a39220c2d506",
+    nasaUrl: "https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1957-001B",
+    thumbnail: "https://media.sketchfab.com/models/35f81881ca404ecf98f2a39220c2d506/thumbnails/5da7842eaa0a4a9bb073751a8a4cf150/blob.jpeg",
+    desc: "Sputnik 1 was the first artificial Earth satellite. It was launched into an elliptical low Earth orbit by the Soviet Union on 4 October 1957. It orbited for three weeks before its batteries died and then orbited for two more months before falling back into the atmosphere.",
+    agency: "Soviet Union",
+    facts: [{"icon":"fa-solid fa-calendar","label":"Launch","value":"Oct 4, 1957"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"83.6 kg"},{"icon":"fa-solid fa-satellite-dish","label":"Mission","value":"First Satellite"}]
+  },
+  {
+    name: "Mars Ingenuity Helicopter",
+    category: "rover",
+    sketchfabId: "201020c6e7e04440a7a956abeda32040",
+    nasaUrl: "https://mars.nasa.gov/technology/helicopter/",
+    thumbnail: "https://media.sketchfab.com/models/201020c6e7e04440a7a956abeda32040/thumbnails/9da43c733fce42269134885c34fadc85/1e5c1328b8ef4beb828a60bfcda96c74.jpeg",
+    desc: "Ingenuity is a small robotic helicopter that operated on Mars from 2021 to 2024. It successfully completed the first powered, controlled flight by an aircraft on a planet besides Earth, operating alongside the Perseverance rover.",
+    agency: "NASA / JPL",
+    facts: [{"icon":"fa-solid fa-calendar","label":"First Flight","value":"Apr 19, 2021"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"1.8 kg"},{"icon":"fa-solid fa-helicopter","label":"Flights","value":"72 Total"}]
+  },
+  {
+    name: "Advanced Soyuz Spacecraft",
+    category: "rocket",
+    sketchfabId: "a7db470ce0a34feb81cd005dd1854dbb",
+    nasaUrl: "https://www.roscosmos.ru/",
+    thumbnail: "https://media.sketchfab.com/models/a7db470ce0a34feb81cd005dd1854dbb/thumbnails/0ff534e300be4748bac4cadc9fb4de60/f30d387a48074c8c8a139c287104bf34.jpeg",
+    desc: "Soyuz is a series of spacecraft which has been in service since the 1960s, having made more than 140 flights. It was designed for the Soviet space program by the Korolev Design Bureau and remains a primary vehicle for transporting crews to the ISS.",
+    agency: "Roscosmos",
+    facts: [{"icon":"fa-solid fa-calendar","label":"First Flight","value":"Nov 28, 1966"},{"icon":"fa-solid fa-users","label":"Crew","value":"Up to 3"},{"icon":"fa-solid fa-rocket","label":"Vehicle","value":"Soyuz Rocket"}]
+  },
+  {
+    name: "Lunar Gateway Space Station",
+    category: "station",
+    sketchfabId: "57c6a27313794618a299ebe9ec8c2afd",
+    nasaUrl: "https://www.nasa.gov/gateway",
+    thumbnail: "https://media.sketchfab.com/models/57c6a27313794618a299ebe9ec8c2afd/thumbnails/1cc82a990a8843afb304cd0c81e7578b/63b0e6ea8d3948e48ad27e71a9b412ee.jpeg",
+    desc: "The Lunar Gateway is a planned extraterrestrial space station in lunar orbit intended to serve as a solar-powered communication hub, science laboratory, and short-term habitation module for government-agency astronauts.",
+    agency: "NASA / ESA / JAXA",
+    facts: [{"icon":"fa-solid fa-calendar","label":"Launch","value":"Planned 2025+"},{"icon":"fa-solid fa-earth-americas","label":"Orbit","value":"NRHO (Lunar)"},{"icon":"fa-solid fa-users","label":"Capacity","value":"4 Astronauts"}]
+  },
+  {
+    name: "Space Shuttle",
+    category: "rocket",
+    sketchfabId: "05ae2cc887e04dd1a03fd4b3fd2ac1f5",
+    nasaUrl: "https://www.nasa.gov/mission_pages/shuttle/main/index.html",
+    thumbnail: "https://media.sketchfab.com/models/05ae2cc887e04dd1a03fd4b3fd2ac1f5/thumbnails/a33fd32bf8e749f4ac1cfc4d474d2769/61f21647bf644b21a7b47e808598a9a3.jpeg",
+    desc: "The Space Shuttle was a partially reusable low Earth orbital spacecraft system operated from 1981 to 2011 by NASA. It launched numerous satellites, interplanetary probes, and the Hubble Space Telescope, and also participated in creating and servicing the ISS.",
+    agency: "NASA",
+    facts: [{"icon":"fa-solid fa-calendar","label":"First Flight","value":"Apr 12, 1981"},{"icon":"fa-solid fa-users","label":"Crew","value":"Up to 8"},{"icon":"fa-solid fa-helicopter","label":"Missions","value":"135 Total"}]
+  },
+  {
+    name: "Galileo Orbiter",
+    category: "satellite",
+    sketchfabId: "19c3c6e0c1b548919d11681065fcf65a",
+    nasaUrl: "https://solarsystem.nasa.gov/missions/galileo/overview/",
+    thumbnail: "https://media.sketchfab.com/models/19c3c6e0c1b548919d11681065fcf65a/thumbnails/ad7ffe1235db421e9c877ef086ef5ae4/b15d37fab7da4651869be492116634d2.jpeg",
+    desc: "Galileo was an uncrewed spacecraft that studied the planet Jupiter and its moons, as well as several other Solar System bodies. It was the first spacecraft to orbit Jupiter and the first to deploy an entry probe into an outer planet's atmosphere.",
+    agency: "NASA / JPL",
+    facts: [{"icon":"fa-solid fa-calendar","label":"Launch","value":"Oct 18, 1989"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"2,380 kg"},{"icon":"fa-solid fa-satellite-dish","label":"Mission","value":"Jupiter Orbiter"}]
+  },
+  {
+    name: "Ariane 5",
+    category: "rocket",
+    sketchfabId: "88a1de562245402da653bc1ae92b1b91",
+    nasaUrl: "https://www.esa.int/Enabling_Support/Space_Transportation/Launch_vehicles/Ariane_5",
+    thumbnail: "https://media.sketchfab.com/models/88a1de562245402da653bc1ae92b1b91/thumbnails/a5574527272b4e65847ba662cf8d1296/bb9617cb630548b2ad63beb3e5e65972.jpeg",
+    desc: "Ariane 5 was a European heavy-lift space launch vehicle developed and operated by Arianespace for the European Space Agency (ESA). It was a highly reliable workhorse that launched numerous payloads, including the James Webb Space Telescope.",
+    agency: "ESA / Arianespace",
+    facts: [{"icon":"fa-solid fa-calendar","label":"First Flight","value":"Jun 4, 1996"},{"icon":"fa-solid fa-weight-hanging","label":"Payload","value":"21,000 kg (LEO)"},{"icon":"fa-solid fa-ruler-vertical","label":"Height","value":"53 meters"}]
+  },
+  {
+    name: "Venera 15-16",
+    category: "satellite",
+    sketchfabId: "bdf43311237248b6b29203d6cdb5b3ab",
+    nasaUrl: "https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1983-053A",
+    thumbnail: "https://media.sketchfab.com/models/bdf43311237248b6b29203d6cdb5b3ab/thumbnails/085755ab0dca465b8051e4ce5f03d20b/blob.jpeg",
+    desc: "Venera 15 and Venera 16 were two identical Soviet spacecraft launched in 1983 to map the surface of Venus using high-resolution synthetic aperture radar. Together they successfully mapped a significant portion of the planet's northern hemisphere.",
+    agency: "Soviet Union",
+    facts: [{"icon":"fa-solid fa-calendar","label":"Launch","value":"Jun 1983"},{"icon":"fa-solid fa-weight-hanging","label":"Mass","value":"5,250 kg"},{"icon":"fa-solid fa-satellite-dish","label":"Mission","value":"Venus Orbiters"}]
+  },
+  {
+    name: "Artemis II - Space Launch System (SLS)",
+    category: "rocket",
+    sketchfabId: "adfc2a81cb97425c9c86ff9c347e5d96",
+    nasaUrl: "https://www.nasa.gov/exploration/systems/sls/index.html",
+    thumbnail: "https://media.sketchfab.com/models/adfc2a81cb97425c9c86ff9c347e5d96/thumbnails/6a636abdeb8d4dd6bd2aefb8f424d100/9c8e43ef34c440c7bab63dedc6783bb1.jpeg",
+    desc: "The Space Launch System (SLS) is a super heavy-lift expendable launch vehicle, which is the primary rocket for NASA's Artemis deep space exploration plans, including the crewed lunar flights of the Artemis program and beyond.",
+    agency: "NASA",
+    facts: [{"icon":"fa-solid fa-calendar","label":"First Flight","value":"Nov 16, 2022"},{"icon":"fa-solid fa-weight-hanging","label":"Payload","value":"95,000 kg (LEO)"},{"icon":"fa-solid fa-ruler-vertical","label":"Height","value":"98 meters"}]
   }
 ];
 
@@ -485,6 +615,9 @@ const $viewerLoading = document.getElementById('craftViewerLoading');
 let viewerOpen = false;
 let activeFilter = 'all';
 let searchQuery = '';
+let currentPage = 0;
+const PAGE_SIZE = 12;
+let filteredModels = [];
 
 /* ══════════════════════════════════════════════════════════════
    RENDER FLEET
@@ -492,30 +625,43 @@ let searchQuery = '';
 function renderGallery() {
   if (!$showcaseGrid) return;
   $showcaseGrid.innerHTML = '';
+  currentPage = 0;
 
-  let models = SPACECRAFT_DB;
-  if (activeFilter !== 'all') models = models.filter(m => m.category === activeFilter);
+  filteredModels = SPACECRAFT_DB;
+  if (activeFilter !== 'all') filteredModels = filteredModels.filter(m => m.category === activeFilter);
   if (searchQuery) {
     const q = searchQuery.toLowerCase();
-    models = models.filter(m => m.name.toLowerCase().includes(q));
+    filteredModels = filteredModels.filter(m => m.name.toLowerCase().includes(q));
   }
 
   const total = SPACECRAFT_DB.length;
   if ($resultCount) {
     $resultCount.textContent = (searchQuery || activeFilter !== 'all')
-      ? `Showing ${models.length} of ${total} models`
+      ? `Showing ${filteredModels.length} of ${total} models`
       : ``;
   }
   if ($modelBadge) $modelBadge.textContent = `${total}+`;
 
-  models.forEach((model, idx) => {
+  loadMoreGallery();
+}
+
+function loadMoreGallery() {
+  if (!$showcaseGrid) return;
+
+  const start = currentPage * PAGE_SIZE;
+  const end = start + PAGE_SIZE;
+  const pageModels = filteredModels.slice(start, end);
+
+  if (pageModels.length === 0) return;
+
+  pageModels.forEach((model, idx) => {
     const catColor = CAT_COLORS[model.category] || '#8ba3c0';
     const catLabel = model.category.charAt(0).toUpperCase() + model.category.slice(1);
     const catIcon = CATEGORY_ICONS[model.category] || 'fa-cube';
 
     const card = document.createElement('div');
     card.className = 'showcase-card fade-up';
-    card.style.animationDelay = `${idx * 50}ms`;
+    card.style.animationDelay = `${(idx % PAGE_SIZE) * 50}ms`;
     card.setAttribute('role', 'button');
     card.setAttribute('tabindex', '0');
     card.setAttribute('aria-label', `Explore ${model.name} in 3D`);
@@ -547,6 +693,8 @@ function renderGallery() {
 
     $showcaseGrid.appendChild(card);
   });
+  
+  currentPage++;
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -740,3 +888,16 @@ if ($searchClear) {
    INIT
    ══════════════════════════════════════════════════════════════ */
 renderGallery();
+
+/* ══════════════════════════════════════════════════════════════
+   INFINITE SCROLL OBSERVER
+   ══════════════════════════════════════════════════════════════ */
+const sentinel = document.getElementById('infiniteScrollSentinel');
+if (sentinel) {
+  const observer = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) {
+      loadMoreGallery();
+    }
+  }, { rootMargin: '200px' });
+  observer.observe(sentinel);
+}

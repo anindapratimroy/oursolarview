@@ -145,6 +145,7 @@
       <div class="featured-grid" id="featuredGrid">
         <!-- populated by spacecraft.js -->
       </div>
+      <div id="infiniteScrollSentinel" style="height: 20px; width: 100%;"></div>
     </div>
   </section>
 
@@ -272,7 +273,11 @@
   resize(); for(let i=0;i<260;i++) stars.push(mkStar());
   addEventListener('resize',resize);
   let f=0;
-  (function draw(){
+  let isCanvasVisible = true;
+  let rafId;
+
+  function draw(){
+    if (!isCanvasVisible) return;
     ctx.clearRect(0,0,W,H);
     stars.forEach(s=>{
       s.a=Math.max(0.08,Math.min(1,s.a+s.da));
@@ -289,8 +294,23 @@
       ctx.strokeStyle=g; ctx.lineWidth=1.5; ctx.stroke();
       s.x+=s.vx; s.y+=s.vy; s.a-=s.da;
     });
-    f++; requestAnimationFrame(draw);
-  })();
+    f++;
+    rafId = requestAnimationFrame(draw);
+  }
+
+  const hero = document.querySelector('.craft-hero');
+  if (hero) {
+    const obs = new IntersectionObserver(e => {
+      isCanvasVisible = e[0].isIntersecting;
+      if (isCanvasVisible) {
+        cancelAnimationFrame(rafId);
+        rafId = requestAnimationFrame(draw);
+      }
+    });
+    obs.observe(hero);
+  } else {
+    rafId = requestAnimationFrame(draw);
+  }
 })();
 
 /* Mobile Nav */
