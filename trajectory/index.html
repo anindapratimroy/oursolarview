@@ -100,7 +100,38 @@
         transition: transform 0.35s cubic-bezier(0.16,1,0.3,1);
       }
       /* When controls are open, push dashboard up by the panel's max height roughly */
-      .control-panel.open ~ #dashboard {
+  
+    /* Make control panel scrollable if it gets too tall */
+    .control-panel {
+      max-height: 85vh;
+      overflow-y: auto;
+    }
+    .control-panel::-webkit-scrollbar { width: 6px; }
+    .control-panel::-webkit-scrollbar-thumb { background: rgba(197,160,72,0.4); border-radius: 4px; }
+    
+    .panel-subtitle { font-size: 0.8rem; color: var(--gold); margin-bottom: 6px; font-weight: bold; border-bottom: 1px solid rgba(197,160,72,0.2); padding-bottom: 3px; margin-top: 10px; }
+    
+    select {
+      width: 100%; background: rgba(0,8,20,0.8); color: var(--gold);
+      border: 1px solid rgba(197,160,72,0.4); border-radius: 6px; padding: 8px 10px;
+      font-size: 0.85rem; font-family: 'Space Grotesk', sans-serif; outline: none; margin-bottom: 8px;
+      appearance: none; -webkit-appearance: none; -moz-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23c5a048' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      cursor: pointer;
+    }
+    
+    select:hover {
+      border-color: var(--gold);
+    }
+    
+    select option {
+      background: #000814;
+      color: #ffffff;
+    }
+
+    .control-panel.open ~ #dashboard {
         transform: translateY(-46vh);
       }
       #orbitTypeBadge { top: 70px; display: none; }
@@ -120,41 +151,101 @@
     <i class="fa-solid fa-sliders"></i> Controls
   </button>
 
-  <div id="orbitTypeBadge">Elliptical Orbit</div>
+    <div id="collisionWarning" style="display:none; position:absolute; top:80px; left:50%; transform:translateX(-50%); background:rgba(255,0,0,0.8); color:white; padding:10px 20px; font-weight:bold; font-size:1.2rem; border-radius:8px; z-index:3000;">
+    <i class="fa-solid fa-triangle-exclamation"></i> COLLISION ALERT! The body has crashed into the central mass!
+  </div>
+<div id="orbitTypeBadge">Elliptical Orbit</div>
 
-  <aside class="control-panel">
-    <div class="panel-title">Orbital Parameters</div>
+    <aside class="control-panel">
+    <div class="panel-title">Orbital Mechanics</div>
     
+    <div class="panel-subtitle">Environment</div>
+    <div class="control-group">
+          <div class="control-group">
+      <label>Orbiting Body</label>
+      <select id="orbitingBody">
+        <option value="earth">Earth</option>
+        <option value="mars">Mars</option>
+        <option value="jupiter">Jupiter</option>
+        <option value="mercury">Mercury</option>
+        <option value="venus">Venus</option>
+        <option value="saturn">Saturn</option>
+        <option value="uranus">Uranus</option>
+        <option value="neptune">Neptune</option>
+      </select>
+    </div>
+    <div class="control-group">
+      <label>Central Mass System</label>
+      <select id="centralMass">
+        <option value="1">The Sun (1 Solar Mass)</option>
+        <option value="0.000003">Earth (Low Mass)</option>
+        <option value="4000000">Sagittarius A* (Supermassive Black Hole)</option>
+      </select>
+    </div>
+
+    <div class="panel-subtitle">Shape (2D)</div>
     <div class="control-group">
       <label>Eccentricity (e) <span id="eVal">0.600</span></label>
       <input type="range" id="eccentricity" min="0" max="1.5" step="0.005" value="0.6">
     </div>
     
     <div class="control-group">
-      <label>Semi-Major Axis (a) <span id="aVal">15.0</span></label>
-      <input type="range" id="semiMajor" min="5" max="30" step="0.1" value="15">
+      <label>Semi-Major Axis (a) <span id="aVal">15.0</span> AU</label>
+      <input type="range" id="semiMajor" min="1" max="50" step="0.1" value="15">
+    </div>
+    
+    <div class="panel-subtitle">Orientation (3D)</div>
+    <div class="control-group">
+      <label>Inclination (i) <span id="iVal">0</span>°</label>
+      <input type="range" id="inclination" min="0" max="180" step="1" value="0">
     </div>
     
     <div class="control-group">
-      <label>God's Fast-Forward Button <span id="speedVal">1x</span></label>
+      <label>Long. of Ascending Node (Ω) <span id="nodeVal">0</span>°</label>
+      <input type="range" id="ascendingNode" min="0" max="360" step="1" value="0">
+    </div>
+    
+    <div class="control-group">
+      <label>Arg. of Periapsis (ω) <span id="argVal">0</span>°</label>
+      <input type="range" id="argPeriapsis" min="0" max="360" step="1" value="0">
+    </div>
+    
+    <div class="panel-subtitle">Time & Position</div>
+    <div class="control-group">
+      <label>God's Fast-Forward <span id="speedVal">1x</span></label>
       <input type="range" id="simSpeed" min="0" max="5" step="0.1" value="1">
     </div>
+    
+    <div class="control-group" id="anomalyGroup">
+      <label>True Anomaly (Scrub Orbit) <span id="thetaVal">0</span>°</label>
+      <input type="range" id="trueAnomaly" min="0" max="360" step="1" value="0">
+    </div>
 
-    <div class="panel-title" style="margin-top:10px;">Presets</div>
-    <div class="btn-group">
+    <div class="panel-title" style="margin-top:15px;">Presets</div>
+    <div class="btn-group" style="flex-wrap: wrap;">
       <button class="btn" id="preEarth">Earth</button>
       <button class="btn" id="preHalley">Halley's</button>
+      <button class="btn" id="preISS">ISS (LEO)</button>
+      <button class="btn" id="preMolniya">Molniya</button>
       <button class="btn" id="preHyper">Hyperbolic</button>
     </div>
 
-    <div class="panel-title" style="margin-top:10px;">Visualization</div>
-    <div class="control-group" style="flex-direction:row; align-items:center; gap:10px;">
+    <div class="panel-title" style="margin-top:15px;">Visualization</div>
+    <div class="control-group" style="flex-direction:row; align-items:center; gap:10px; margin-bottom:6px;">
       <input type="checkbox" id="showVectors" checked style="accent-color:var(--gold); transform:scale(1.2);">
-      <label for="showVectors" style="margin:0;">Show Velocity Vectors</label>
+      <label for="showVectors" style="margin:0;">Velocity Vectors</label>
+    </div>
+    <div class="control-group" style="flex-direction:row; align-items:center; gap:10px; margin-bottom:6px;">
+      <input type="checkbox" id="showPlane" style="accent-color:var(--gold); transform:scale(1.2);">
+      <label for="showPlane" style="margin:0;">Orbital Plane (3D)</label>
+    </div>
+    <div class="control-group" style="flex-direction:row; align-items:center; gap:10px;">
+      <input type="checkbox" id="showTrail" checked style="accent-color:var(--gold); transform:scale(1.2);">
+      <label for="showTrail" style="margin:0;">Planet Trail</label>
     </div>
   </aside>
 
-  <div id="dashboard">
+  <div id="dashboard" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;">
     <div class="dash-card">
       <span class="dc-label">Distance (r)</span>
       <span class="dc-value" id="distVal">-- AU</span>
@@ -166,6 +257,18 @@
     <div class="dash-card highlight">
       <span class="dc-label">Period (T)</span>
       <span class="dc-value" id="periodVal">-- yrs</span>
+    </div>
+    <div class="dash-card">
+      <span class="dc-label">Periapsis (q)</span>
+      <span class="dc-value" id="periapsisVal">-- AU</span>
+    </div>
+    <div class="dash-card">
+      <span class="dc-label">Apoapsis (Q)</span>
+      <span class="dc-value" id="apoapsisVal">-- AU</span>
+    </div>
+    <div class="dash-card">
+      <span class="dc-label">Mech. Energy (E)</span>
+      <span class="dc-value" id="energyVal">--</span>
     </div>
   </div>
 

@@ -173,7 +173,8 @@ composer.addPass(bloom);
 
 // ── Physics Constants ─────────────────────────────────────────
 const G = 6.67430e-11;
-const M0 = 1.98847e30;
+let M0_multiplier = 1;
+let M0 = 1.98847e30 * M0_multiplier;
 const r0 = 1.47095e11;
 const v0 = 3.029195106e4;
 const SF = 1e-10; // scale factor: 1 THREE unit = 1e10 m
@@ -188,8 +189,25 @@ const speedValSpan = document.getElementById('speedVal');
 const distValEl   = document.getElementById('distVal');
 const velValEl    = document.getElementById('velVal');
 const periodValEl = document.getElementById('periodVal');
+const periapsisValEl = document.getElementById('periapsisVal');
+const apoapsisValEl = document.getElementById('apoapsisVal');
+const energyValEl = document.getElementById('energyVal');
 const badge       = document.getElementById('orbitTypeBadge');
 const showVecCb   = document.getElementById('showVectors');
+
+// New DOM Refs
+const incSlider = document.getElementById('inclination');
+const nodeSlider = document.getElementById('ascendingNode');
+const argSlider = document.getElementById('argPeriapsis');
+const incValSpan = document.getElementById('iVal');
+const nodeValSpan = document.getElementById('nodeVal');
+const argValSpan = document.getElementById('argVal');
+const centralMassSelect = document.getElementById('centralMass');
+const showPlaneCb = document.getElementById('showPlane');
+const showTrailCb = document.getElementById('showTrail');
+const trueAnomalySlider = document.getElementById('trueAnomaly');
+const trueAnomalyValSpan = document.getElementById('thetaVal');
+
 
 // ── State ─────────────────────────────────────────────────────
 let orbitPts = [];
@@ -208,38 +226,114 @@ aSlider.addEventListener('input', () => {
 speedSlider.addEventListener('input', () => {
   speedValSpan.textContent = parseFloat(speedSlider.value).toFixed(1) + 'x';
 });
+incSlider.addEventListener('input', () => { incValSpan.textContent = incSlider.value; buildAndSetOrbit(); });
+nodeSlider.addEventListener('input', () => { nodeValSpan.textContent = nodeSlider.value; buildAndSetOrbit(); });
+argSlider.addEventListener('input', () => { argValSpan.textContent = argSlider.value; buildAndSetOrbit(); });
+centralMassSelect.addEventListener('change', () => {
+  M0_multiplier = parseFloat(centralMassSelect.value);
+  M0 = 1.98847e30 * M0_multiplier;
+  buildAndSetOrbit();
+});
+showPlaneCb.addEventListener('change', () => {
+  if (orbitalPlaneMesh) orbitalPlaneMesh.visible = showPlaneCb.checked;
+});
+trueAnomalySlider.addEventListener('input', () => {
+  trueAnomalyValSpan.textContent = trueAnomalySlider.value;
+  // Convert true anomaly (0-360) to orbital param t (0-1) for our spline
+  orbitTheta = parseFloat(trueAnomalySlider.value) / 360.0;
+});
+
+
+
+const orbitingBodySelect = document.getElementById('orbitingBody');
+const textureLoader = new THREE.TextureLoader();
+const planetTextures = {
+  earth: textureLoader.load('../earth.avif'),
+  mars: textureLoader.load('../mars.webp'),
+  jupiter: textureLoader.load('../jupiter.avif'),
+  mercury: textureLoader.load('../mercury.webp'),
+  venus: textureLoader.load('../venus.webp'),
+  saturn: textureLoader.load('../saturn.avif'),
+  uranus: textureLoader.load('../uranus.webp'),
+  neptune: textureLoader.load('../neptune.avif')
+};
+if(orbitingBodySelect) {
+  orbitingBodySelect.addEventListener('change', () => {
+     const val = orbitingBodySelect.value;
+     const tex = planetTextures[val];
+     earthMat.map = tex;
+     
+     if (val !== 'earth') {
+         earthMat.normalMap = null;
+         if (cloudMesh) cloudMesh.visible = false;
+         if (atmoMesh) atmoMesh.visible = false;
+     } else {
+         earthMat.normalMap = normalTex;
+         if (cloudMesh) cloudMesh.visible = true;
+         if (atmoMesh) atmoMesh.visible = true;
+     }
+     
+     earthMat.needsUpdate = true;
+  });
+}
+const collisionWarningEl = document.getElementById('collisionWarning');
 
 // ── Presets ───────────────────────────────────────────────────
+function resetToDefault() {
+  centralMassSelect.value = "1"; centralMassSelect.dispatchEvent(new Event('change'));
+  incSlider.value = 0; nodeSlider.value = 0; argSlider.value = 0;
+}
 document.getElementById('preEarth').addEventListener('click', () => {
-  eccSlider.value = 0.017;
-  aSlider.value = 15;
-  eccSlider.dispatchEvent(new Event('input'));
-  aSlider.dispatchEvent(new Event('input'));
+  resetToDefault();
+  eccSlider.value = 0.017; aSlider.value = 15;
+  [eccSlider, aSlider, incSlider, nodeSlider, argSlider].forEach(el => el.dispatchEvent(new Event('input')));
 });
 document.getElementById('preHalley').addEventListener('click', () => {
-  eccSlider.value = 0.967;
-  aSlider.value = 26;
-  eccSlider.dispatchEvent(new Event('input'));
-  aSlider.dispatchEvent(new Event('input'));
+  resetToDefault();
+  eccSlider.value = 0.967; aSlider.value = 26;
+  [eccSlider, aSlider, incSlider, nodeSlider, argSlider].forEach(el => el.dispatchEvent(new Event('input')));
 });
 document.getElementById('preHyper').addEventListener('click', () => {
-  eccSlider.value = 1.2;
-  aSlider.value = 15;
-  eccSlider.dispatchEvent(new Event('input'));
-  aSlider.dispatchEvent(new Event('input'));
+  resetToDefault();
+  eccSlider.value = 1.2; aSlider.value = 15;
+  [eccSlider, aSlider, incSlider, nodeSlider, argSlider].forEach(el => el.dispatchEvent(new Event('input')));
 });
+document.getElementById('preISS').addEventListener('click', () => {
+  centralMassSelect.value = "0.000003"; centralMassSelect.dispatchEvent(new Event('change'));
+  eccSlider.value = 0.001; aSlider.value = 5;
+  incSlider.value = 51; nodeSlider.value = 0; argSlider.value = 0;
+  [eccSlider, aSlider, incSlider, nodeSlider, argSlider].forEach(el => el.dispatchEvent(new Event('input')));
+});
+document.getElementById('preMolniya').addEventListener('click', () => {
+  centralMassSelect.value = "0.000003"; centralMassSelect.dispatchEvent(new Event('change'));
+  eccSlider.value = 0.74; aSlider.value = 18;
+  incSlider.value = 63; nodeSlider.value = 90; argSlider.value = 270;
+  [eccSlider, aSlider, incSlider, nodeSlider, argSlider].forEach(el => el.dispatchEvent(new Event('input')));
+});
+
 
 // ── Orbit computation ─────────────────────────────────────────
 function buildOrbitPoints(a_au, e, n = 900) {
   const a = a_au * 1.496e11; // AU → m
   const pts = [];
+  
+  // 3D Orbital Elements
+  const inc = parseFloat(incSlider.value) * (Math.PI / 180);
+  const node = parseFloat(nodeSlider.value) * (Math.PI / 180);
+  const argP = parseFloat(argSlider.value) * (Math.PI / 180);
+
+  // Rotation Euler for the entire orbital plane
+  const euler = new THREE.Euler(inc, node, argP, 'YXZ');
+
   if (e < 0.999) {
     // Ellipse
     const cx = -a * e;
     const b  = a * Math.sqrt(1 - e * e);
     for (let i = 0; i < n; i++) {
       const t = (i / n) * 2 * Math.PI;
-      pts.push(new THREE.Vector3((cx + a * Math.cos(t)) * SF, 0, b * Math.sin(t) * SF));
+      let vec = new THREE.Vector3((cx + a * Math.cos(t)) * SF, 0, b * Math.sin(t) * SF);
+      vec.applyEuler(euler);
+      pts.push(vec);
     }
   } else if (e < 1.001) {
     // Parabola
@@ -248,7 +342,11 @@ function buildOrbitPoints(a_au, e, n = 900) {
     for (let i = 0; i <= n; i++) {
       const t = (i / n) * 2 * tMax - tMax;
       const rr = p / (1 + Math.cos(t));
-      if (rr > 0 && rr < 2e13) pts.push(new THREE.Vector3(rr * Math.cos(t) * SF, 0, rr * Math.sin(t) * SF));
+      if (rr > 0 && rr < 2e13) {
+        let vec = new THREE.Vector3(rr * Math.cos(t) * SF, 0, rr * Math.sin(t) * SF);
+        vec.applyEuler(euler);
+        pts.push(vec);
+      }
     }
   } else {
     // Hyperbola
@@ -257,7 +355,11 @@ function buildOrbitPoints(a_au, e, n = 900) {
     for (let i = 0; i <= n; i++) {
       const t = (i / n) * 2 * tMax - tMax;
       const rr = p / (1 + e * Math.cos(t));
-      if (rr > 0 && rr < 2e13) pts.push(new THREE.Vector3(rr * Math.cos(t) * SF, 0, rr * Math.sin(t) * SF));
+      if (rr > 0 && rr < 2e13) {
+        let vec = new THREE.Vector3(rr * Math.cos(t) * SF, 0, rr * Math.sin(t) * SF);
+        vec.applyEuler(euler);
+        pts.push(vec);
+      }
     }
   }
   return pts;
@@ -276,15 +378,25 @@ function orbitColor(type) {
 }
 
 let orbitPath = null;
+let orbitalPlaneMesh = null;
 
 function buildAndSetOrbit() {
   const e   = parseFloat(eccSlider.value);
   const a   = parseFloat(aSlider.value);
   const type = getOrbitType(e);
 
-  // Remove old orbit line and grid
+  // Remove old orbit line, plane and grid
   if (orbitLine) { scene.remove(orbitLine); orbitLine.geometry.dispose(); orbitLine = null; }
   if (gridHelper) { scene.remove(gridHelper); gridHelper.geometry.dispose(); gridHelper = null; }
+  if (orbitalPlaneMesh) { 
+      scene.remove(orbitalPlaneMesh); 
+      if (orbitalPlaneMesh.geometry) {
+          orbitalPlaneMesh.geometry.dispose(); 
+      } else if (orbitalPlaneMesh.children && orbitalPlaneMesh.children[0]) {
+          orbitalPlaneMesh.children[0].geometry.dispose();
+      }
+      orbitalPlaneMesh = null; 
+  }
 
   orbitPts = buildOrbitPoints(a, e);
   orbitTheta = 0;
@@ -309,8 +421,35 @@ function buildAndSetOrbit() {
   );
   scene.add(orbitLine);
 
-  // --- Dynamic Perfectly Fitted Grid ---
   const a_scaled = a * 1.496e11 * SF;
+  // Create Orbital Plane if it's an ellipse
+  if (isClosed && showPlaneCb) {
+    const cx = -a_scaled * e;
+    const b_scaled = a_scaled * Math.sqrt(1 - e * e);
+    const planeGeo = new THREE.PlaneGeometry(a_scaled * 2, b_scaled * 2, 32, 32);
+    orbitalPlaneMesh = new THREE.Mesh(planeGeo, new THREE.MeshBasicMaterial({
+      color: color, transparent: true, opacity: 0.1, side: THREE.DoubleSide, depthWrite: false
+    }));
+    
+    // Position center of the ellipse correctly before rotating
+    orbitalPlaneMesh.position.set(cx, 0, 0);
+    
+    // We need to group it to rotate the whole orbital system
+    const planeGroup = new THREE.Group();
+    planeGroup.add(orbitalPlaneMesh);
+    
+    const inc = parseFloat(incSlider.value) * (Math.PI/180);
+    const node = parseFloat(nodeSlider.value) * (Math.PI/180);
+    const argP = parseFloat(argSlider.value) * (Math.PI/180);
+    planeGroup.rotation.set(inc, node, argP, 'YXZ');
+    
+    orbitalPlaneMesh = planeGroup; // Track the group to easily remove it later
+    scene.add(orbitalPlaneMesh);
+    orbitalPlaneMesh.visible = showPlaneCb.checked;
+  }
+
+  // --- Dynamic Perfectly Fitted Grid ---
+  // a_scaled is already defined above
   const gridPts = [];
   
   if (type === 'ellipse') {
@@ -326,8 +465,13 @@ function buildAndSetOrbit() {
       const inside = 1 - (dx * dx) / (a_scaled * a_scaled);
       if (inside > 0) {
         const z = b_scaled * Math.sqrt(inside);
-        gridPts.push(new THREE.Vector3(x, 0, -z));
-        gridPts.push(new THREE.Vector3(x, 0, z));
+        let v1 = new THREE.Vector3(x, 0, -z); let v2 = new THREE.Vector3(x, 0, z);
+        const inc = parseFloat(incSlider.value) * (Math.PI/180);
+        const node = parseFloat(nodeSlider.value) * (Math.PI/180);
+        const argP = parseFloat(argSlider.value) * (Math.PI/180);
+        const euler = new THREE.Euler(inc, node, argP, 'YXZ');
+        v1.applyEuler(euler); v2.applyEuler(euler);
+        gridPts.push(v1); gridPts.push(v2);
       }
     }
     // Draw lines parallel to X (z-lines)
@@ -335,8 +479,13 @@ function buildAndSetOrbit() {
       const inside = 1 - (z * z) / (b_scaled * b_scaled);
       if (inside > 0) {
         const x_len = a_scaled * Math.sqrt(inside);
-        gridPts.push(new THREE.Vector3(cx - x_len, 0, z));
-        gridPts.push(new THREE.Vector3(cx + x_len, 0, z));
+        let v1 = new THREE.Vector3(cx - x_len, 0, z); let v2 = new THREE.Vector3(cx + x_len, 0, z);
+        const inc = parseFloat(incSlider.value) * (Math.PI/180);
+        const node = parseFloat(nodeSlider.value) * (Math.PI/180);
+        const argP = parseFloat(argSlider.value) * (Math.PI/180);
+        const euler = new THREE.Euler(inc, node, argP, 'YXZ');
+        v1.applyEuler(euler); v2.applyEuler(euler);
+        gridPts.push(v1); gridPts.push(v2);
       }
     }
   } else {
@@ -384,8 +533,38 @@ function buildAndSetOrbit() {
     periodValEl.textContent = '∞ (unbound)';
   }
 
+  // Calculate new orbital parameters
+  const periapsis = a * Math.abs(1 - e);
+  periapsisValEl.textContent = periapsis.toFixed(2) + ' AU';
+  
+  if (type === 'ellipse') {
+    const apoapsis = a * (1 + e);
+    apoapsisValEl.textContent = apoapsis.toFixed(2) + ' AU';
+  } else {
+    apoapsisValEl.textContent = '∞ (unbound)';
+  }
+  
+  let energy;
+  const a_m = a * 1.496e11;
+  if (type === 'ellipse') {
+    energy = - (G * M0) / (2 * a_m);
+  } else if (type === 'parabola') {
+    energy = 0;
+  } else {
+    energy = (G * M0) / (2 * a_m); // For hyperbola, E is positive
+  }
+  const energy_mj = energy / 1e6;
+  energyValEl.textContent = energy_mj.toFixed(2) + ' MJ/kg';
+
   simState = 'running';
-  earthMesh.visible = cloudMesh.visible = atmoMesh.visible = true;
+  earthMesh.visible = true;
+  if (orbitingBodySelect && orbitingBodySelect.value !== 'earth') {
+      if (cloudMesh) cloudMesh.visible = false;
+      if (atmoMesh) atmoMesh.visible = false;
+  } else {
+      if (cloudMesh) cloudMesh.visible = true;
+      if (atmoMesh) atmoMesh.visible = true;
+  }
   velArrow.visible = true;
 }
 
@@ -448,21 +627,40 @@ function animate() {
       const dist2Sun = pos.length();
 
       // Angular speed proportional to 1/r² (Kepler 2nd law)
-      const angStep = dt * 0.000015 * (2.2 / Math.max(dist2Sun, 0.1));
-      if (e < 1) {
-        orbitTheta = (orbitTheta + angStep) % 1;
-      } else {
-        if (orbitTheta < 1) orbitTheta += angStep * 0.7;
+      // M0_multiplier changes the speed according to Kepler's third law (v ~ sqrt(M))
+      const timeScale = Math.sqrt(M0_multiplier);
+      const angStep = dt * 0.000015 * (2.2 / Math.max(dist2Sun, 0.1)) * timeScale;
+      
+      // If simSpeed is 0, we rely on the manual scrubber (orbitTheta stays static)
+      if (simSpeed > 0) {
+        if (e < 1) {
+          orbitTheta = (orbitTheta + angStep) % 1;
+        } else {
+          if (orbitTheta < 1) orbitTheta += angStep * 0.7;
+        }
+        if (trueAnomalySlider && trueAnomalyValSpan) {
+           trueAnomalySlider.value = orbitTheta * 360;
+           trueAnomalyValSpan.textContent = Math.round(orbitTheta * 360);
+        }
       }
 
       earthMesh.position.set(pos.x, pos.y, pos.z);
       cloudMesh.position.set(pos.x, pos.y, pos.z);
       atmoMesh.position.set(pos.x, pos.y, pos.z);
-      earthMesh.rotation.y += 0.04;
+      
+      if (orbitingBodySelect && orbitingBodySelect.value !== 'earth') {
+          // Point the mesh at the sun (0,0,0) so the baked bright side faces the sun.
+          earthMesh.lookAt(0, 0, 0);
+          // Apply an offset so the bright side of the texture actually faces the sun
+          // Most baked textures have the bright side at +Z or -Z. Let's add a Y rotation offset.
+          earthMesh.rotateY(Math.PI / 2); // adjust if needed
+      } else {
+          earthMesh.rotation.y += 0.04;
+      }
       cloudMesh.rotation.y += 0.055;
 
       // Update dynamic tail
-      if (tFrame % 2 === 0) {
+      if (tFrame % 2 === 0 && showTrailCb && showTrailCb.checked) {
          const tNode = tails.shift();
          tNode.position.copy(pos);
          tNode.position.x += (Math.random() - 0.5) * 1.5;
@@ -482,6 +680,15 @@ function animate() {
       // Dashboard: distance
       const distAU = (dist2Sun / SF) / 1.496e11;
       distValEl.textContent = distAU.toFixed(3) + ' AU';
+      
+      // Collision detection (if distance < Sun radius scaled)
+      // The sun mesh is scaled to a certain size. In this simulation, let's say collision happens if distAU < 0.2 (just an arbitrary small threshold for collision with a star)
+      // Actually, sunMesh has a radius of 20 units. Our distance is in THREE units (dist2Sun).
+      if (dist2Sun < 25) {
+         collisionWarningEl.style.display = 'block';
+      } else {
+         collisionWarningEl.style.display = 'none';
+      }
 
       // Dashboard: velocity (v = sqrt(GM(2/r - 1/a)))
       const a_m = parseFloat(aSlider.value) * 1.496e11;
