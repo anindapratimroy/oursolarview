@@ -439,7 +439,7 @@ const SPACECRAFT_DB = [
     category: "rover",
     sketchfabId: "108773e6b4674e69a5922dd5f59f1a6e",
     nasaUrl: "#",
-    thumbnail: "",
+    thumbnail: "https://media.sketchfab.com/models/108773e6b4674e69a5922dd5f59f1a6e/thumbnails/197ed9b3ef014f16bda10317824713ac/bbd61f2735f141fd9df8e6ffd0f11f5c.jpeg",
     desc: "Mantis - NASA Mech 2030 Space Program by Vladyslav Nazymok.",
     agency: "NASA",
     facts: []
@@ -450,7 +450,7 @@ const SPACECRAFT_DB = [
     category: "rocket",
     sketchfabId: "7a2c9709ff8144c8b3b18ec84b5e112e",
     nasaUrl: "#",
-    thumbnail: "",
+    thumbnail: "https://media.sketchfab.com/models/7a2c9709ff8144c8b3b18ec84b5e112e/thumbnails/9c887d41a23844558d632bec9e81ac2d/ce2ded31ecc043a3be1f0eef290c5a0c.jpeg",
     desc: "Saturn V - NASA by Stanley Creative.",
     agency: "NASA",
     facts: []
@@ -461,7 +461,7 @@ const SPACECRAFT_DB = [
     category: "probe",
     sketchfabId: "bc3dc59eceb74b43a02cc2d51b5a0be5",
     nasaUrl: "#",
-    thumbnail: "",
+    thumbnail: "https://media.sketchfab.com/models/bc3dc59eceb74b43a02cc2d51b5a0be5/thumbnails/a3baf2abba78409ea038a6526f5139a5/41e92aa511d84fdcb9079bd670422e06.jpeg",
     desc: "LUCY | NASA Space Probe | Free Download by murilo.kleine.",
     agency: "NASA",
     facts: []
@@ -472,7 +472,7 @@ const SPACECRAFT_DB = [
     category: "rover",
     sketchfabId: "440f5c9f53f64b69865484f938eb4b0a",
     nasaUrl: "#",
-    thumbnail: "",
+    thumbnail: "https://media.sketchfab.com/models/440f5c9f53f64b69865484f938eb4b0a/thumbnails/85f9fa57acce405797ce82dab4015552/2073b7a85f454128930c59b2df367f0e.jpeg",
     desc: "NASA_Rover by William J. Haney.",
     agency: "NASA",
     facts: []
@@ -483,7 +483,7 @@ const SPACECRAFT_DB = [
     category: "rover",
     sketchfabId: "2d936204fedb42569ae9b75c9a808c1c",
     nasaUrl: "#",
-    thumbnail: "",
+    thumbnail: "https://media.sketchfab.com/models/2d936204fedb42569ae9b75c9a808c1c/thumbnails/2f0878615b4449098c98d5e21655569f/e76fa0cba4654a779a170a289290d4cc.jpeg",
     desc: "Project Eden - Exo-Rover by William Domeyer.",
     agency: "NASA",
     facts: []
@@ -494,7 +494,7 @@ const SPACECRAFT_DB = [
     category: "rover",
     sketchfabId: "5f59240fb0bb4d19aadf1a4cda503add",
     nasaUrl: "#",
-    thumbnail: "",
+    thumbnail: "https://media.sketchfab.com/models/5f59240fb0bb4d19aadf1a4cda503add/thumbnails/9260df3ab7c647d2821d6a1905de23bf/4ef7bf4090dd4221bccee7525ad82f75.jpeg",
     desc: "Perseverance Rover - NASA Mars 2020 Mission by zaddazed.",
     agency: "NASA",
     facts: []
@@ -505,7 +505,7 @@ const SPACECRAFT_DB = [
     category: "spacecraft",
     sketchfabId: "6f677587d795473fbacec34fdf681405",
     nasaUrl: "#",
-    thumbnail: "",
+    thumbnail: "https://media.sketchfab.com/models/6f677587d795473fbacec34fdf681405/thumbnails/27438909d6d54631b547da28a064f721/231e00d265c544b8a27e87f57df0730b.jpeg",
     desc: "spaceship by okotaru.",
     agency: "N/A",
     facts: []
@@ -516,7 +516,7 @@ const SPACECRAFT_DB = [
     category: "station",
     sketchfabId: "31cad35dc37b4511ae920255aef62922",
     nasaUrl: "#",
-    thumbnail: "",
+    thumbnail: "https://media.sketchfab.com/models/31cad35dc37b4511ae920255aef62922/thumbnails/f2d3ef5785224fe0af569f22ad9e1915/c1d83873d4454904b6e385e27e996416.jpeg",
     desc: "NASA International Space Station by SQUIR3D.",
     agency: "NASA",
     facts: []
@@ -527,7 +527,7 @@ const SPACECRAFT_DB = [
     category: "rover",
     sketchfabId: "bd1379cd718e43f78bb96f229456a451",
     nasaUrl: "#",
-    thumbnail: "",
+    thumbnail: "https://media.sketchfab.com/models/bd1379cd718e43f78bb96f229456a451/thumbnails/b714cbc7e7aa4e9a8d31e7691a3b9a1e/3260c1d8fa594c319f94074cdacb45b6.jpeg",
     desc: "NASA Curiosity Rover MSL by John Niehuss.",
     agency: "NASA",
     facts: []
@@ -538,7 +538,7 @@ const SPACECRAFT_DB = [
     category: "rover",
     sketchfabId: "e1de8d0a96f14b479b677ab1b4b0e680",
     nasaUrl: "#",
-    thumbnail: "",
+    thumbnail: "https://media.sketchfab.com/models/e1de8d0a96f14b479b677ab1b4b0e680/thumbnails/ad34a6e175f64fadbfc23321a9fc25b0/7443dac979a343b6b4c73983591367ae.jpeg",
     desc: "NASA Extraterrestial Exploration Support Rover by Adrian Bik.",
     agency: "NASA",
     facts: []
@@ -549,7 +549,7 @@ const SPACECRAFT_DB = [
     category: "rover",
     sketchfabId: "ba733c3fe84e4846b143ba7374c9f847",
     nasaUrl: "#",
-    thumbnail: "",
+    thumbnail: "https://media.sketchfab.com/models/ba733c3fe84e4846b143ba7374c9f847/thumbnails/4415874d31c648eea0a510f62b59a3cf/6fafcdc8099c4874bfcbbfebf0bd866e.jpeg",
     desc: "Rover Nasa by LM3D.",
     agency: "NASA",
     facts: []
@@ -560,7 +560,7 @@ const SPACECRAFT_DB = [
     category: "concept",
     sketchfabId: "1aee53865de7419aa637ea4524b0b138",
     nasaUrl: "#",
-    thumbnail: "",
+    thumbnail: "https://media.sketchfab.com/models/1aee53865de7419aa637ea4524b0b138/thumbnails/8d6fadbd6d2a452ca8c384e0698122e1/bb0adcd194644cd08cc52a4c7489c1ff.jpeg",
     desc: "NASA Assault Rifle by Chawanmushi.",
     agency: "NASA",
     facts: []
@@ -571,7 +571,7 @@ const SPACECRAFT_DB = [
     category: "spacecraft",
     sketchfabId: "f025cec8c7fb4eccb83b54df8b9a6ea7",
     nasaUrl: "#",
-    thumbnail: "",
+    thumbnail: "https://media.sketchfab.com/models/f025cec8c7fb4eccb83b54df8b9a6ea7/thumbnails/f94a7bea561a4145aa86914eb90c5cd3/fe5e207eacab467c89df39478b1070dd.jpeg",
     desc: "NASA Artemis ll Spacecraft by Zaineb Aljumayaat.",
     agency: "NASA",
     facts: []
@@ -582,7 +582,7 @@ const SPACECRAFT_DB = [
     category: "spacecraft",
     sketchfabId: "372bb6781922471cada4e0a9bd5c61fb",
     nasaUrl: "#",
-    thumbnail: "",
+    thumbnail: "https://media.sketchfab.com/models/372bb6781922471cada4e0a9bd5c61fb/thumbnails/5d4248cac5bd4947a79ef538f625aaee/0f02c4046c14499381ce8df16feb098c.jpeg",
     desc: "Apollo 11 Command Module (Combined) by The Smithsonian Institution.",
     agency: "NASA",
     facts: []
@@ -593,7 +593,7 @@ const SPACECRAFT_DB = [
     category: "satellite",
     sketchfabId: "6d08e8d83a1a432cb560b5c17242dfb5",
     nasaUrl: "#",
-    thumbnail: "",
+    thumbnail: "https://media.sketchfab.com/models/6d08e8d83a1a432cb560b5c17242dfb5/thumbnails/9e3e6c0b7b024fc0a1ff1077b30ea4e9/9e949dd400314126a6e32590a59ed231.jpeg",
     desc: "Locator, Satellite dish by vanwels.",
     agency: "N/A",
     facts: []
@@ -604,7 +604,7 @@ const SPACECRAFT_DB = [
     category: "satellite",
     sketchfabId: "0c8c2af008084446bcc7dc6136f16fac",
     nasaUrl: "#",
-    thumbnail: "",
+    thumbnail: "https://media.sketchfab.com/models/0c8c2af008084446bcc7dc6136f16fac/thumbnails/cf57063490514219ba020561f0cc6e58/720x405.jpeg",
     desc: "Moon Satellite Dish by i_r_riley.",
     agency: "N/A",
     facts: []
