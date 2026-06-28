@@ -729,27 +729,28 @@
 
 .craft-viewer-info-btn {
   position: absolute;
-  top: 20px; right: 20px;
+  top: 20px; left: 50%;
+  transform: translateX(-50%);
   z-index: 15;
-  background: rgba(197, 160, 72, 0.15);
-  border: 1px solid rgba(197, 160, 72, 0.4);
-  color: var(--gold);
+  background: var(--gold);
+  border: none;
+  color: #000;
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 1rem;
-  font-weight: 600;
-  padding: 10px 18px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  padding: 10px 24px;
   border-radius: 30px;
   cursor: pointer;
   transition: all 0.3s ease;
-  backdrop-filter: blur(4px);
+  box-shadow: 0 4px 20px rgba(197, 160, 72, 0.5);
   display: flex;
   align-items: center;
   gap: 8px;
 }
 .craft-viewer-info-btn:hover {
-  background: rgba(197, 160, 72, 0.3);
-  box-shadow: 0 0 15px rgba(197, 160, 72, 0.4);
-  transform: scale(1.05);
+  background: var(--gold-light);
+  box-shadow: 0 6px 25px rgba(197, 160, 72, 0.7);
+  transform: translateX(-50%) scale(1.05);
 }
 .craft-viewer-info-btn.hidden {
   opacity: 0;
