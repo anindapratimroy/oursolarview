@@ -429,6 +429,24 @@ const SPACECRAFT_DB = [
   }
 ];
 
+/* ─────────────────────────────────────────────────────────────
+   SORT DATABASE BY CATEGORY
+   ───────────────────────────────────────────────────────────── */
+const categorySortOrder = {
+  rover: 1,
+  station: 2,
+  telescope: 3,
+  satellite: 4,
+  spacecraft: 5,
+  rocket: 6
+};
+
+SPACECRAFT_DB.sort((a, b) => {
+  const orderA = categorySortOrder[a.category] || 99;
+  const orderB = categorySortOrder[b.category] || 99;
+  return orderA - orderB;
+});
+
 
 
 
