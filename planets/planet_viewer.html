@@ -8,7 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" />
   <style>
-    body { margin: 0; overflow: hidden; background: black; }
+    body { margin: 0; overflow: hidden; background: black; width: 100vw; height: 100vh; }
     canvas { display: block; }
 
     /* ── Loading ──────────────────────────────────────────────── */
@@ -156,6 +156,8 @@ const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.dampingFactor = 0.05;
 
+let globalComposer = null;
+
 // ════════════════════════════════════════════════════════════
 //  PLANET SETUP FUNCTIONS
 //  Every value below (camera pos, lights, material params,
@@ -193,6 +195,8 @@ function setupSun() {
   const comp = new EffectComposer(renderer);
   comp.addPass(new RenderPass(scene, camera));
   comp.addPass(new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 1.5, 0.4, 0.85));
+  
+  globalComposer = comp;
 
   return function animate() {
     fireTexture.offset.x += 0.001;   // ← exact reference
@@ -633,11 +637,19 @@ function loop() {
 loop();
 
 // ─── Resize ───────────────────────────────────────────────────
-window.addEventListener('resize', () => {
-  camera.aspect = innerWidth / innerHeight;
+function onResize() {
+  const w = window.innerWidth;
+  const h = window.innerHeight;
+  camera.aspect = w / h;
   camera.updateProjectionMatrix();
-  renderer.setSize(innerWidth, innerHeight);
-});
+  renderer.setSize(w, h);
+  if (globalComposer) {
+    globalComposer.setSize(w, h);
+  }
+}
+window.addEventListener('resize', onResize);
+const ro = new ResizeObserver(onResize);
+ro.observe(document.body);
 </script>
 </body>
 </html>
