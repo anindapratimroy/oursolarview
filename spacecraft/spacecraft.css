@@ -576,20 +576,19 @@
 /* ── Viewer Body ── */
 .craft-viewer-body {
   flex: 1;
-  display: grid;
-  grid-template-columns: 1fr 360px;
+  display: flex;
   min-height: 0;
   overflow: hidden;
+  position: relative;
 }
 
 @media (max-width: 900px) {
-  .craft-viewer-body { grid-template-columns: 1fr; }
-  .craft-viewer-sidebar { display: none; }
   .craft-viewer-close-btn span { display: none; }
 }
 
 /* ── 3D Panel ── */
 .craft-viewer-3d-panel {
+  flex: 1;
   position: relative;
   background: #000812;
   overflow: hidden;
