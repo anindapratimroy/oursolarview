@@ -610,10 +610,11 @@ function openViewer(model) {
             api.getAnimations(function(err, animations) {
               if (!err && animations && animations.length > 0) {
                 const anim = animations[0];
-                api.setCurrentAnimationByUID(anim.uid);
-                // Seek to the very end of the animation (fully deployed state)
-                api.seekTo(anim.length, function() {
-                  api.pause();
+                api.setCurrentAnimationByUID(anim.uid, function() {
+                  // Seek to the very end of the animation (fully deployed state)
+                  api.seekTo(anim.length - 0.05, function() {
+                    api.pause();
+                  });
                 });
               }
             });
