@@ -607,17 +607,8 @@ function openViewer(model) {
         success: function onSuccess(api) {
           api.start();
           api.addEventListener('viewerready', function() {
-            api.getAnimations(function(err, animations) {
-              if (!err && animations && animations.length > 0) {
-                const anim = animations[0];
-                api.setCurrentAnimationByUID(anim.uid, function() {
-                  // Seek to the very end of the animation (fully deployed state)
-                  api.seekTo(anim.length - 0.05, function() {
-                    api.pause();
-                  });
-                });
-              }
-            });
+            // Force "Static Pose" (bind pose, fully deployed) for all animated models
+            api.setCurrentAnimationByUID('-1');
             hideLoader();
           });
           api.addEventListener('modelLoadProgress', function(factor) {
