@@ -616,9 +616,9 @@ let lastT = performance.now();
 const tailGroup = new THREE.Group();
 scene.add(tailGroup);
 const tails = [];
-for (let i = 0; i < 60; i++) {
+for (let i = 0; i < 90; i++) {
   const mesh = new THREE.Mesh(
-    new THREE.SphereGeometry(0.7, 8, 8), 
+    new THREE.SphereGeometry(3.0, 8, 8), 
     new THREE.MeshBasicMaterial({ color: 0x44ddff, transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false })
   );
   tails.push(mesh);
@@ -672,17 +672,20 @@ function animate() {
       if (tFrame % 2 === 0 && showTrailCb && showTrailCb.checked) {
          const tNode = tails.shift();
          tNode.position.copy(pos);
+         if (velArrow && velArrow.dir) {
+            tNode.position.addScaledVector(velArrow.dir, -3.5);
+         }
          tNode.position.x += (Math.random() - 0.5) * 1.5;
          tNode.position.y += (Math.random() - 0.5) * 1.5;
          tNode.position.z += (Math.random() - 0.5) * 1.5;
-         tNode.material.opacity = 0.7;
+         tNode.material.opacity = 0.5;
          tNode.scale.set(1, 1, 1);
          if (orbitLine) tNode.material.color.setHex(orbitLine.material.color.getHex());
          tails.push(tNode);
       }
       for (let i = 0; i < tails.length; i++) {
-         tails[i].material.opacity *= 0.93;
-         tails[i].scale.multiplyScalar(0.96);
+         tails[i].material.opacity *= 0.96;
+         tails[i].scale.multiplyScalar(0.98);
       }
       tFrame++;
 
