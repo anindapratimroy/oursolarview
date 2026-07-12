@@ -175,12 +175,12 @@
       </select>
     </div>
     <div class="control-group">
-      <label>Central Mass System</label>
-      <select id="centralMass">
-        <option value="1">The Sun (1 Solar Mass)</option>
-        <option value="0.000003">Earth (Low Mass)</option>
-        <option value="4000000">Sagittarius A* (Supermassive Black Hole)</option>
-      </select>
+      <label>Central Mass (<span id="massVal">1.00</span> M☉)</label>
+      <input type="range" id="centralMass" min="-6" max="6" step="0.01" value="0">
+    </div>
+    <div class="control-group">
+      <label>Planet Mass (<span id="planetMassVal">3.00e-6</span> M☉)</label>
+      <input type="range" id="planetMass" min="-8" max="2" step="0.01" value="-5.52">
     </div>
 
     <div class="panel-subtitle">Shape (2D)</div>

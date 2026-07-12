@@ -171,7 +171,9 @@ composer.addPass(bloom);
 
 // ── Physics Constants ─────────────────────────────────────────
 const G = 6.67430e-11;
-let M0_multiplier = 1;
+let centralM_multiplier = 1;
+let planetM_multiplier = Math.pow(10, -5.52);
+let M0_multiplier = centralM_multiplier + planetM_multiplier;
 let M0 = 1.98847e30 * M0_multiplier;
 const r0 = 1.47095e11;
 const v0 = 3.029195106e4;
@@ -202,6 +204,8 @@ const nodeValSpan = document.getElementById('nodeVal');
 const argValSpan = document.getElementById('argVal');
 const centralMassSlider = document.getElementById('centralMass');
 const massValSpan = document.getElementById('massVal');
+const planetMassSlider = document.getElementById('planetMass');
+const planetMassValSpan = document.getElementById('planetMassVal');
 const showPlaneCb = document.getElementById('showPlane');
 const showTrailCb = document.getElementById('showTrail');
 const trueAnomalySlider = document.getElementById('trueAnomaly');
@@ -228,15 +232,20 @@ speedSlider.addEventListener('input', () => {
 incSlider.addEventListener('input', () => { incValSpan.textContent = incSlider.value; buildAndSetOrbit(); });
 nodeSlider.addEventListener('input', () => { nodeValSpan.textContent = nodeSlider.value; buildAndSetOrbit(); });
 argSlider.addEventListener('input', () => { argValSpan.textContent = argSlider.value; buildAndSetOrbit(); });
-centralMassSlider.addEventListener('input', () => {
-  const oldM0 = M0_multiplier;
-  M0_multiplier = Math.pow(10, parseFloat(centralMassSlider.value));
+function updateMasses(oldM0) {
+  M0_multiplier = centralM_multiplier + planetM_multiplier;
   M0 = 1.98847e30 * M0_multiplier;
   
-  if (M0_multiplier >= 0.01 && M0_multiplier < 100) {
-    massValSpan.innerText = M0_multiplier.toFixed(2);
+  if (centralM_multiplier >= 0.01 && centralM_multiplier < 100) {
+    massValSpan.innerText = centralM_multiplier.toFixed(2);
   } else {
-    massValSpan.innerText = M0_multiplier.toExponential(2);
+    massValSpan.innerText = centralM_multiplier.toExponential(2);
+  }
+  
+  if (planetM_multiplier >= 0.01 && planetM_multiplier < 100) {
+    planetMassValSpan.innerText = planetM_multiplier.toFixed(2);
+  } else {
+    planetMassValSpan.innerText = planetM_multiplier.toExponential(2);
   }
   
   // Kepler's Third Law: Keep orbital period constant by scaling semi-major axis
@@ -247,6 +256,18 @@ centralMassSlider.addEventListener('input', () => {
   aValSpan.textContent = newA.toFixed(1);
   
   buildAndSetOrbit();
+}
+
+centralMassSlider.addEventListener('input', () => {
+  const oldM0 = M0_multiplier;
+  centralM_multiplier = Math.pow(10, parseFloat(centralMassSlider.value));
+  updateMasses(oldM0);
+});
+
+planetMassSlider.addEventListener('input', () => {
+  const oldM0 = M0_multiplier;
+  planetM_multiplier = Math.pow(10, parseFloat(planetMassSlider.value));
+  updateMasses(oldM0);
 });
 showPlaneCb.addEventListener('change', () => {
   if (orbitalPlaneMesh) orbitalPlaneMesh.visible = showPlaneCb.checked;
