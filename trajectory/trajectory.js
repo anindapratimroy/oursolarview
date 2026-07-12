@@ -151,7 +151,7 @@ const atmoMesh = new THREE.Mesh(
 scene.add(atmoMesh);
 
 // ── Velocity Vector Arrow ───────────────────────────────────────
-const velArrow = new THREE.ArrowHelper(new THREE.Vector3(1, 0, 0), new THREE.Vector3(), 15, 0xff3333, 4.0, 2.5);
+const velArrow = new THREE.ArrowHelper(new THREE.Vector3(1, 0, 0), new THREE.Vector3(), 20, 0xff3333, 7.0, 4.0);
 scene.add(velArrow);
 
 // ── Orbit Line ───────────────────────────────────────────────
@@ -740,7 +740,8 @@ function animate() {
       if (showVecCb && showVecCb.checked) {
         velArrow.position.copy(pos);
         velArrow.setDirection(tangDir);
-        velArrow.setLength(Math.min((v_ms / 1000) * 0.4 + 3.0, 15), 4.0, 2.5);
+        // Make the vector longer and the arrowhead more prominent
+        velArrow.setLength(Math.min((v_ms / 1000) * 0.8 + 6.0, 40), 7.0, 4.0);
         velArrow.visible = true;
       } else {
         velArrow.visible = false;
