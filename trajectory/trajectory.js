@@ -453,7 +453,6 @@ function buildAndSetOrbit() {
   }
 
   orbitPts = buildOrbitPoints(a, e);
-  orbitTheta = 0;
 
   const color = orbitColor(type);
   const isClosed = type === 'ellipse';
