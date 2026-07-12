@@ -664,15 +664,8 @@ function animate() {
       cloudMesh.position.set(pos.x, pos.y, pos.z);
       atmoMesh.position.set(pos.x, pos.y, pos.z);
       
-      if (orbitingBodySelect && orbitingBodySelect.value !== 'earth') {
-          // Point the mesh at the sun (0,0,0) so the baked bright side faces the sun.
-          earthMesh.lookAt(0, 0, 0);
-          // Apply an offset so the bright side of the texture actually faces the sun
-          // Most baked textures have the bright side at +Z or -Z. Let's add a Y rotation offset.
-          earthMesh.rotateY(Math.PI / 2); // adjust if needed
-      } else {
-          earthMesh.rotation.y += 0.04;
-      }
+      // Allow all planets to rotate around their own Y axis
+      earthMesh.rotation.y += 0.04;
       cloudMesh.rotation.y += 0.055;
 
       // Update dynamic tail
