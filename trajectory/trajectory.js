@@ -298,14 +298,14 @@ trueAnomalySlider.addEventListener('input', () => {
 const orbitingBodySelect = document.getElementById('orbitingBody');
 const textureLoader = new THREE.TextureLoader();
 const planetTextures = {
-  earth: textureLoader.load('../earth.avif'),
-  mars: textureLoader.load('../mars.webp'),
-  jupiter: textureLoader.load('../jupiter.avif'),
-  mercury: textureLoader.load('../mercury.webp'),
-  venus: textureLoader.load('../venus.webp'),
-  saturn: textureLoader.load('../saturn.avif'),
-  uranus: textureLoader.load('../uranus.webp'),
-  neptune: textureLoader.load('../neptune.avif')
+  earth: textureLoader.load('../planets/img_earth/earth_day_4096.jpg'),
+  mars: textureLoader.load('../planets/img_others/2k_mars.jpg'),
+  jupiter: textureLoader.load('../planets/img_others/2k_jupiter.jpg'),
+  mercury: textureLoader.load('../planets/img_others/2k_mercury.jpg'),
+  venus: textureLoader.load('../planets/img_others/2k_venus_surface.jpg'),
+  saturn: textureLoader.load('../planets/img_others/2k_saturn.jpg'),
+  uranus: textureLoader.load('../planets/img_others/2k_uranus.jpg'),
+  neptune: textureLoader.load('../planets/img_others/2k_neptune.jpg')
 };
 if(orbitingBodySelect) {
   orbitingBodySelect.addEventListener('change', () => {
