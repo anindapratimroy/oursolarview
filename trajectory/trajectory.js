@@ -19,8 +19,8 @@ renderer.domElement.style.zIndex = '0';
 
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
-controls.dampingFactor = 0.06;
-controls.minDistance = 5;
+controls.dampingFactor = 0.05;
+controls.enablePan = true;
 controls.maxDistance = 800;
 
 // Custom Google Earth style Zoom-to-Cursor
@@ -202,7 +202,8 @@ const argSlider = document.getElementById('argPeriapsis');
 const incValSpan = document.getElementById('iVal');
 const nodeValSpan = document.getElementById('nodeVal');
 const argValSpan = document.getElementById('argVal');
-const centralMassSelect = document.getElementById('centralMass');
+const centralMassSlider = document.getElementById('centralMass');
+const massValSpan = document.getElementById('massVal');
 const showPlaneCb = document.getElementById('showPlane');
 const showTrailCb = document.getElementById('showTrail');
 const trueAnomalySlider = document.getElementById('trueAnomaly');
@@ -229,9 +230,24 @@ speedSlider.addEventListener('input', () => {
 incSlider.addEventListener('input', () => { incValSpan.textContent = incSlider.value; buildAndSetOrbit(); });
 nodeSlider.addEventListener('input', () => { nodeValSpan.textContent = nodeSlider.value; buildAndSetOrbit(); });
 argSlider.addEventListener('input', () => { argValSpan.textContent = argSlider.value; buildAndSetOrbit(); });
-centralMassSelect.addEventListener('change', () => {
-  M0_multiplier = parseFloat(centralMassSelect.value);
+centralMassSlider.addEventListener('input', () => {
+  const oldM0 = M0_multiplier;
+  M0_multiplier = Math.pow(10, parseFloat(centralMassSlider.value));
   M0 = 1.98847e30 * M0_multiplier;
+  
+  if (M0_multiplier >= 0.01 && M0_multiplier < 100) {
+    massValSpan.innerText = M0_multiplier.toFixed(2);
+  } else {
+    massValSpan.innerText = M0_multiplier.toExponential(2);
+  }
+  
+  // Kepler's Third Law: Keep orbital period constant by scaling semi-major axis
+  const ratio = Math.pow(M0_multiplier / oldM0, 1/3);
+  let newA = parseFloat(aSlider.value) * ratio;
+  newA = Math.max(1, Math.min(50, newA)); // clamp to slider bounds
+  aSlider.value = newA.toFixed(1);
+  aValSpan.textContent = newA.toFixed(1);
+  
   buildAndSetOrbit();
 });
 showPlaneCb.addEventListener('change', () => {
@@ -280,7 +296,7 @@ const collisionWarningEl = document.getElementById('collisionWarning');
 
 // ── Presets ───────────────────────────────────────────────────
 function resetToDefault() {
-  centralMassSelect.value = "1"; centralMassSelect.dispatchEvent(new Event('change'));
+  centralMassSlider.value = 0; centralMassSlider.dispatchEvent(new Event('input'));
   incSlider.value = 0; nodeSlider.value = 0; argSlider.value = 0;
 }
 document.getElementById('preEarth').addEventListener('click', () => {
@@ -299,13 +315,13 @@ document.getElementById('preHyper').addEventListener('click', () => {
   [eccSlider, aSlider, incSlider, nodeSlider, argSlider].forEach(el => el.dispatchEvent(new Event('input')));
 });
 document.getElementById('preISS').addEventListener('click', () => {
-  centralMassSelect.value = "0.000003"; centralMassSelect.dispatchEvent(new Event('change'));
+  centralMassSlider.value = Math.log10(0.000003).toFixed(2); centralMassSlider.dispatchEvent(new Event('input'));
   eccSlider.value = 0.001; aSlider.value = 5;
   incSlider.value = 51; nodeSlider.value = 0; argSlider.value = 0;
   [eccSlider, aSlider, incSlider, nodeSlider, argSlider].forEach(el => el.dispatchEvent(new Event('input')));
 });
 document.getElementById('preMolniya').addEventListener('click', () => {
-  centralMassSelect.value = "0.000003"; centralMassSelect.dispatchEvent(new Event('change'));
+  centralMassSlider.value = Math.log10(0.000003).toFixed(2); centralMassSlider.dispatchEvent(new Event('input'));
   eccSlider.value = 0.74; aSlider.value = 18;
   incSlider.value = 63; nodeSlider.value = 90; argSlider.value = 270;
   [eccSlider, aSlider, incSlider, nodeSlider, argSlider].forEach(el => el.dispatchEvent(new Event('input')));
