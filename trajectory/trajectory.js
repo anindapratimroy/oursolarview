@@ -207,7 +207,6 @@ const massValSpan = document.getElementById('massVal');
 const planetMassSlider = document.getElementById('planetMass');
 const planetMassValSpan = document.getElementById('planetMassVal');
 const showPlaneCb = document.getElementById('showPlane');
-const showTrailCb = document.getElementById('showTrail');
 const trueAnomalySlider = document.getElementById('trueAnomaly');
 const trueAnomalyValSpan = document.getElementById('thetaVal');
 
@@ -635,19 +634,6 @@ function drawSweptArea(currentPos) {
 const BASE_SPEED = 0.008 * 24 * 3600;
 let lastT = performance.now();
 
-// ── Particle Tail System ──────────────────────────────────────
-const tailGroup = new THREE.Group();
-scene.add(tailGroup);
-const tails = [];
-for (let i = 0; i < 90; i++) {
-  const mesh = new THREE.Mesh(
-    new THREE.SphereGeometry(3.0, 8, 8), 
-    new THREE.MeshBasicMaterial({ color: 0x44ddff, transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false })
-  );
-  tails.push(mesh);
-  tailGroup.add(mesh);
-}
-let tFrame = 0;
 
 function animate() {
   requestAnimationFrame(animate);
@@ -692,25 +678,6 @@ function animate() {
       cloudMesh.rotation.y += 0.055;
 
       const tangDir = orbitPath.getTangentAt(orbitTheta).normalize();
-
-      // Update dynamic tail
-      if (tFrame % 2 === 0 && showTrailCb && showTrailCb.checked) {
-         const tNode = tails.shift();
-         tNode.position.copy(pos);
-         tNode.position.addScaledVector(tangDir, -3.5);
-         tNode.position.x += (Math.random() - 0.5) * 1.5;
-         tNode.position.y += (Math.random() - 0.5) * 1.5;
-         tNode.position.z += (Math.random() - 0.5) * 1.5;
-         tNode.material.opacity = 0.5;
-         tNode.scale.set(1, 1, 1);
-         if (orbitLine) tNode.material.color.setHex(orbitLine.material.color.getHex());
-         tails.push(tNode);
-      }
-      for (let i = 0; i < tails.length; i++) {
-         tails[i].material.opacity *= 0.96;
-         tails[i].scale.multiplyScalar(0.98);
-      }
-      tFrame++;
 
       // Dashboard: distance
       const distAU = (dist2Sun / SF) / 1.496e11;
