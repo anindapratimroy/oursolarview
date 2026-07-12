@@ -82,12 +82,10 @@ renderer.domElement.addEventListener('wheel', (event) => {
 camera.position.set(0, 25, 150);
 
 // ── Lighting ──────────────────────────────────────────────────
-scene.add(new THREE.AmbientLight(0x112244, 1.5));
-const sunPoint = new THREE.PointLight(0xffddaa, 12, 2000);
+scene.add(new THREE.AmbientLight(0x112244, 0.4));
+const sunPoint = new THREE.PointLight(0xffddaa, 15, 2000);
 scene.add(sunPoint);
-const rimLight = new THREE.DirectionalLight(0x4466aa, 0.5);
-rimLight.position.set(-10, 5, -10);
-scene.add(rimLight);
+// (Removed rimLight to ensure lighting only comes from the sun)
 
 // ── Stars ─────────────────────────────────────────────────────
 const starGeo = new THREE.BufferGeometry();
@@ -281,10 +279,14 @@ if(orbitingBodySelect) {
      
      if (val !== 'earth') {
          earthMat.normalMap = null;
+         earthMat.specular = new THREE.Color(0x000000);
+         earthMat.shininess = 0;
          if (cloudMesh) cloudMesh.visible = false;
          if (atmoMesh) atmoMesh.visible = false;
      } else {
          earthMat.normalMap = normalTex;
+         earthMat.specular = new THREE.Color(0x2244aa);
+         earthMat.shininess = 20;
          if (cloudMesh) cloudMesh.visible = true;
          if (atmoMesh) atmoMesh.visible = true;
      }
