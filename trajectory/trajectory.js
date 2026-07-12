@@ -670,13 +670,13 @@ function animate() {
       earthMesh.rotation.y += 0.04;
       cloudMesh.rotation.y += 0.055;
 
+      const tangDir = orbitPath.getTangentAt(orbitTheta).normalize();
+
       // Update dynamic tail
       if (tFrame % 2 === 0 && showTrailCb && showTrailCb.checked) {
          const tNode = tails.shift();
          tNode.position.copy(pos);
-         if (velArrow && velArrow.dir) {
-            tNode.position.addScaledVector(velArrow.dir, -3.5);
-         }
+         tNode.position.addScaledVector(tangDir, -3.5);
          tNode.position.x += (Math.random() - 0.5) * 1.5;
          tNode.position.y += (Math.random() - 0.5) * 1.5;
          tNode.position.z += (Math.random() - 0.5) * 1.5;
@@ -717,7 +717,6 @@ function animate() {
 
       // Velocity arrow
       if (showVecCb && showVecCb.checked) {
-        const tangDir = new THREE.Vector3(-pos.z, 0, pos.x).normalize();
         velArrow.position.copy(pos);
         velArrow.setDirection(tangDir);
         velArrow.setLength(Math.min((v_ms / 1000) * 0.4 + 3.0, 15), 4.0, 2.5);
