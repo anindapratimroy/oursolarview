@@ -113,23 +113,30 @@ const cloudTex  = loader.load('../planets/img_earth/earth_clouds_1024.png');
 const normalTex = loader.load('../planets/img_earth/earth_normal_2048.jpg');
 
 // ── Sun ───────────────────────────────────────────────────────
+const sunGroup = new THREE.Group();
+scene.add(sunGroup);
+
 const sunMat = new THREE.MeshStandardMaterial({
   map: sunTex, emissive: 0xff6600, emissiveMap: sunTex, emissiveIntensity: 1.8,
   roughness: 1, metalness: 0
 });
 const sunMesh = new THREE.Mesh(new THREE.SphereGeometry(12.0, 32, 32), sunMat);
-scene.add(sunMesh);
+sunGroup.add(sunMesh);
 
 // Sun corona
 function addCorona(radius, color, opacity) {
-  scene.add(new THREE.Mesh(
+  const mesh = new THREE.Mesh(
     new THREE.SphereGeometry(radius, 32, 32),
     new THREE.MeshBasicMaterial({ color, transparent: true, opacity, side: THREE.BackSide, depthWrite: false })
-  ));
+  );
+  sunGroup.add(mesh);
+  return mesh;
 }
 addCorona(13.5, 0xff8800, 0.18);
 addCorona(15.5, 0xff6600, 0.08);
 addCorona(19.5, 0xff4400, 0.04);
+
+let currentPlanetScale = 1.0;
 
 // ── Earth ─────────────────────────────────────────────────────
 const earthMat = new THREE.MeshPhongMaterial({
@@ -253,6 +260,15 @@ function updateMasses(oldM0) {
   newA = Math.max(1, Math.min(50, newA)); // clamp to slider bounds
   aSlider.value = newA.toFixed(1);
   aValSpan.textContent = newA.toFixed(1);
+  
+  // Visual scaling feedback based on mass
+  const sunScale = Math.max(0.2, Math.min(4.0, Math.pow(centralM_multiplier, 1/4)));
+  sunGroup.scale.setScalar(sunScale);
+  
+  currentPlanetScale = Math.max(0.2, Math.min(4.0, Math.pow(planetM_multiplier / 3e-6, 1/4)));
+  if (earthMesh) earthMesh.scale.setScalar(currentPlanetScale);
+  if (cloudMesh) cloudMesh.scale.setScalar(currentPlanetScale);
+  if (atmoMesh) atmoMesh.scale.setScalar(currentPlanetScale);
   
   buildAndSetOrbit();
 }
