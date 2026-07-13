@@ -132,7 +132,7 @@
     .hero {
       position: relative;
       z-index: 1;
-      min-height: 100vh;
+      min-height: 800px;
       display: flex;
       align-items: center;
       padding-top: 72px;
@@ -633,7 +633,7 @@
     top: 72px; /* Height of nav */
     right: 0;
     width: 60%;
-    height: calc(100vh - 72px);
+    height: 728px;
     max-height: 900px;
     background: rgba(0, 10, 25, 0.95);
     backdrop-filter: blur(15px);

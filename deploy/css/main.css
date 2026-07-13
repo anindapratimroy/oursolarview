@@ -25,7 +25,7 @@
       background-color: var(--navy);
       color: var(--text);
       overflow-x: hidden;
-      min-height: 100vh;
+      min-height: 800px;
     }
 
     /* ─── Space Canvas ───────────────────────────────────────── */
@@ -144,7 +144,7 @@
     .hero {
       position: relative;
       z-index: 1;
-      min-height: 100vh;
+      min-height: 800px;
       display: flex;
       align-items: center;
       padding-top: 72px;
@@ -772,7 +772,7 @@
 
     .modal-iframe {
       width: 100%;
-      height: 72vh;
+      height: 576px;
       border: none;
       display: block;
       background: var(--navy);
@@ -792,7 +792,7 @@
       border: none;
     }
     #modal.fullscreen .modal-iframe {
-      height: calc(100vh - 70px);
+      height: 730px;
     }
     .modal-fullscreen-btn {
       position: relative;

@@ -4,7 +4,7 @@
 
 /* ── Page Base ───────────────────────────────────────────── */
 .spacecraft-main {
-  min-height: 100vh;
+  min-height: 800px;
   padding-top: 80px;
 }
 
@@ -658,7 +658,7 @@
 }
 
 .viewer-fallback-img {
-  width: 45%; max-width: 480px; max-height: 70vh;
+  width: 45%; max-width: 480px; max-height: 560px;
   object-fit: contain; border-radius: 14px;
   border: 1px solid rgba(255,255,255,0.08);
   box-shadow: 0 8px 40px rgba(0,0,0,0.6);
