@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=1280" />
+  <title>Planet Viewer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" />
+  <style>
+    body { margin: 0; overflow: hidden; background: black; width: 100vw; height: 100vh; }
+    canvas { display: block; width: 100% !important; height: 100% !important; }
+
+    /* ── Loading ──────────────────────────────────────────────── */
+    #loading {
+      position: fixed; inset: 0; z-index: 9999;
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; gap: 16px;
+      background: #000;
+      transition: opacity 0.7s ease;
+    }
+    #loading.done { opacity: 0; pointer-events: none; }
+    #ld-name   { font-family:'Space Grotesk',sans-serif; font-size:1.5rem; font-weight:700; color:#fff; }
+    #ld-spin   { width:40px;height:40px; border:3px solid rgba(197,160,72,.2); border-top-color:#c5a048; border-radius:50%; animation:spin .9s linear infinite; }
+    #ld-pct    { font-family:'Space Grotesk',sans-serif; font-size:.82rem; font-weight:600; letter-spacing:.18em; text-transform:uppercase; color:#c5a048; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+
+    /* ── Back Button ──────────────────────────────────────────── */
+    #back-btn {
+      position:fixed; top:18px; left:18px; z-index:10000;
+      display:flex; align-items:center; gap:9px;
+      padding:10px 22px;
+      background:rgba(0,7,20,.78); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
+      border:1.5px solid rgba(255,255,255,.18); border-radius:30px;
+      color:#fff; font-family:'Space Grotesk',sans-serif; font-size:13.5px; font-weight:700;
+      cursor:pointer; text-decoration:none; letter-spacing:.04em;
+      transition:border-color .25s, transform .25s, background .25s;
+    }
+    #back-btn:hover { border-color:rgba(197,160,72,.7); background:rgba(197,160,72,.12); transform:translateX(-4px); }
+
+
+    @media (max-width:480px) {
+      #back-btn    { padding:8px 14px; font-size:12px; top:12px; left:12px; }
+    }
+  </style>
+
+  <script async src="https://ga.jspm.io/npm:es-module-shims@1.8.0/dist/es-module-shims.js"></script>
+<script type="importmap">
+  {
+    "imports": {
+      "three":           "https://unpkg.com/three@0.129.0/build/three.module.js",
+      "three/addons/":   "https://unpkg.com/three@0.129.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+
+<button id="back-btn" aria-label="Go back">
+  <i class="fa-solid fa-arrow-left"></i> Step Back
+</button>
+
+<div id="loading">
+  <div id="ld-name">Loading...</div>
+  <div id="ld-spin"></div>
+  <div id="ld-pct">God is shaping the planet... (0%)</div>
+</div>
+
+<!-- Back button — always visible -->
+<script>
+  const _bb = document.getElementById('back-btn');
+  _bb.addEventListener('click', () => {
+    if (window.parent && window.parent !== window) {
+      window.parent.postMessage('closeModal', '*');
+    } else {
+      window.history.back();
+    }
+  });
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls }   from 'three/addons/controls/OrbitControls.js';
+import { EffectComposer }  from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass }      from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+
+// ─── planet from URL ─────────────────────────────────────────
+const planet = (new URLSearchParams(location.search).get('planet') || 'earth').toLowerCase();
+const cap    = planet.charAt(0).toUpperCase() + planet.slice(1);
+
+document.getElementById('ld-name').textContent       = cap;
+
+// ─── Loading overlay ─────────────────────────────────────────
+const ldEl  = document.getElementById('loading');
+const ldPct = document.getElementById('ld-pct');
+
+const phrases = [
+  "God is shaping the planet...",
+  "God is painting the textures...",
+  "God is adding the atmosphere...",
+  "God is positioning the moons...",
+  "God is calculating gravity..."
+];
+
+let currentPhrase = phrases[0];
+setInterval(() => {
+  currentPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+}, 800);
+
+let fakePct = 0;
+const pctInterval = setInterval(() => {
+  fakePct += 1;
+  if (fakePct > 99) fakePct = 99; 
+  ldPct.textContent = `${currentPhrase} (${fakePct}%)`;
+}, 30); // 99% in ~3 seconds
+
+function hideLoader() {
+  clearTimeout(safeTimer);
+  clearInterval(pctInterval);
+  ldPct.textContent = `${currentPhrase} (100%)`;
+  ldEl.classList.add('done');
+  setTimeout(() => ldEl.remove?.(), 800);
+}
+// 15-second hard fallback — never stays black
+const safeTimer = setTimeout(hideLoader, 15000);
+
+const manager = new THREE.LoadingManager();
+let texturesLoaded = false;
+manager.onLoad = () => { texturesLoaded = true; };
+manager.onError = () => {};
+
+// Force a cinematic minimum delay of 3 seconds
+setTimeout(() => {
+  if (texturesLoaded) {
+    hideLoader();
+  } else {
+    manager.onLoad = hideLoader;
+  }
+}, 3000);
+
+const loader = new THREE.TextureLoader(manager);
+
+// ─── Renderer / Camera / Controls (shared boilerplate) ────────
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(innerWidth, innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
+if (planet === 'sun') {
+  renderer.outputEncoding = THREE.sRGBEncoding;
+}
+document.body.appendChild(renderer.domElement);
+
+const scene  = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(45, innerWidth/innerHeight, 0.1, 5000);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.05;
+
+let globalComposer = null;
+
+// ════════════════════════════════════════════════════════════
+//  PLANET SETUP FUNCTIONS
+//  Every value below (camera pos, lights, material params,
+//  rotation speeds) is taken DIRECTLY from the matching
+//  Reference_folder_not_to_change/planets/<name>.html
+// ════════════════════════════════════════════════════════════
+
+// ── SUN  (reference: sun.html) ───────────────────────────────
+function setupSun() {
+  camera.position.set(0, 0, 60);
+  controls.minDistance = 11;
+  controls.maxDistance = 60;
+
+  const fireTexture = loader.load('./img_others/8k_sun.jpg');
+  fireTexture.wrapS = fireTexture.wrapT = THREE.RepeatWrapping;
+
+  const sunMaterial = new THREE.MeshStandardMaterial({
+    map:               fireTexture,
+    emissive:          new THREE.Color(0xffaa00),   // ← exact reference value
+    emissiveMap:       fireTexture,
+    emissiveIntensity: 2                             // ← exact reference value
+  });
+
+  const sunMesh = new THREE.Mesh(new THREE.SphereGeometry(10, 18, 18), sunMaterial);
+  scene.add(sunMesh);
+
+  const sunLight = new THREE.PointLight(0xffddaa, 10, 1000);
+  sunLight.position.copy(sunMesh.position);
+  scene.add(sunLight);
+
+  // Stars (reference sun.html)
+  addSimpleStars(4000, 5000);
+
+  // Bloom (reference sun.html exact values)
+  const comp = new EffectComposer(renderer);
+  comp.addPass(new RenderPass(scene, camera));
+  comp.addPass(new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 1.5, 0.4, 0.85));
+  
+  globalComposer = comp;
+
+  return function animate() {
+    fireTexture.offset.x += 0.001;   // ← exact reference
+    fireTexture.offset.y += 0.001;
+    sunMesh.rotation.y   += 0.002;
+    controls.update();
+    comp.render();
+  };
+}
+
+// ── MERCURY  (reference: mercury.html) ───────────────────────
+function setupMercury() {
+  camera.position.set(0, 0, 6);
+  controls.minDistance = 2.9;
+  controls.maxDistance = 15;
+
+  // Lights — exact reference values
+  const lightDir = new THREE.Vector3(5, 3, 5).normalize();
+  const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
+  dirLight.position.copy(lightDir.clone().multiplyScalar(10));
+  scene.add(dirLight);
+  scene.add(new THREE.AmbientLight(0x333333));
+
+  const planetTexture = loader.load('./img_others/8k_mercury.jpg');
+
+  // Material — exact reference values
+  const planetMaterial = new THREE.MeshPhongMaterial({
+    map:       planetTexture,
+    bumpMap:   planetTexture,
+    bumpScale: 0.05,
+  });
+
+  const planetMesh = new THREE.Mesh(new THREE.SphereGeometry(2, 64, 64), planetMaterial);
+  scene.add(planetMesh);
+
+  addSimpleStars(2000, 2000);
+
+  return function animate() {
+    planetMesh.rotation.y += 0.001;   // ← exact reference
+    controls.update();
+    renderer.render(scene, camera);
+  };
+}
+
+// ── VENUS  (reference: venus.html) ───────────────────────────
+function setupVenus() {
+  camera.position.set(0, 0, 6);
+  controls.minDistance = 2.9;
+  controls.maxDistance = 15;
+
+  const lightDir = new THREE.Vector3(5, 3, 5).normalize();
+  const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
+  dirLight.position.copy(lightDir.clone().multiplyScalar(10));
+  scene.add(dirLight);
+  scene.add(new THREE.AmbientLight(0x333333));
+
+  const planetTexture = loader.load('./img_others/8k_venus_surface.jpg');
+
+  const planetMaterial = new THREE.MeshPhongMaterial({
+    map:       planetTexture,
+    bumpMap:   planetTexture,
+    bumpScale: 0.05,
+  });
+
+  const planetMesh = new THREE.Mesh(new THREE.SphereGeometry(2, 64, 64), planetMaterial);
+  scene.add(planetMesh);
+
+  // Atmosphere layer (reference venus.html)
+  // Reference loads 4k_venus_atmosphere.jpg at opacity:0 — we keep that exactly
+  const atmosphereMaterial = new THREE.MeshPhongMaterial({
+    transparent: true,
+    opacity:     0,                   // ← exact reference value
+    side:        THREE.DoubleSide
+  });
+  const atmosphereMesh = new THREE.Mesh(new THREE.SphereGeometry(1.03, 64, 64), atmosphereMaterial);
+  scene.add(atmosphereMesh);
+
+  addSimpleStars(2000, 2000);
+
+  return function animate() {
+    planetMesh.rotation.y     += 0.001;    // ← exact reference
+    atmosphereMesh.rotation.y += 0.0008;   // ← exact reference
+    controls.update();
+    renderer.render(scene, camera);
+  };
+}
+
+// ── EARTH  (reference: earth.html) ───────────────────────────
+function setupEarth() {
+  camera.position.set(0, 0, 6);
+  controls.minDistance = 2.8;
+  controls.maxDistance = 15;
+
+  // Light — exact reference values
+  const lightDir = new THREE.Vector3(5, 3, 5).normalize();
+  const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+  directionalLight.position.copy(lightDir.clone().multiplyScalar(10));
+  scene.add(directionalLight);
+
+  // Textures — exact reference paths
+  const texDay    = loader.load('./img_earth/earth_day_4096.jpg');
+  const texNight  = loader.load('./img_earth/earth_night_4096.jpg');
+  const texBump   = loader.load('./img_earth/earth_bump_roughness_clouds_4096.jpg');
+  const texNormal = loader.load('./img_earth/earth_normal_2048.jpg');
+  const texClouds = loader.load('./img_earth/earth_clouds_1024.png');
+
+  // Stars — twinkling version (reference earth.html)
+  const starCount = 3000;
+  const starGeometry  = new THREE.BufferGeometry();
+  const starPositions = [], starColors = [], starTwinkleData = [];
+  for (let i = 0; i < starCount; i++) {
+    const theta = Math.random() * Math.PI * 2;
+    const phi   = Math.acos(2 * Math.random() - 1);
+    const r     = 700;
+    starPositions.push(r*Math.sin(phi)*Math.cos(theta), r*Math.sin(phi)*Math.sin(theta), r*Math.cos(phi));
+    const brightness = Math.random() * 0.8 + 0.2;
+    starColors.push(brightness, brightness, brightness);
+    starTwinkleData.push({ baseBrightness: brightness, speed: Math.random()*2+0.5, offset: Math.random()*Math.PI*2, index: i*3 });
+  }
+  starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starPositions, 3));
+  const starColorAttr = new THREE.Float32BufferAttribute(starColors, 3);
+  starGeometry.setAttribute('color', starColorAttr);
+  const starsMesh = new THREE.Points(starGeometry, new THREE.PointsMaterial({ size:2, vertexColors:true, transparent:true, opacity:0.9 }));
+  scene.add(starsMesh);
+
+  // ShaderMaterial — EXACT copy from reference earth.html
+  const earthMaterial = new THREE.ShaderMaterial({
+    uniforms: {
+      dayTex:        { value: texDay   },
+      nightTex:      { value: texNight },
+      lightDirection:{ value: lightDir },
+    },
+    vertexShader: `
+      varying vec2 vUv;
+      varying vec3 vNormal;
+      void main() {
+        vUv = uv;
+        vNormal = normalize(normalMatrix * normal);
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      }
+    `,
+    fragmentShader: `
+      uniform sampler2D dayTex;
+      uniform sampler2D nightTex;
+      uniform vec3 lightDirection;
+      varying vec2 vUv;
+      varying vec3 vNormal;
+      void main() {
+        float light = dot(normalize(vNormal), normalize(lightDirection));
+        light = clamp(light, 0.0, 1.0);
+        vec4 dayColor   = texture2D(dayTex,   vUv);
+        vec4 nightColor = texture2D(nightTex, vUv);
+        vec4 color = mix(nightColor, dayColor, light);
+        gl_FragColor = color;
+      }
+    `
+  });
+
+  const earthMesh = new THREE.Mesh(new THREE.SphereGeometry(2, 64, 64), earthMaterial);
+  scene.add(earthMesh);
+
+  // Clouds — exact reference
+  const cloudMesh = new THREE.Mesh(
+    new THREE.SphereGeometry(2.02, 64, 64),
+    new THREE.MeshPhongMaterial({ map: texClouds, transparent: true, opacity: 0.4, depthWrite: false })
+  );
+  scene.add(cloudMesh);
+
+  let t = 0;
+  return function animate() {
+    earthMesh.rotation.y += 0.001;    // ← exact reference
+    cloudMesh.rotation.y += 0.0015;   // ← exact reference
+
+    // Dynamic light — exact reference earth.html
+    const rotationMatrix  = new THREE.Matrix4().makeRotationY(earthMesh.rotation.y);
+    const dynamicLightDir = new THREE.Vector3(5, 3, 5).applyMatrix4(rotationMatrix).normalize();
+    earthMaterial.uniforms.lightDirection.value = dynamicLightDir;
+    directionalLight.position.copy(dynamicLightDir.clone().multiplyScalar(10));
+
+    // Twinkle stars (reference earth.html)
+    t += 0.016;
+    for (let i = 0; i < starTwinkleData.length; i++) {
+      const d = starTwinkleData[i];
+      const b = d.baseBrightness * (0.6 + 0.4 * Math.sin(d.speed * t + d.offset));
+      starColorAttr.array[d.index]   = b;
+      starColorAttr.array[d.index+1] = b;
+      starColorAttr.array[d.index+2] = b;
+    }
+    starColorAttr.needsUpdate = true;
+
+    controls.update();
+    renderer.render(scene, camera);
+  };
+}
+
+// ── MARS  (reference: mars.html) ─────────────────────────────
+function setupMars() {
+  camera.position.set(0, 0, 6);
+  controls.minDistance = 2.9;
+  controls.maxDistance = 15;
+
+  const lightDir = new THREE.Vector3(5, 3, 5).normalize();
+  const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
+  dirLight.position.copy(lightDir.clone().multiplyScalar(10));
+  scene.add(dirLight);
+  scene.add(new THREE.AmbientLight(0x333333));
+
+  const planetTexture = loader.load('./img_others/8k_mars.jpg');
+
+  const planetMaterial = new THREE.MeshPhongMaterial({
+    map:       planetTexture,
+    bumpMap:   planetTexture,
+    bumpScale: 0.05,
+  });
+
+  const planetMesh = new THREE.Mesh(new THREE.SphereGeometry(2, 64, 64), planetMaterial);
+  scene.add(planetMesh);
+
+  addSimpleStars(2000, 2000);
+
+  return function animate() {
+    planetMesh.rotation.y += 0.001;   // ← exact reference
+    controls.update();
+    renderer.render(scene, camera);
+  };
+}
+
+// ── JUPITER  (reference: jupiter.html) ───────────────────────
+function setupJupiter() {
+  camera.position.set(0, 10, 25);
+  controls.minDistance = 5.9;
+  controls.maxDistance = 35;
+
+  // Lights — exact reference
+  const pointLight = new THREE.PointLight(0xffffff, 2, 500);
+  pointLight.position.set(20, 20, 20);
+  scene.add(pointLight);
+  scene.add(new THREE.AmbientLight(0x333333));
+
+  const planetTexture = loader.load('./img_others/8k_jupiter.jpg');
+  const rockTexture   = loader.load('./img_others/cream.jpeg');
+  const rock2Texture  = loader.load('./img_others/stone_brown.jpg');
+
+  // Material — exact reference
+  const planetMaterial = new THREE.MeshStandardMaterial({
+    map:       planetTexture,
+    bumpMap:   planetTexture,
+    bumpScale: 0.05,
+    roughness: 1,
+    metalness: 0
+  });
+  const planetMesh = new THREE.Mesh(new THREE.SphereGeometry(5, 64, 64), planetMaterial);
+  scene.add(planetMesh);
+
+  // Ring — exact reference jupiter.html (single band, InstancedMesh for performance)
+  const mergedRing = new THREE.Group();
+  mergedRing.add(createRingInstanced(7.5, 11.3, 10500, rockTexture, 0.06));
+  mergedRing.rotation.x = 0.05;   // ← exact reference
+  scene.add(mergedRing);
+
+  addSimpleStars(4000, 5000);
+
+  return function animate() {
+    planetMesh.rotation.y += 0.01;    // ← exact reference
+    mergedRing.rotation.y += 0.003;   // ← exact reference
+    controls.update();
+    renderer.render(scene, camera);
+  };
+}
+
+// ── SATURN  (reference: saturn.html) ─────────────────────────
+function setupSaturn() {
+  camera.position.set(0, 10, 25);
+  controls.minDistance = 5.9;
+  controls.maxDistance = 35;
+
+  const pointLight = new THREE.PointLight(0xffffff, 2, 500);
+  pointLight.position.set(20, 20, 20);
+  scene.add(pointLight);
+  scene.add(new THREE.AmbientLight(0x333333));
+
+  const planetTexture = loader.load('./img_others/8k_saturn.jpg');
+  const rockTexture   = loader.load('./img_others/cream.jpeg');
+  const rock2Texture  = loader.load('./img_others/stone_brown.jpg');
+
+  const planetMaterial = new THREE.MeshStandardMaterial({
+    map:       planetTexture,
+    bumpMap:   planetTexture,
+    bumpScale: 0.05,
+    roughness: 1,
+    metalness: 0
+  });
+  const planetMesh = new THREE.Mesh(new THREE.SphereGeometry(5, 64, 64), planetMaterial);
+  scene.add(planetMesh);
+
+  // 4-band ring system — EXACT reference saturn.html stone counts & radii.
+  // Uses InstancedMesh (1 draw call per band) instead of 33k individual meshes
+  // so the browser doesn't freeze — visually identical result.
+  const mergedRing = new THREE.Group();
+  mergedRing.add(createRingInstanced(7,   7.5,  10500, rock2Texture, 0.06));  // ref: 10500
+  mergedRing.add(createRingInstanced(7.5, 8.1,  1500,  rockTexture,  0.06));  // ref: 1500
+  mergedRing.add(createRingInstanced(8.1, 9.3,  10500, rock2Texture, 0.06));  // ref: 10500
+  mergedRing.add(createRingInstanced(9.3, 11.3, 10500, rockTexture,  0.06));  // ref: 10500
+  mergedRing.rotation.x = 0.05;   // ← exact reference
+  scene.add(mergedRing);
+
+  addSimpleStars(4000, 5000);
+
+  return function animate() {
+    planetMesh.rotation.y += 0.1;    // ← exact reference saturn.html
+    mergedRing.rotation.y += 0.05;   // ← exact reference saturn.html
+    controls.update();
+    renderer.render(scene, camera);
+  };
+}
+
+// ── URANUS  (reference: uranus.html) ─────────────────────────
+function setupUranus() {
+  camera.position.set(0, 0, 6);
+  controls.minDistance = 2.9;
+  controls.maxDistance = 15;
+
+  // Exact reference: light color 0xfffeff, multiplier 1 (not 10)
+  const lightDir = new THREE.Vector3(5, 3, 5).normalize();
+  const dirLight = new THREE.DirectionalLight(0xfffeff, 1.2);
+  dirLight.position.copy(lightDir.clone().multiplyScalar(1));   // ← ref: multiplyScalar(1)
+  scene.add(dirLight);
+  scene.add(new THREE.AmbientLight(0x333333));
+
+  const planetTexture = loader.load('./img_others/2k_uranus.jpg');
+
+  const planetMaterial = new THREE.MeshPhongMaterial({
+    map:       planetTexture,
+    bumpMap:   planetTexture,
+    bumpScale: 0.05,
+  });
+
+  const planetMesh = new THREE.Mesh(new THREE.SphereGeometry(2, 64, 64), planetMaterial);
+  scene.add(planetMesh);
+
+  addSimpleStars(2000, 2000);
+
+  return function animate() {
+    planetMesh.rotation.y += 0.01;   // ← exact reference
+    controls.update();
+    renderer.render(scene, camera);
+  };
+}
+
+// ── NEPTUNE  (reference: neptune.html) ───────────────────────
+function setupNeptune() {
+  camera.position.set(0, 0, 6);
+  controls.minDistance = 2.9;
+  controls.maxDistance = 15;
+
+  const lightDir = new THREE.Vector3(5, 3, 5).normalize();
+  const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
+  dirLight.position.copy(lightDir.clone().multiplyScalar(10));
+  scene.add(dirLight);
+  scene.add(new THREE.AmbientLight(0x333333));
+
+  const planetTexture = loader.load('./img_others/2k_neptune.jpg');
+
+  const planetMaterial = new THREE.MeshPhongMaterial({
+    map:       planetTexture,
+    bumpMap:   planetTexture,
+    bumpScale: 0.05,
+  });
+
+  const planetMesh = new THREE.Mesh(new THREE.SphereGeometry(2, 64, 64), planetMaterial);
+  scene.add(planetMesh);
+
+  addSimpleStars(2000, 2000);
+
+  return function animate() {
+    planetMesh.rotation.y += 0.01;   // ← exact reference
+    controls.update();
+    renderer.render(scene, camera);
+  };
+}
+
+// ════════════════════════════════════════════════════════════
+//  HELPER UTILITIES
+// ════════════════════════════════════════════════════════════
+
+// Simple star field matching reference sun/mercury/mars/etc. style
+function addSimpleStars(count, spread) {
+  const geo  = new THREE.BufferGeometry();
+  const pos  = [];
+  for (let i = 0; i < count; i++) {
+    pos.push((Math.random()-.5)*spread, (Math.random()-.5)*spread, (Math.random()-.5)*spread);
+  }
+  geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  scene.add(new THREE.Points(geo, new THREE.PointsMaterial({ color:0xffffff, size:2 })));
+}
+
+// InstancedMesh ring band — identical visual to reference Group-of-Spheres
+// but rendered in a single GPU draw call, so no browser freeze
+function createRingInstanced(innerR, outerR, count, texture, opacity) {
+  const geo   = new THREE.SphereGeometry(0.1, 6, 6);
+  const mat   = new THREE.MeshStandardMaterial({ map:texture, roughness:0.8, opacity, transparent:true });
+  const iMesh = new THREE.InstancedMesh(geo, mat, count);
+  const dummy = new THREE.Object3D();
+  for (let i = 0; i < count; i++) {
+    const angle  = Math.random() * Math.PI * 2;
+    const radius = innerR + Math.random() * (outerR - innerR);
+    dummy.position.set(Math.cos(angle)*radius, (Math.random()-.5)*0.5, Math.sin(angle)*radius);
+    dummy.rotation.set(Math.random()*Math.PI, Math.random()*Math.PI, Math.random()*Math.PI);
+    dummy.scale.setScalar(0.5 + Math.random() * 0.7);
+    dummy.updateMatrix();
+    iMesh.setMatrixAt(i, dummy.matrix);
+  }
+  iMesh.instanceMatrix.needsUpdate = true;
+  return iMesh;
+}
+
+// ════════════════════════════════════════════════════════════
+//  ROUTE — pick the right setup then start the loop
+// ════════════════════════════════════════════════════════════
+let perFrameFn;
+switch (planet) {
+  case 'sun':     perFrameFn = setupSun();     break;
+  case 'mercury': perFrameFn = setupMercury(); break;
+  case 'venus':   perFrameFn = setupVenus();   break;
+  case 'earth':   perFrameFn = setupEarth();   break;
+  case 'mars':    perFrameFn = setupMars();    break;
+  case 'jupiter': perFrameFn = setupJupiter(); break;
+  case 'saturn':  perFrameFn = setupSaturn();  break;
+  case 'uranus':  perFrameFn = setupUranus();  break;
+  case 'neptune': perFrameFn = setupNeptune(); break;
+  default:        perFrameFn = setupEarth();   break;
+}
+
+function loop() {
+  requestAnimationFrame(loop);
+  perFrameFn();
+}
+loop();
+
+// ─── Resize ───────────────────────────────────────────────────
+function onResize() {
+  const w = window.innerWidth;
+  const h = window.innerHeight;
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+  renderer.setSize(w, h, false);
+  if (globalComposer) {
+    globalComposer.setSize(w, h);
+  }
+}
+window.addEventListener('resize', onResize);
+const ro = new ResizeObserver(entries => {
+  if(entries.length > 0) {
+    const { width, height } = entries[0].contentRect;
+    if(width === 0 || height === 0) return;
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
+    renderer.setSize(width, height, false);
+    if (globalComposer) {
+      globalComposer.setSize(width, height);
+    }
+  }
+});
+ro.observe(document.body);
+</script>
+</body>
+</html>

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=1280" />
+  <title>See How I Weighed the Heavens</title>
+  <meta name="description" content="Compare the physical properties and visual scaling of Solar System planets." />
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Merriweather:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" />
+  
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+  
+  <!-- Global CSS -->
+  <link rel="stylesheet" href="../css/design-tokens.css" />
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/layout.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <!-- Feature Specific CSS -->
+  <link rel="stylesheet" href="../css/compare.css" />
+  <style>
+    .back-btn {
+      color: #fff; text-decoration: none; font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.1rem; font-weight: 800; padding: 14px 28px;
+      background: var(--lg-bg); border: 1px solid var(--lg-border);
+      backdrop-filter: blur(16px); border-radius: 40px;
+      display: inline-flex; align-items: center; gap: 9px;
+      transition: all 0.3s ease;
+      position: relative; z-index: 2000; margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+    .back-btn:hover { border-color: var(--gold); transform: translateX(-4px); }
+  </style>
+</head>
+<body>
+
+<!-- Animated Space Canvas -->
+<canvas id="space-canvas"></canvas>
+
+<!-- Navigation -->
+<nav class="nav" role="navigation" aria-label="Main Navigation">
+  <div class="nav-inner">
+    <a href="../index.html" class="nav-brand" aria-label="Home">
+      <span class="brand-dot"></span>
+      Behold My <em>Masterpiece</em>
+    </a>
+    
+    <!-- Mobile Hamburger -->
+    <button class="mobile-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="nav-links">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </button>
+
+    <ul class="nav-links" id="nav-links">
+      <li><a href="../solarsystem/index.html">Witness My Clockwork</a></li>
+      <li><a href="../spacecraft/index.html">Witness My Machines</a></li>
+      <li><a href="../trajectory/index.html">Toy With My Physics</a></li>
+      <li><a href="index.html" aria-current="page">Measure My Titans</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Global Loader -->
+<div id="compare-global-loader" style="position:fixed; top:0; left:0; width:100%; height:100%; background:var(--navy); z-index:9999; display:flex; justify-content:center; align-items:center; flex-direction:column; gap:20px; color:var(--gold); font-family:'Space Mono', monospace; font-size:1.2rem; transition:opacity 0.6s ease;">
+  <i class="fa-solid fa-circle-notch fa-spin fa-2x"></i>
+  <span id="compare-global-text" style="transition: opacity 0.4s ease-in-out;">God is aligning the celestial bodies... (0%)</span>
+</div>
+
+<main class="compare-container">
+  <!-- Back Button -->
+  <div style="text-align: left; width: 100%;">
+    <a href="../index.html" class="back-btn" aria-label="Return to Eternity">
+      <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Return to Eternity
+    </a>
+  </div>
+
+  <div class="compare-split">
+    <!-- Left Planet -->
+    <div class="compare-side compare-side-left">
+      <div class="compare-selector">
+        <select id="select-left" aria-label="Select left planet">
+          <option value="sun">Sun</option>
+          <option value="mercury">Mercury</option>
+          <option value="venus">Venus</option>
+          <option value="earth" selected>Earth</option>
+          <option value="mars">Mars</option>
+          <option value="jupiter">Jupiter</option>
+          <option value="saturn">Saturn</option>
+          <option value="uranus">Uranus</option>
+          <option value="neptune">Neptune</option>
+        </select>
+        <i class="fa-solid fa-chevron-down select-icon"></i>
+      </div>
+      
+      <div class="compare-canvas-container" id="compare-canvas-wrap-left">
+        <canvas id="compare-canvas-left"></canvas>
+      </div>
+    </div>
+
+    <!-- Right Planet -->
+    <div class="compare-side compare-side-right">
+      <div class="compare-selector">
+        <select id="select-right" aria-label="Select right planet">
+          <option value="sun">Sun</option>
+          <option value="mercury">Mercury</option>
+          <option value="venus" selected>Venus</option>
+          <option value="earth">Earth</option>
+          <option value="mars">Mars</option>
+          <option value="jupiter">Jupiter</option>
+          <option value="saturn">Saturn</option>
+          <option value="uranus">Uranus</option>
+          <option value="neptune">Neptune</option>
+        </select>
+        <i class="fa-solid fa-chevron-down select-icon"></i>
+      </div>
+      
+      <div class="compare-canvas-container" id="compare-canvas-wrap-right">
+        <canvas id="compare-canvas-right"></canvas>
+      </div>
+    </div>
+  </div>
+  
+  <div style="text-align: center; margin-top: 15px; margin-bottom: 25px; font-family: 'Space Mono', monospace; font-size: 1.1rem; color: var(--gold-light); opacity: 0.9; letter-spacing: 0.05em; text-transform: uppercase; text-shadow: 0 0 10px rgba(197,160,72,0.4);">
+    Displayed in True 1:1 Scale. God made sure you remember how small you are.
+  </div>
+
+  <!-- Data Table -->
+  <div class="compare-table-wrapper">
+    <table class="compare-data-table">
+      <thead>
+        <tr>
+          <th class="td-prop">Parameter</th>
+          <th id="compare-th-left" class="td-val left-val">Earth</th>
+          <th id="compare-th-right" class="td-val right-val">Venus</th>
+        </tr>
+      </thead>
+      <tbody id="compare-tbody">
+        <!-- Javascript populates this -->
+      </tbody>
+    </table>
+  </div>
+</main>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-team">
+      <span class="footer-label">Creators</span>
+      <a href="https://www.linkedin.com/in/aninda-pratim-roy" target="_blank" rel="noopener" class="footer-name-link">Aninda Pratim Roy <span class="footer-deg">(M.Tech AASE)</span></a>
+      <span class="footer-divider">|</span>
+      <a href="https://www.linkedin.com/in/manish-kumawat-iiti" target="_blank" rel="noopener" class="footer-name-link">Manish Kumawat <span class="footer-deg">(B.Tech AASE)</span></a>
+      <span class="footer-divider">|</span>
+      <span class="footer-credits-link">Credits</span>
+    </div>
+    <div class="footer-inst">
+      <a href="http://aase.iiti.ac.in" target="_blank" rel="noopener" class="footer-inst-link">
+        <i class="fa-solid fa-building-columns"></i> AASE, IIT Indore
+      </a>
+    </div>
+  </div>
+</footer>
+
+<script async src="https://ga.jspm.io/npm:es-module-shims@1.8.0/dist/es-module-shims.js"></script>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+<script type="module" src="../js/compare_init.js"></script>
+</body>
+<!-- Credits Modal -->
+<div id="creditsModal" class="credits-modal">
+  <div class="credits-modal-backdrop" id="creditsModalBackdrop"></div>
+  <div class="credits-modal-content">
+    <h3 class="credits-title">Special Thanks</h3>
+    <a href="https://www.linkedin.com/in/arpan-dawn-373613177?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" rel="noopener" class="credits-name">Arpan Dawn</a>
+  </div>
+</div>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const creditsBtns = document.querySelectorAll('.footer-credits-link');
+    const creditsModal = document.getElementById('creditsModal');
+    const creditsBackdrop = document.getElementById('creditsModalBackdrop');
+    if (creditsBtns.length > 0 && creditsModal && creditsBackdrop) {
+      creditsBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          creditsModal.classList.add('open');
+        });
+      });
+      creditsBackdrop.addEventListener('click', () => {
+        creditsModal.classList.remove('open');
+      });
+    }
+  });
+</script>
+</html>

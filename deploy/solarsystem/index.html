@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1280">
+  <title>Witness My Perfect Clockwork</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Merriweather:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous">
+  
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+  <link rel="manifest" href="../manifest.json" />
+  <link rel="stylesheet" href="../css/design-tokens.css" />
+  <link rel="stylesheet" href="../css/base.css" />
+  <style>
+    /* Solar System Viewer specific overrides */
+    body { overflow: hidden; background: var(--navy); }
+    canvas { display: block; }
+    
+    .back-btn {
+      position: absolute; top: 18px; left: 18px; z-index: 2000;
+      color: #fff; text-decoration: none; font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.1rem; font-weight: 800; padding: 14px 28px;
+      background: var(--lg-bg); border: 1px solid var(--lg-border);
+      backdrop-filter: blur(16px); border-radius: 40px;
+      display: flex; align-items: center; gap: 9px;
+      transition: all 0.3s ease;
+    }
+    .back-btn:hover { border-color: var(--gold); transform: translateX(-4px); }
+
+    /* Control Panel */
+    .control-panel {
+      position: absolute; top: 18px; right: 18px; z-index: 1000;
+      background: rgba(0,10,25,0.82); backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.14); border-top-color: rgba(255,255,255,0.28);
+      border-radius: 20px; padding: 22px; width: 320px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+      display: flex; flex-direction: column; gap: 20px;
+      color: var(--text-muted); font-family: 'Space Grotesk', sans-serif;
+    }
+    
+    .control-group {
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .control-group label { font-size: 0.85rem; color: var(--text-dim); font-weight: 600; }
+    /* Improved Controls Styling */
+    .control-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+    .info-tooltip { cursor: help; color: var(--gold); opacity: 0.8; font-size: 0.9rem; transition: 0.3s; }
+    .info-tooltip:hover { opacity: 1; text-shadow: 0 0 8px var(--gold); }
+    
+    .button-row { display: flex; gap: 10px; margin-top: 8px; }
+    .control-btn {
+      flex: 1; background: rgba(197,160,72,0.15); color: var(--gold);
+      border: 1px solid rgba(197,160,72,0.4); padding: 8px; border-radius: 6px;
+      font-family: 'Space Grotesk', sans-serif; font-size: 0.85rem; font-weight: 600;
+      cursor: pointer; transition: 0.2s ease; display: flex; justify-content: center; align-items: center; gap: 6px;
+    }
+    .control-btn:hover { background: rgba(197,160,72,0.3); transform: translateY(-2px); }
+    .control-btn.active { background: var(--gold); color: #000; }
+    /* Dynamic Status Box */
+    .status-box {
+      margin-top: 15px; padding: 12px; background: rgba(197,160,72,0.08);
+      border-left: 3px solid var(--gold); border-radius: 4px;
+      font-size: 0.8rem; line-height: 1.4; color: #ddd;
+    }
+    .status-box span.highlight { color: var(--gold); font-weight: bold; }
+    
+    /* Toggle Switch */
+    .toggle-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-top: 1px solid rgba(255,255,255,0.05); }
+    .toggle-label { font-size: 0.85rem; font-weight: 600; color: var(--text-dim); }
+    .switch { position: relative; display: inline-block; width: 34px; height: 18px; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #333; transition: .4s; border-radius: 18px; }
+    .slider:before { position: absolute; content: ""; height: 12px; width: 12px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+    input:checked + .slider { background-color: var(--gold); }
+    input:checked + .slider:before { transform: translateX(16px); background-color: #000; }
+
+
+    
+    input[type=range] { width: 100%; -webkit-appearance: none; height: 4px; background: rgba(255,255,255,0.15); border-radius: 2px; outline: none; }
+    input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%; background: var(--gold); cursor: grab; }
+    
+    input[type=color] { width: 100%; height: 30px; border: 1px solid rgba(197,160,72,0.4); border-radius: 6px; background: #222; cursor: pointer; }
+    
+    select {
+      width: 100%; background: rgba(0,8,20,0.8); color: var(--text);
+      border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 8px 12px;
+      font-size: 0.85rem; font-family: 'Space Grotesk', sans-serif; outline: none;
+    }
+    
+    .checkbox-group { display: flex; align-items: center; gap: 10px; }
+    .checkbox-group input { transform: scale(1.2); accent-color: var(--gold); }
+
+    /* Floating Labels */
+    .label-container { pointer-events: none; }
+    .label {
+      color: var(--text); font-size: 12px; font-weight: 600;
+      background: rgba(0,8,20,0.7); backdrop-filter: blur(8px);
+      padding: 3px 9px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.12);
+      white-space: nowrap; transform-origin: center bottom; transition: opacity 0.2s;
+    }
+
+    /* Info Panel */
+    #infoPanel {
+      position: absolute; bottom: 18px; left: 18px; z-index: 1000;
+      background: rgba(0,10,25,0.82); backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.14); border-top-color: rgba(255,255,255,0.28);
+      border-radius: 20px; padding: 22px; max-width: 400px; max-height: 80vh; overflow-y: auto;
+      opacity: 0; pointer-events: none; transform: translateY(12px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+    #infoPanel.visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
+    #infoPanel h3 { font-family: 'Merriweather', serif; color: var(--text); font-size: 1.35rem; margin-bottom: 16px; }
+    #infoPanel h3::after { content:''; display:block; width:40px; height:3px; background:var(--gold); margin-top:8px; }
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .info-item { font-size: 0.83rem; color: var(--text-dim); }
+    .info-item strong { color: var(--gold-light); display: block; font-family: 'Space Mono', monospace; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 2px; }
+    .info-item span { color: var(--text-muted); font-size: 0.9rem; }
+    .panel-section { font-size: 0.9rem; line-height: 1.6; margin-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px; }
+    
+    .toggle-controls-btn { display: none; }
+
+    @media (max-width: 768px) {
+      .toggle-controls-btn {
+        display: flex; position: absolute; top: 18px; right: 18px; z-index: 2000;
+        background: rgba(0, 15, 35, 0.85); border: 1.5px solid rgba(197, 160, 72, 0.4);
+        border-radius: 30px; padding: 8px 16px; color: var(--gold-light);
+        font-family: 'Space Mono', monospace; font-size: 0.8rem; font-weight: 700;
+        text-transform: uppercase; cursor: pointer; align-items: center; gap: 8px;
+        backdrop-filter: blur(8px);
+      }
+      .control-panel { 
+        top: auto; bottom: 0; left: 0; right: 0; width: 100%; border-radius: 20px 20px 0 0; 
+        padding: 16px 16px 30px; transform: translateY(100%); transition: transform 0.35s cubic-bezier(0.16,1,0.3,1); 
+      }
+      .control-panel.open { transform: translateY(0); }
+      #infoPanel { bottom: 20px; left: 10px; right: 10px; max-width: auto; transition: transform 0.35s cubic-bezier(0.16,1,0.3,1); }
+      .control-panel.open ~ #infoPanel { transform: translateY(-240px); }
+    }
+  </style>
+<script async src="https://ga.jspm.io/npm:es-module-shims@1.8.0/dist/es-module-shims.js"></script>
+<script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.129.0/build/three.module.js",
+      "three/examples/jsm/": "https://cdn.jsdelivr.net/npm/three@0.129.0/examples/jsm/"
+    }
+  }
+</script>
+</head>
+<body>
+  
+  <!-- Back Button -->
+  <a href="../index.html" class="back-btn" aria-label="Return to Eternity">
+    <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+    Return to Eternity
+  </a>
+
+  <!-- Mobile Toggle -->
+  <button class="toggle-controls-btn" id="toggleControlsBtn">
+    <i class="fa-solid fa-sliders"></i> Controls
+  </button>
+
+  <!-- Unified Control Panel -->
+  <aside class="control-panel">
+    <div class="control-group">
+      <div class="control-header">
+        <label>⏱️ Time Reference:</label>
+        <i class="fa-solid fa-circle-info info-tooltip" title="Select a planet to synchronize the simulation speed to its real-world day or year."></i>
+      </div>
+      <select id="timeRefTarget">
+        <option value="custom">Custom Scale</option>
+        <option value="sun_eq">The Sun</option>
+        <option value="mercury">Mercury</option>
+        <option value="venus">Venus</option>
+        <option value="earth">Earth</option>
+        <option value="mars">Mars</option>
+        <option value="jupiter">Jupiter</option>
+        <option value="saturn">Saturn</option>
+        <option value="uranus">Uranus</option>
+        <option value="neptune">Neptune</option>
+      </select>
+    </div>
+    
+    <div class="control-group" id="timeRefUnitGroup" style="display: none;">
+      <div class="control-header">
+        <label>⏳ Reference Unit (Per Second):</label>
+        <i class="fa-solid fa-circle-info info-tooltip" title="Choose whether 1 real second equals a full rotation (day) or orbit (year) of the selected planet."></i>
+      </div>
+      <select id="timeRefUnit">
+        <option value="rotation">1 Day (Rotation)</option>
+        <option value="orbit">1 Year (Orbit)</option>
+      </select>
+    </div>
+
+    <div class="control-group">
+      <div class="control-header">
+        <label>🌌 Accelerate Eternity: <span id="scaleValue">100000</span>x</label>
+        <i class="fa-solid fa-circle-info info-tooltip" title="Manually drag the slider to speed up or slow down time across the entire solar system."></i>
+      </div>
+      <input id="scaleSlider" type="range" min="1" max="6000000000" value="100000" step="100">
+      <div class="button-row">
+        <button class="control-btn" id="btnPlayPause"><i class="fa-solid fa-pause"></i> Pause</button>
+        <button class="control-btn" id="btnRealTime"><i class="fa-solid fa-clock"></i> 1x Real-Time</button>
+      </div>
+    </div>
+    
+    <div class="control-group">
+      <div class="control-header">
+        <label>🔭 Direct My Gaze:</label>
+        <i class="fa-solid fa-circle-info info-tooltip" title="Select a planet to instantly teleport the camera and lock onto it."></i>
+      </div>
+      <select id="planetView">
+        <option value="none">The Endless Void</option>
+        <option value="mercury">Mercury</option>
+        <option value="venus">Venus</option>
+        <option value="earth">Earth</option>
+        <option value="mars">Mars</option>
+        <option value="jupiter">Jupiter</option>
+        <option value="saturn">Saturn</option>
+        <option value="uranus">Uranus</option>
+        <option value="neptune">Neptune</option>
+      </select>
+    </div>
+
+
+    
+    <!-- Visual Toggles -->
+    <div class="toggle-row">
+      <span class="toggle-label"><i class="fa-solid fa-ring"></i> Show Orbits</span>
+      <label class="switch">
+        <input type="checkbox" id="toggleOrbits" checked>
+        <span class="slider"></span>
+      </label>
+    </div>
+    
+    <!-- Dynamic Explanation Box -->
+    <div class="status-box" id="dynamicStatus">
+      <i class="fa-solid fa-user-astronaut"></i> 
+      <span id="statusText">Time is flowing at <strong>100,000x</strong> real speed. You are viewing the entire Solar System.</span>
+    </div>
+  </aside>
+
+  <!-- Info Panel -->
+  <div id="infoPanel">
+      <h3 id="panelPlanetName"></h3>
+      <p id="panelDetails" class="panel-section"></p>
+      <p id="panelFunFact" class="panel-section" style="font-style:italic; border:none; padding:0;"></p>
+
+      <div class="info-grid">
+          <div class="info-item"><strong>Type</strong><span id="infoType"></span></div>
+          <div class="info-item"><strong>Avg. Temp</strong><span id="infoAvgTemp"></span></div>
+          <div class="info-item"><strong>Orbital Period</strong><span id="infoOrbitalPeriod"></span></div>
+          <div class="info-item"><strong>Day Length</strong><span id="infoRotationPeriod"></span></div>
+          <div class="info-item"><strong>Distance from Sun</strong><span id="infoDistanceFromSun"></span></div>
+          <div class="info-item"><strong>Radius</strong><span id="infoRadius"></span></div>
+          <div class="info-item"><strong>Mass (Earths)</strong><span id="infoMass"></span></div>
+          <div class="info-item"><strong>Gravity (Earths)</strong><span id="infoGravity"></span></div>
+          <div class="info-item"><strong>Moons</strong><span id="infoMoons"></span></div>
+      </div>
+  </div>
+
+  <script async src="https://ga.jspm.io/npm:es-module-shims@1.8.0/dist/es-module-shims.js"></script>
+<script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.129.0/build/three.module.js",
+        "three/examples/jsm/": "https://cdn.jsdelivr.net/npm/three@0.129.0/examples/jsm/"
+      }
+    }
+  </script>
+  <script>
+    const toggleBtn = document.getElementById('toggleControlsBtn');
+    const controlPanel = document.querySelector('.control-panel');
+    if (toggleBtn && controlPanel) {
+      toggleBtn.addEventListener('click', () => {
+        controlPanel.classList.toggle('open');
+      });
+    }
+  </script>
+  <script type="module" src="./solarsystem.js"></script>
+</body>
+</html>

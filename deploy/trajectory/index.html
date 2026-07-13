@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1280">
+<title>Toy With My Laws of Physics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Merriweather:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" />
+  
+<link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+<link rel="manifest" href="../manifest.json" />
+<link rel="stylesheet" href="../css/design-tokens.css" />
+  <link rel="stylesheet" href="../css/base.css" />
+  <style>
+    body { overflow: hidden; background: var(--navy); }
+    canvas { display: block; }
+    
+    .back-btn {
+      position: absolute; top: 18px; left: 18px; z-index: 2000;
+      color: #fff; text-decoration: none; font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.1rem; font-weight: 800; padding: 14px 28px;
+      background: var(--lg-bg); border: 1px solid var(--lg-border);
+      backdrop-filter: blur(16px); border-radius: 40px;
+      display: flex; align-items: center; gap: 9px;
+      transition: all 0.3s ease;
+    }
+    .back-btn:hover { border-color: var(--gold); transform: translateX(-4px); }
+
+    /* Control Panel */
+    .control-panel {
+      position: absolute; top: 18px; right: 18px; z-index: 1000;
+      background: rgba(0,10,25,0.82); backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.14); border-top-color: rgba(255,255,255,0.28);
+      border-radius: 20px; padding: 22px; width: 320px; max-height: calc(100vh - 40px); overflow-y: auto;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+      display: flex; flex-direction: column; gap: 20px;
+      color: var(--text-muted); font-family: 'Space Grotesk', sans-serif;
+    }
+    
+    .panel-title {
+      font-family: 'Merriweather', serif; font-size: 1.1rem; color: var(--gold); font-weight: 800;
+      border-bottom: 2px solid rgba(197,160,72,0.3); padding-bottom: 8px; margin-bottom: 8px;
+    }
+
+    .control-group { display: flex; flex-direction: column; gap: 8px; }
+    .control-group label { display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--text-dim); font-weight: 600; }
+    .control-group label span { color: var(--gold-light); font-family: 'Space Mono', monospace; font-size: 0.8rem; }
+    
+    input[type=range] { width: 100%; -webkit-appearance: none; height: 4px; background: rgba(255,255,255,0.15); border-radius: 2px; outline: none; }
+    input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%; background: var(--gold); cursor: grab; }
+    
+    .btn-group { display: flex; gap: 10px; }
+    .btn {
+      flex: 1; padding: 8px; background: rgba(0,15,35,0.8); border: 1px solid rgba(197,160,72,0.4);
+      color: var(--gold); border-radius: 6px; cursor: pointer; font-family: 'Space Mono', monospace; font-size: 0.8rem;
+    }
+    .btn:hover { background: rgba(197,160,72,0.2); }
+
+    /* Dashboard Bottom */
+    #dashboard {
+      position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 1000;
+      display: flex; gap: 16px;
+    }
+    .dash-card {
+      background: rgba(0,10,25,0.82); backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.14); border-top-color: rgba(255,255,255,0.28);
+      border-radius: 16px; padding: 20px 32px; text-align: center; min-width: 180px;
+    }
+    .dc-label { font-family: 'Space Mono', monospace; font-size: 0.9rem; color: var(--gold); text-transform: uppercase; margin-bottom: 8px; display: block; }
+    .dc-value { font-size: 1.6rem; font-weight: 800; color: var(--text); font-family: 'Space Grotesk', sans-serif; }
+    
+    #orbitTypeBadge {
+      position: absolute; top: 20px; left: 50%; transform: translateX(-50%); z-index: 1000;
+      background: rgba(0,15,35,0.85); border: 1.5px solid rgba(197,160,72,0.4); border-radius: 40px;
+      padding: 14px 32px; color: var(--gold-light); font-family: 'Space Mono', monospace; font-size: 1.1rem; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.1em;
+    }
+
+    .toggle-controls-btn { display: none; }
+
+    @media (max-width: 768px) {
+      .toggle-controls-btn {
+        display: flex; position: absolute; top: 18px; right: 18px; z-index: 2000;
+        background: rgba(0, 15, 35, 0.85); border: 1.5px solid rgba(197, 160, 72, 0.4);
+        border-radius: 30px; padding: 8px 16px; color: var(--gold-light);
+        font-family: 'Space Mono', monospace; font-size: 0.8rem; font-weight: 700;
+        text-transform: uppercase; cursor: pointer; align-items: center; gap: 8px;
+        backdrop-filter: blur(8px);
+      }
+      .control-panel { 
+        top: auto; bottom: 0; left: 0; right: 0; width: 100%; 
+        border-radius: 20px 20px 0 0; padding: 16px 16px 30px; max-height: 45vh; overflow-y: auto; 
+        transform: translateY(100%); transition: transform 0.35s cubic-bezier(0.16,1,0.3,1);
+      }
+      .control-panel.open { transform: translateY(0); }
+      #dashboard { 
+        bottom: 20px; top: auto; flex-wrap: wrap; justify-content: center; width: 100%; gap: 8px;
+        transition: transform 0.35s cubic-bezier(0.16,1,0.3,1);
+      }
+      /* When controls are open, push dashboard up by the panel's max height roughly */
+  
+    /* Make control panel scrollable if it gets too tall */
+    .control-panel {
+      max-height: 85vh;
+      overflow-y: auto;
+    }
+    .control-panel::-webkit-scrollbar { width: 6px; }
+    .control-panel::-webkit-scrollbar-thumb { background: rgba(197,160,72,0.4); border-radius: 4px; }
+    
+    .panel-subtitle { font-size: 0.8rem; color: var(--gold); margin-bottom: 6px; font-weight: bold; border-bottom: 1px solid rgba(197,160,72,0.2); padding-bottom: 3px; margin-top: 10px; }
+    
+    select {
+      width: 100%; background: rgba(0,8,20,0.8); color: var(--gold);
+      border: 1px solid rgba(197,160,72,0.4); border-radius: 6px; padding: 8px 10px;
+      font-size: 0.85rem; font-family: 'Space Grotesk', sans-serif; outline: none; margin-bottom: 8px;
+      appearance: none; -webkit-appearance: none; -moz-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23c5a048' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      cursor: pointer;
+    }
+    
+    select:hover {
+      border-color: var(--gold);
+    }
+    
+    select option {
+      background: #000814;
+      color: #ffffff;
+    }
+
+    .control-panel.open ~ #dashboard {
+        transform: translateY(-46vh);
+      }
+      #orbitTypeBadge { top: 70px; display: none; }
+      .dash-card { min-width: 105px; padding: 10px 14px; }
+      .dc-value { font-size: 1rem; }
+      .dash-card.highlight { border-color: var(--gold-light); }
+    }
+  </style>
+</head>
+<body>
+
+  <a href="../index.html" class="back-btn" aria-label="Return to Eternity">
+    <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Return to Eternity
+  </a>
+
+  <button class="toggle-controls-btn" id="toggleControlsBtn">
+    <i class="fa-solid fa-sliders"></i> Controls
+  </button>
+
+    <div id="collisionWarning" style="display:none; position:absolute; top:80px; left:50%; transform:translateX(-50%); background:rgba(255,0,0,0.8); color:white; padding:10px 20px; font-weight:bold; font-size:1.2rem; border-radius:8px; z-index:3000;">
+    <i class="fa-solid fa-triangle-exclamation"></i> COLLISION ALERT! The body has crashed into the central mass!
+  </div>
+<div id="orbitTypeBadge">Elliptical Orbit</div>
+
+    <aside class="control-panel">
+    <div class="panel-title">Orbital Mechanics</div>
+    
+    <div class="panel-subtitle">Environment</div>
+    <div class="control-group">
+          <div class="control-group">
+      <label>Orbiting Body</label>
+      <select id="orbitingBody">
+        <option value="earth">Earth</option>
+        <option value="mars">Mars</option>
+        <option value="jupiter">Jupiter</option>
+        <option value="mercury">Mercury</option>
+        <option value="venus">Venus</option>
+        <option value="saturn">Saturn</option>
+        <option value="uranus">Uranus</option>
+        <option value="neptune">Neptune</option>
+      </select>
+    </div>
+    <div class="control-group">
+      <label>Central Mass (<span id="massVal">1.00</span> M☉)</label>
+      <input type="range" id="centralMass" min="-6" max="6" step="0.01" value="0">
+    </div>
+    <div class="control-group">
+      <label>Planet Mass (<span id="planetMassVal">3.00e-6</span> M☉)</label>
+      <input type="range" id="planetMass" min="-8" max="2" step="0.01" value="-5.52">
+    </div>
+
+    <div class="panel-subtitle">Shape (2D)</div>
+    <div class="control-group">
+      <label>Eccentricity (e) <span id="eVal">0.600</span></label>
+      <input type="range" id="eccentricity" min="0" max="1.5" step="0.005" value="0.6">
+    </div>
+    
+    <div class="control-group">
+      <label>Semi-Major Axis (a) <span id="aVal">15.0</span> AU</label>
+      <input type="range" id="semiMajor" min="1" max="50" step="0.1" value="15">
+    </div>
+    
+    <div class="panel-subtitle">Orientation (3D)</div>
+    <div class="control-group">
+      <label>Inclination (i) <span id="iVal">0</span>°</label>
+      <input type="range" id="inclination" min="0" max="180" step="1" value="0">
+    </div>
+    
+    <div class="control-group">
+      <label>Long. of Ascending Node (Ω) <span id="nodeVal">0</span>°</label>
+      <input type="range" id="ascendingNode" min="0" max="360" step="1" value="0">
+    </div>
+    
+    <div class="control-group">
+      <label>Arg. of Periapsis (ω) <span id="argVal">0</span>°</label>
+      <input type="range" id="argPeriapsis" min="0" max="360" step="1" value="0">
+    </div>
+    
+    <div class="panel-subtitle">Time & Position</div>
+    <div class="control-group">
+      <label>God's Fast-Forward <span id="speedVal">1x</span></label>
+      <input type="range" id="simSpeed" min="0" max="5" step="0.1" value="1">
+    </div>
+    
+    <div class="control-group" id="anomalyGroup">
+      <label>True Anomaly (Scrub Orbit) <span id="thetaVal">0</span>°</label>
+      <input type="range" id="trueAnomaly" min="0" max="360" step="1" value="0">
+    </div>
+
+    <div class="panel-title" style="margin-top:15px;">Presets</div>
+    <div class="btn-group" style="flex-wrap: wrap;">
+      <button class="btn" id="preEarth">Earth</button>
+      <button class="btn" id="preHalley">Halley's</button>
+      <button class="btn" id="preISS">ISS (LEO)</button>
+      <button class="btn" id="preMolniya">Molniya</button>
+      <button class="btn" id="preHyper">Hyperbolic</button>
+    </div>
+
+    <div class="panel-title" style="margin-top:15px;">Visualization</div>
+    <div class="control-group" style="flex-direction:row; align-items:center; gap:10px; margin-bottom:6px;">
+      <input type="checkbox" id="showVectors" checked style="accent-color:var(--gold); transform:scale(1.2);">
+      <label for="showVectors" style="margin:0;">Velocity Vectors</label>
+    </div>
+    <div class="control-group" style="flex-direction:row; align-items:center; gap:10px; margin-bottom:6px;">
+      <input type="checkbox" id="showPlane" style="accent-color:var(--gold); transform:scale(1.2);">
+      <label for="showPlane" style="margin:0;">Orbital Plane (3D)</label>
+    </div>
+
+  </aside>
+
+  <div id="dashboard" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;">
+    <div class="dash-card">
+      <span class="dc-label">Distance (r)</span>
+      <span class="dc-value" id="distVal">-- AU</span>
+    </div>
+    <div class="dash-card">
+      <span class="dc-label">Velocity (v)</span>
+      <span class="dc-value" id="velVal">-- km/s</span>
+    </div>
+    <div class="dash-card highlight">
+      <span class="dc-label">Period (T)</span>
+      <span class="dc-value" id="periodVal">-- yrs</span>
+    </div>
+    <div class="dash-card">
+      <span class="dc-label">Periapsis (q)</span>
+      <span class="dc-value" id="periapsisVal">-- AU</span>
+    </div>
+    <div class="dash-card">
+      <span class="dc-label">Apoapsis (Q)</span>
+      <span class="dc-value" id="apoapsisVal">-- AU</span>
+    </div>
+    <div class="dash-card">
+      <span class="dc-label">Mech. Energy (E)</span>
+      <span class="dc-value" id="energyVal">--</span>
+    </div>
+  </div>
+
+  <script async src="https://ga.jspm.io/npm:es-module-shims@1.8.0/dist/es-module-shims.js"></script>
+<script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.129.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.129.0/examples/jsm/",
+        "three/examples/jsm/": "https://cdn.jsdelivr.net/npm/three@0.129.0/examples/jsm/"
+      }
+    }
+  </script>
+  <script>
+    // --- Mobile Controls Toggle ---
+    const toggleBtn = document.getElementById('toggleControlsBtn');
+    const controlPanel = document.querySelector('.control-panel');
+    if (toggleBtn && controlPanel) {
+      toggleBtn.addEventListener('click', () => {
+        controlPanel.classList.toggle('open');
+      });
+    }
+  </script>
+  <script type="module" src="./trajectory.js"></script>
+</body>
+</html>
