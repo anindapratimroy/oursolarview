@@ -19,6 +19,9 @@
   },
   "homepage": "https://github.com/anindapratimroy/oursolarview#readme",
   "dependencies": {
-    "puppeteer": "^25.3.0"
+    "esbuild": "^0.28.1",
+    "puppeteer": "^25.3.0",
+    "three-129": "npm:three@^0.129.0",
+    "three-160": "npm:three@^0.160.0"
   }
 }
