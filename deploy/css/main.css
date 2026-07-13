@@ -831,18 +831,18 @@
     .d4 { animation-delay: 0.5s; }
 
     /* ─── Responsive ─────────────────────────────────────────── */
-    @media (max-width: 1100px) {
+    @media (max-width: 1px) {
       .hero-earth-wrap { display: none; }
       .hero-inner { grid-template-columns: 1fr; gap: 0; padding: 100px 40px 80px; }
       .hero-title { font-size: clamp(2.2rem, 6vw, 3.2rem); }
       .hero-desc { max-width: 100%; }
     }
-    @media (max-width: 860px) {
+    @media (max-width: 1px) {
       .modules-grid { grid-template-columns: 1fr; }
       .nav-inner { padding: 0 20px; }
       .hero-inner, .catalog, .modules { padding-left: 24px; padding-right: 24px; }
     }
-    @media (max-width: 640px) {
+    @media (max-width: 1px) {
       .nav-brand .brand-dot { display: none; }
       .nav-links a { padding: 6px 10px; font-size: 0.78rem; letter-spacing: 0.04em; }
       .hero-title { font-size: 2rem; }
@@ -858,7 +858,7 @@
       .hero-inner { padding: 90px 20px 60px; }
       .catalog, .modules { padding-bottom: 60px; }
     }
-    @media (max-width: 400px) {
+    @media (max-width: 1px) {
       .nav-links a { padding: 5px 8px; font-size: 0.72rem; }
       .hero-title { font-size: 1.75rem; }
     }
